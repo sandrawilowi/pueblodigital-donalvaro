@@ -1,0 +1,530 @@
+[s/$title/s]
+
+<div id="buscador">
+    
+    <div class="card">
+
+        <div class="card-header font_weight500 d-flex justify-content-between align-items-center">
+
+            <span class="font_weight500">
+                Buscar Usuario
+            </span>
+
+            <i id="iconCollapseFilterCerraduras"
+               class="fa-solid fa-square-minus cursor_pointer ms-auto"
+               onclick="toggleFilter('collapseFilterUsuario', this)"
+               aria-label="Mostrar/Ocultar filtros">
+            </i>
+
+        </div>
+
+        <div id="collapseFilterUsuario" class="collapse show">
+            <div class="card-body">
+                <form id="filterUsuarios" name="filterUsuarios">
+
+                    <div class="row">
+
+                        <div class="col-md-3 mt-2">
+
+                            <label class="colorBase7 font_weight500" for="nameFilter">Nombre</label>
+                            <div>
+                                <input type="text" class="form-control" id="nameFilter" name="nameFilter" placeholder="Nombre" onkeypress="ngFilter(event,'btnFilter')">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3 mt-2">
+
+                            <label class="colorBase7 font_weight500" for="lastnameFilter">Apellidos</label>
+                            <div>
+                                <input type="text" class="form-control" id="lastnameFilter" name="lastnameFilter" placeholder="Apellidos" onkeypress="ngFilter(event,'btnFilter')">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3 mt-2">
+
+                            <label class="colorBase7 font_weight500" for="emailFilter">Email</label>
+                            <div>
+                                <input type="text" class="form-control" id="emailFilter" name="emailFilter" placeholder="Email" onkeypress="ngFilter(event,'btnFilter')">
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mt-2">
+
+                            <label class="colorBase7 font_weight500" for="statusFilter">Estado</label>
+                            <div class="custom-select">
+                                <select class="form-control" id="statusFilter" name="statusFilter" onkeypress="ngFilter(event,'btnFilter')">
+                                    <option value="" selected>Todos</option>                                
+                                    <option value="1">Activo</option>
+                                    <option value="0">Desactivado</option>
+                                    <option value="2">Bloqueado</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </form>
+
+                <div class="row mt-4">
+
+                    <div class="col-md-6">
+                        <button aria-label="Buscar cerraduras" class="btn btn-primary px-4" id="btnFilter" 
+                                onclick="formFilter('filterUsuarios');" onkeypress="ngFilter(event,'btnFilter')">
+                            Buscar
+                        </button>
+                    </div>
+
+                    <div  class="col-md-6 text-end">
+                        <button type="button" aria-label="Limpiar" class="btn btn-clear" onclick="clearForm('filterUsuarios');">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="mt-4" id="insertTableUsuarios">
+
+    [s/if $results|count>0/s]
+    <table id="dt_usuarios" class="table border" data-ordering="true" style="table-layout:fixed; width: 100%">
+        <thead>
+            <tr class="text-center">
+                <th class="text-center">ID</th>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Apellidos</th>
+                <th class="text-center">Email</th>
+                <th class="text-center">Teléfono</th>                  
+                <th class="text-center">Acciones</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+
+            [s/assign "cont" 1/s]
+            [s/foreach from=$results item=result/s]
+
+            <tr class="text-center">
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->id/s]
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    <a aria-label="[s/$result->first_name/s]" class="colorBase9 cursor_pointer" href="editusuario/[s/$result->id/s]">
+                    [s/$result->first_name/s]
+                    </a>
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    <a aria-label="[s/$result->last_name/s]" class="colorBase9 cursor_pointer" href="editusuario/[s/$result->id/s]">
+                    [s/$result->last_name/s]
+                    </a>
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->email/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->phone/s]
+                </td>
+
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    <div class="row">
+
+                        <div class="col-md-4">
+
+                            [s/if $result->status==1/s]
+                            <a aria-label="Desactivar Cerradura" class="cursor_pointer" href="javascript: void(0)" onclick="activeUser([s/$result->id/s],0)" id="btnActiveDeviceLink[s/$result->id/s]">
+                                <i class="ph-fill ph-power text-22 colorAccent" id="btnActiveDevice[s/$result->id/s]"></i>
+                            </a>
+                            
+                            [s/elseif $result->status==0/s]
+                            <a aria-label="Activar Cerradura" class="cursor_pointer" href="javascript: void(0)" onclick="activeUser([s/$result->id/s],1)" id="btnActiveDeviceLink[s/$result->id/s]">
+                                <i class="ph-fill ph-power text-22 colorWarning" id="btnActiveDevice[s/$result->id/s]"></i>
+                            </a>
+
+                            [s//if/s]
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            [s/if $result->status == 2/s]
+
+                            <a id="btnBlockUserLink[s/$result->id/s]"
+                               href="javascript:void(0);"
+                               title="Desbloquear usuario"
+                               onclick="blockUser([s/$result->id/s],0)">
+                                <i id="btnBlockUser[s/$result->id/s]"
+                                   class="fa-solid fa-lock colorWarning"></i>
+                            </a>
+
+                            [s/else/s]
+
+                            <a id="btnBlockUserLink[s/$result->id/s]"
+                               href="javascript:void(0);"
+                               title="Bloquear usuario"
+                               onclick="blockUser([s/$result->id/s],1)">
+                                <i id="btnBlockUser[s/$result->id/s]"
+                                   class="fa-solid fa-lock-open colorMuted"></i>
+                            </a>
+
+                            [s//if/s]
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <a aria-label="modal delete" class="colorBase9 cursor_pointer" href="javascript: void(0)" data-bs-toggle="modal" data-bs-target="#modal_delete[s/$result->id/s]">
+                                <i class="ph-fill ph-trash text-22 colorError"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                </td>
+
+            </tr>
+            
+
+            [s/assign "cont" $cont+1/s]
+            [s/if $cont>2/s]
+                [s/assign "cont" 1/s]
+            [s//if/s]
+
+            [s//foreach/s]
+
+        </tbody>
+    </table>
+    [s/else/s]
+    <div class="card mt-3">
+
+        <div class="card-body colorMuted">
+            No hay resultados.
+        </div>
+
+    </div>
+
+    [s//if/s]
+    
+
+    [s/foreach from=$results item=result/s]
+
+<div id="modal_delete[s/$result->id/s]" class="hidden-print modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header modal-header-error">
+                <div class="text-20 colorBase7 font_weight500">Eliminar Usuario</div>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="container-modal-error">
+
+
+                    <div class="mt-2 text-center">
+                        ¿Está seguro que quiere eliminar este cliente? No se podrán recuperar los datos.
+                        <br>
+                        <strong>[s/$result->first_name/s] [s/$result->last_name/s]</strong>
+                    </div>
+                    
+                    <div id="loading-delete" class="loading-div">
+                        <img alt="Loading" src="assets/images/loading.svg">
+                        <div class="text-center colorMuted">Eliminando usuario</div>
+                    </div>
+
+
+                </div>
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+                            <button aria-label="Cancelar" class="btn backgroundMuted colorWhite" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                        </div>
+
+                        <div class="col-md-6 text-end">
+                            <button aria-label="Eliminar Cerradura" id="btn_delete"
+                                    class="btn backgroundError colorWhite" onclick="deleteUser([s/$result->id/s])">
+                                Eliminar
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+[s//foreach/s]
+    
+</div>
+
+<div id="modal_add" class="hidden-print modal fade">
+
+    <div class="modal-dialog modal-lg" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Crear Usuario
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="container-modal py-4">
+
+                    <div class="card-body">
+
+                        <form id="form_new_user" name="form_new_user">
+
+                            <div class="row">
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label for="user_first_name" class="form-label">
+                                        Nombre
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="text"
+                                           id="user_first_name"
+                                           name="first_name"
+                                           class="form-control"
+                                           maxlength="100"
+                                           autocomplete="off">
+
+                                </div>
+
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label for="user_last_name" class="form-label">
+                                        Apellidos
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="text"
+                                           id="user_last_name"
+                                           name="last_name"
+                                           class="form-control"
+                                           maxlength="150"
+                                           autocomplete="off">
+
+                                </div>
+
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label for="user_email" class="form-label">
+                                        Email
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="email"
+                                           id="user_email"
+                                           name="email"
+                                           class="form-control"
+                                           maxlength="190"
+                                           autocomplete="off">
+
+                                </div>
+
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label for="user_phone" class="form-label">
+                                        Teléfono
+                                    </label>
+
+                                    <input type="text"
+                                           id="user_phone"
+                                           name="phone"
+                                           class="form-control"
+                                           maxlength="30"
+                                           autocomplete="off">
+
+                                </div>
+
+
+                                <div class="col-md-12 mb-3">
+
+                                    <label for="user_address" class="form-label">
+                                        Dirección
+                                    </label>
+
+                                    <input type="text"
+                                           id="user_address"
+                                           name="address"
+                                           class="form-control"
+                                           maxlength="255"
+                                           autocomplete="off">
+
+                                </div>
+
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label for="user_country_id" class="form-label">
+                                        País
+                                    </label>
+
+                                    <select id="user_country_id"
+                                            name="country_id"
+                                            class="form-select">
+
+                                        <option value="">
+                                            Seleccione un país
+                                        </option>
+
+                                        [s/foreach from=$countries item=country/s]
+
+                                        <option value="[s/$country->id/s]">
+                                            [s/$country->nom/s]
+                                        </option>
+
+                                        [s//foreach/s]
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label for="user_city" class="form-label">
+                                        Localidad
+                                    </label>
+
+                                    <input type="text"
+                                           id="user_city"
+                                           name="city"
+                                           class="form-control"
+                                           maxlength="150"
+                                           autocomplete="off">
+
+                                </div>
+
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label for="user_province_id" class="form-label">
+                                        Provincia
+                                    </label>
+
+                                    <select id="user_province_id"
+                                            name="province_id"
+                                            class="form-select"
+                                            disabled>
+
+                                        <option value="">
+                                            Seleccione primero un país
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="col-md-2 mb-3">
+
+                                    <label for="user_postal_code" class="form-label">
+                                        C. Postal
+                                    </label>
+
+                                    <input type="text"
+                                           id="user_postal_code"
+                                           name="postal_code"
+                                           class="form-control"
+                                           maxlength="20"
+                                           autocomplete="off">
+
+                                </div>
+                    
+                            </div>
+
+                        </form>
+
+                    </div>
+
+
+                    <div id="user_form_error"
+                         class="alert alert-danger mt-3 mb-0"
+                         style="display:none;">
+                        Debe completar los campos obligatorios.
+                    </div>
+
+
+                    <div id="loading_user" class="loading-div">
+
+                        <img alt="Loading" src="assets/images/loading.svg">
+
+                        <div class="text-center colorMuted">
+                            Creando usuario
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+
+                            <button aria-label="Cancelar"
+                                    class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+
+                        <div class="col-md-6 text-end">
+
+                            <button aria-label="Guardar Usuario"
+                                    class="btn backgroundPrimary colorWhite"
+                                    onclick="addUser(2)"
+                                    id="btn_guardar_user">
+                                Guardar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,201 @@
+<div class="card">
+
+    <div class="card-header font_weight500">
+        Reservas
+    </div>
+
+    <div class="card-body">
+
+        [s/if !empty($results)/s]
+
+            <div class="table-responsive">
+
+                <table class="table align-middle">
+
+                    <thead>
+
+                        <tr>
+                            <th>Referencia</th>
+                            <th>Instalación</th>
+                            <th>Fechas</th>
+                            <th>Personas</th>
+                            <th>Importe</th>
+                            <th>Forma de pago</th>
+                            <th>Estado</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        [s/foreach from=$results item=reservation/s]
+
+                            <tr>
+
+                                <!-- REFERENCIA -->
+                                <td>
+
+                                    <div class="font_weight500 colorSecondary">
+                                        [s/$reservation->reference|escape/s]
+                                    </div>
+
+                                    [s/if $reservation->requires_guest_information == 1 && $reservation->guests_count < $reservation->people_count/s]
+
+                                    <a href="[s/$extraUrl/s]ver-reserva-cliente/[s/$reservation->id/s]#huespedes"
+                                       class="btn btn-sm backgroundWarning colorWhite"
+                                       title="Faltan datos de huéspedes">
+
+                                        <i class="fa-solid fa-user-plus"></i>
+
+                                    </a>
+
+                                    [s//if/s]
+
+                                </td>
+
+
+                                <!-- INSTALACIÓN -->
+                                <td>
+
+                                    <a href="[s/$extraUrl/s]ver-instalacion/[s/$reservation->facility_id/s]"
+                                       class="colorPrimary text-decoration-none">
+
+                                        [s/$reservation->facility_name|escape/s]
+
+                                    </a>
+
+                                </td>
+
+
+                                <!-- FECHAS -->
+                                <td>
+
+                                    <div>
+                                        [s/$reservation->start_at|date_format:"%d/%m/%Y %H:%M"/s]
+                                    </div>
+
+                                    <div class="small colorMuted">
+                                        [s/$reservation->end_at|date_format:"%d/%m/%Y %H:%M"/s]
+                                    </div>
+
+                                </td>
+
+
+                                <!-- PERSONAS -->
+                                <td>
+                                    [s/$reservation->people_count/s]
+                                </td>
+
+
+                                <!-- IMPORTE -->
+                                <td>
+
+                                    <span class="font_weight500">
+                                        [s/$reservation->total_amount|string_format:"%.2f"/s] €
+                                    </span>
+
+                                </td>
+
+
+                                <!-- FORMA DE PAGO -->
+                                <td>
+
+                                    [s/if !empty($reservation->user_bonus_id)/s]
+
+                                        <span class="colorAccent">
+                                            <i class="fa-solid fa-ticket me-1"></i>
+                                            Bono
+                                        </span>
+
+                                    [s/elseif !empty($reservation->payment_name)/s]
+
+                                        [s/$reservation->payment_name|escape/s]
+
+                                    [s/else/s]
+
+                                        <span class="colorMuted">
+                                            -
+                                        </span>
+
+                                    [s//if/s]
+
+                                </td>
+
+
+                                <!-- ESTADO RESERVA -->
+                                <td>
+
+                                    [s/if $reservation->status_code == 'pending'/s]
+
+                                        <span class="badge backgroundWarning colorWhite">
+                                            [s/$reservation->status_name|escape/s]
+                                        </span>
+
+                                    [s/elseif $reservation->status_code == 'confirmed'/s]
+
+                                        <span class="badge bg-success">
+                                            [s/$reservation->status_name|escape/s]
+                                        </span>
+
+                                    [s/elseif $reservation->status_code == 'cancelled' || $reservation->status_code == 'rejected'/s]
+
+                                        <span class="badge backgroundError colorWhite">
+                                            [s/$reservation->status_name|escape/s]
+                                        </span>
+
+                                    [s/else/s]
+
+                                        <span class="badge backgroundMuted colorWhite">
+                                            [s/$reservation->status_name|escape/s]
+                                        </span>
+
+                                    [s//if/s]
+
+                                </td>
+
+                                <!-- ACCIONES -->
+                                <td class="text-end">
+
+                                    <a href="[s/$extraUrl/s]ver-reserva-cliente/[s/$reservation->id/s]"
+                                       class="btn btn-sm backgroundPrimary colorWhite"
+                                       title="Ver reserva">
+
+                                        <i class="fa-solid fa-eye"></i>
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                        [s//foreach/s]
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        [s/else/s]
+
+            <div class="text-center py-4">
+
+                <div class="colorMuted mb-3">
+                    No tienes ninguna reserva.
+                </div>
+
+                <a href="[s/$extraUrl/s]instalaciones-cliente"
+                   class="btn backgroundPrimary colorWhite">
+
+                    Ver instalaciones
+
+                </a>
+
+            </div>
+
+        [s//if/s]
+
+    </div>
+
+</div>

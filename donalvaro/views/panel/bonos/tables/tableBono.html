@@ -1,0 +1,146 @@
+[s/if $results|count>0/s]
+    <table id="dt_bono" class="table border" data-ordering="true" style="table-layout:fixed; width: 100%">
+        <thead>
+            <tr class="text-center">
+                <th class="text-center">ID</th>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Tipo</th>
+                <th class="text-center">Precio</th>
+                <th class="text-center">Instalaciones</th>                  
+                <th class="text-center">Acciones</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+
+            [s/assign "cont" 1/s]
+            [s/foreach from=$results item=result/s]
+
+            <tr class="text-center">
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->id/s]
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    <a aria-label="[s/$result->name/s]" class="colorBase9 cursor_pointer" href="editbono/[s/$result->id/s]">
+                    [s/$result->name/s]
+                    </a>
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->bonus_type/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] colorBase12 text-center">
+                    [s/$result->price/s]
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->facilities/s]
+                </td>
+
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            [s/if $result->status==1/s]
+                            <a aria-label="Desactivar Bono" class="cursor_pointer" href="javascript: void(0)" onclick="activeBonus([s/$result->id/s],0)" id="btnActiveBonusLink[s/$result->id/s]">
+                                <i class="ph-fill ph-power text-22 colorAccent" id="btnActiveBonus[s/$result->id/s]"></i>
+                            </a>
+                            
+                            [s/elseif $result->status==0/s]
+                            <a aria-label="Activar Bono" class="cursor_pointer" href="javascript: void(0)" onclick="activeBonus([s/$result->id/s],1)" id="btnActiveBonusLink[s/$result->id/s]">
+                                <i class="ph-fill ph-power text-22 colorWarning" id="btnActiveBonus[s/$result->id/s]"></i>
+                            </a>
+
+                            [s//if/s]
+
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <a aria-label="modal delete" class="colorBase9 cursor_pointer" href="javascript: void(0)" data-bs-toggle="modal" data-bs-target="#modal_delete[s/$result->id/s]">
+                                <i class="ph-fill ph-trash text-22 colorError"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                </td>
+
+            </tr>
+            
+
+            [s/assign "cont" $cont+1/s]
+            [s/if $cont>2/s]
+                [s/assign "cont" 1/s]
+            [s//if/s]
+
+            [s//foreach/s]
+
+        </tbody>
+    </table>
+    [s/else/s]
+    <div class="card mt-3">
+
+        <div class="card-body colorMuted">
+            No hay resultados.
+        </div>
+
+    </div>
+
+    [s//if/s]
+    
+    [s/foreach from=$results item=result/s]
+
+<div id="modal_delete[s/$result->id/s]" class="hidden-print modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header modal-header-error">
+                <div class="text-20 colorBase7 font_weight500">Eliminar Bono</div>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="container-modal-error">
+
+
+                    <div class="mt-2 text-center">
+                        ¿Está seguro que quiere eliminar este bono? El bono dejará de estar disponible en el sistema.
+                        <br>
+                        <strong>[s/$result->name/s]</strong>
+                    </div>
+                    
+                    <div id="loading-delete" class="loading-div">
+                        <img alt="Loading" src="assets/images/loading.svg">
+                        <div class="text-center colorMuted">Eliminando bono</div>
+                    </div>
+
+
+                </div>
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+                            <button aria-label="Cancelar" class="btn backgroundMuted colorWhite" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                        </div>
+
+                        <div class="col-md-6 text-end">
+                            <button aria-label="Eliminar Cerradura" id="btn_delete"
+                                    class="btn backgroundError colorWhite" onclick="deleteBonus([s/$result->id/s])">
+                                Eliminar
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+[s//foreach/s]

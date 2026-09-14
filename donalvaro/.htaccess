@@ -1,0 +1,17 @@
+<IfModule mod_headers.c>
+   Header add Access-Control-Allow-Origin: "https://donalvaro.pueblodigital.es"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+
+RewriteEngine on
+
+RewriteRule ^apache-status/?$ - [END]
+
+RewriteRule ^([a-zA-Z0-9_-]+)$ index.php?type=$1 [L]
+RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)$ index.php?type=$1&control=$2 [L]
+
+</IfModule>
+
+
+

@@ -1,0 +1,604 @@
+@CHARSET "UTF-8";
+
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--pd-secondary);
+    background: #fff;
+}
+
+.navbar {
+    background: rgba(255,255,255,.96);
+    box-shadow: 0 4px 18px rgba(15,23,42,.06);
+}
+
+.brand-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--pd-primary), var(--pd-accent));
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: .6rem;
+}
+
+.brand-logo {
+    width: 52px;
+    height: 52px;
+    padding: 8px;
+    background: linear-gradient(
+            135deg,
+            var(--pd-primary),
+            var(--pd-accent)
+    );
+    border-radius: 14px;
+    object-fit: contain;
+}
+
+.hero {
+    padding: 9rem 0 6rem;
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+
+.hero h1,
+.section-title {
+    font-weight: 800;
+    letter-spacing: -.03em;
+}
+
+.hero p,
+.text-muted {
+    color: var(--pd-muted) !important;
+}
+
+.btn-primary {
+    background: var(--pd-primary);
+    border-color: var(--pd-primary);
+}
+
+.section {
+    padding: 5rem 0;
+}
+
+.section-light {
+    background: var(--pd-light);
+}
+
+.section-label {
+    color: var(--pd-primary);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: .8rem;
+    margin-bottom: .6rem;
+}
+
+.card-feature,
+.login-card {
+    border: 0;
+    border-radius: 1.4rem;
+    box-shadow: 0 18px 45px rgba(15,23,42,.08);
+    background: #fff;
+}
+
+.card-feature {
+    height: 100%;
+    padding: 1.6rem;
+}
+
+.feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: #dbeafe;
+    color: var(--pd-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.step-number {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--pd-primary);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.login-page {
+    padding: 10rem 0 5rem;
+    min-height: calc(100vh - 110px);
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+
+.login-card {
+    padding: 2.5rem;
+}
+
+.form-control {
+    min-height: 52px;
+    border-radius: 14px;
+}
+
+.footer {
+    background: #020617;
+    color: #cbd5e1;
+    padding: 2rem 0;
+}
+
+.footer-divider{
+    margin:2rem 0 1.5rem;
+    border-color:rgba(255,255,255,.1);
+}
+
+.footer-links{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:.5rem 1.5rem;
+}
+
+.footer-links a{
+    color:#cbd5e1 !important;
+    text-decoration:none !important;
+    font-size:.95rem;
+    transition:color .2s;
+}
+
+.footer-links a,
+.footer-links a:link,
+.footer-links a:visited,
+.footer-links a:hover,
+.footer-links a:active {
+    color: #cbd5e1 !important;
+    text-decoration: none !important;
+}
+
+.footer-links a:hover {
+    color: #ffffff !important;
+}
+
+.footer-links a:focus-visible {
+    outline: 2px solid #93c5fd;
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+.legal-page {
+    padding: 9rem 0 6rem;
+    background: #f8fafc;
+}
+
+.legal-content {
+    background: #ffffff;
+    border-radius: 1.5rem;
+    padding: 3rem;
+    box-shadow: 0 18px 45px rgba(15,23,42,.06);
+}
+
+.legal-content h1 {
+    margin-bottom: 2rem;
+}
+
+.legal-content h3 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.legal-content p,
+.legal-content li {
+    line-height: 1.75;
+}
+
+.legal-content hr {
+    margin: 3rem 0;
+}
+
+.footer-main {
+    padding-bottom: 2rem;
+}
+
+.footer-funding {
+    padding: 2rem 0;
+    border-top: 1px solid rgba(255, 255, 255, .15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3.5rem;
+}
+
+.footer-funding-logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    flex-shrink: 0;
+}
+
+.footer-logo-junta {
+    width: 170px;
+    height: auto;
+    object-fit: contain;
+}
+
+.footer-logo-eu {
+    width: 220px;
+    height: auto;
+    object-fit: contain;
+}
+
+.footer-funding-text {
+    max-width: 560px;
+    font-size: .9rem;
+    line-height: 1.5;
+}
+
+.footer-funding-title {
+    color: #22c55e;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: .35rem;
+}
+
+.footer-funding-department {
+    font-weight: 600;
+}
+
+.footer-funding-project {
+    font-weight: 600;
+    margin-top: .2rem;
+}
+
+.footer-funding-grant {
+    margin: .25rem 0 .6rem;
+}
+
+.footer-links {
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, .15);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .45rem;
+}
+
+@media (max-width: 991.98px) {
+
+    .footer-funding {
+        flex-direction: column;
+        gap: 1.75rem;
+        text-align: center;
+    }
+
+}
+
+@media (max-width: 575.98px) {
+
+    .footer-funding-logos {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .footer-logo-junta {
+        width: 150px;
+    }
+
+    .footer-logo-eu {
+        width: 190px;
+    }
+
+    .footer-links span {
+        display: none;
+    }
+
+    .footer-links {
+        column-gap: 1rem;
+        row-gap: .75rem;
+    }
+
+}
+
+@media (max-width:768px){
+
+    .footer-links{
+        flex-direction:column;
+        align-items:center;
+        gap:.8rem;
+    }
+    
+    .legal-page {
+        padding: 7rem 0 4rem;
+    }
+
+    .legal-content {
+        padding: 2rem;
+        border-radius: 1rem;
+    }
+
+}
+
+.cookies-info {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #0f172a;
+    color: #fff;
+    padding: 1rem 0;
+    z-index: 2000;
+    box-shadow: 0 -10px 30px rgba(0,0,0,.15);
+}
+
+.cookies-info a {
+    color: #93c5fd;
+    text-decoration: none;
+}
+
+.cookies-info a:hover {
+    color: #fff;
+}
+
+.cookies-info.hidden {
+    display: none;
+}
+
+.password-wrapper{
+    position:relative;
+}
+
+.password-wrapper .form-control{
+    padding-right:3.5rem;
+}
+
+.btn-password{
+    position:absolute;
+    right:1rem;
+    top:50%;
+    transform:translateY(-50%);
+    border:none;
+    background:none;
+    padding:0;
+    color:var(--pd-muted);
+    cursor:pointer;
+}
+
+.btn-password:hover{
+    color:var(--pd-primary);
+}
+
+.btn-password:focus{
+    outline:none;
+    box-shadow:none;
+}
+
+.btn-password-generate{
+
+    border:none;
+    background:none;
+    padding:0;
+
+    color:var(--pd-primary);
+
+    font-weight:600;
+
+    transition:.2s;
+
+}
+
+.btn-password-generate:hover{
+
+    color:var(--pd-accent);
+
+}
+
+.password-info{
+
+    margin-bottom:1.5rem;
+    padding:1rem;
+
+    border-radius:1rem;
+
+    background:#f8fafc;
+    border:1px solid #dbeafe;
+    font-size:.80rem;
+
+}
+
+.password-info-title{
+
+    font-weight:600;
+    color:var(--pd-primary);
+
+    margin-bottom:.75rem;
+
+}
+
+.password-info ul{
+
+    margin:0;
+    padding-left:1.2rem;
+
+}
+
+.password-info li{
+
+    color:var(--pd-muted);
+    margin-bottom:.25rem;
+
+}
+
+.password-info li:last-child{
+
+    margin-bottom:0;
+
+}
+
+.password-info span{
+    color:var(--pd-muted);
+    margin-bottom:.25rem;
+}
+
+.activation-wrapper{
+    min-height:70vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+
+.activation-card {
+    width:100%;
+    padding: 56px 40px;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+}
+
+.activation-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 24px;
+
+    border-radius: 50%;
+    font-size: 2rem;
+}
+
+.activation-icon-success {
+    color: #16a34a;
+    background-color: rgba(34, 197, 94, 0.12);
+}
+
+.activation-icon-error {
+    color: #dc2626;
+    background-color: rgba(220, 38, 38, 0.12);
+}
+
+.activation-title {
+    margin-bottom: 16px;
+    color: var(--pd-secondary);
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.activation-message {
+    max-width: 480px;
+    margin: 0 auto 28px;
+    color: var(--pd-muted);
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.activation-button {
+    min-width: 170px;
+    padding: 11px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+@media (max-width: 575.98px) {
+    .activation-card {
+        padding: 36px 22px;
+    }
+
+    .activation-title {
+        font-size: 1.5rem;
+    }
+}
+
+.app-download {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 3.5rem 4rem;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, .06);
+}
+
+.app-download-description {
+    max-width: 720px;
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+.app-download-note {
+    color: var(--pd-muted);
+    font-size: .9rem;
+}
+
+.app-download-visual {
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(37, 99, 235, .08), rgba(34, 197, 94, .12));
+    border-radius: 24px;
+}
+
+.app-download-icon {
+    width: 110px;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--pd-accent);
+    color: #ffffff;
+    border-radius: 28px;
+    font-size: 4rem;
+    box-shadow: 0 15px 35px rgba(34, 197, 94, .22);
+}
+
+.app-download-brand {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.app-download-brand strong {
+    display: block;
+    color: var(--pd-secondary);
+    font-size: 1.1rem;
+}
+
+.app-download-brand span {
+    display: block;
+    margin-top: .25rem;
+    color: var(--pd-muted);
+    font-size: .9rem;
+}
+
+@media (max-width: 991.98px) {
+
+    .app-download {
+        padding: 3rem;
+    }
+
+    .app-download-visual {
+        min-height: 210px;
+    }
+
+}
+
+@media (max-width: 575.98px) {
+
+    .app-download {
+        padding: 2rem;
+        border-radius: 18px;
+    }
+
+    .app-download .btn {
+        width: 100%;
+    }
+
+}

@@ -1,0 +1,542 @@
+[s/$title/s]
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-12">
+
+            <div class="card mb-4">
+
+                <div class="card-header">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+                            <div class="fs-5 font_weight500">
+                                Horario habitual
+                            </div>
+
+                            <div class="colorWhite mt-1">
+                                Configure los días y horarios en los que puede reservarse la instalación.
+                            </div>
+                        </div>
+
+                        <button type="button"
+                                class="btn backgroundPrimary colorWhite"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal_add_availability">
+
+                            <i class="fa-solid fa-plus me-1"></i>
+                            Añadir disponibilidad
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="availability-legend d-flex flex-wrap align-items-center gap-3 mb-3">
+
+                        <span class="font_weight500">
+                            Ocupación:
+                        </span>
+
+                        <div class="d-flex align-items-center gap-2">
+
+                            <span class="availability-legend-color availability-free"></span>
+
+                            <span class="small">
+                                Menos del 50%
+                            </span>
+
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2">
+
+                            <span class="availability-legend-color availability-medium"></span>
+
+                            <span class="small">
+                                50% o más
+                            </span>
+
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2">
+
+                            <span class="availability-legend-color availability-full"></span>
+
+                            <span class="small">
+                                Completo
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div id="availability_calendar" data-booking-type="[s/$facility->booking_type_code/s]" data-facility-id="[s/$facility->id/s]">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+<div id="modal_add_availability" class="hidden-print modal fade">
+
+    <div class="modal-dialog modal-lg" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                     <i class="fa-regular fa-calendar-plus me-2"></i>
+                    Añadir Disponibilidad
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="container-modal py-4">
+
+                    <div class="card-body">
+
+                        <form id="form_add_availability"
+                              name="form_add_availability">
+
+                            <input type="hidden"
+                                   id="availability_facility_id"
+                                   name="facility_id"
+                                   value="[s/$facility->id/s]">
+
+                            <input type="hidden"
+                                   id="availability_booking_type"
+                                   value="[s/$facility->booking_type_code/s]">
+
+
+                            <div class="row">
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label for="availability_date_from"
+                                           class="form-label">
+                                        Desde
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="date"
+                                           id="availability_date_from"
+                                           name="date_from"
+                                           class="form-control">
+
+                                </div>
+
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label for="availability_date_until"
+                                           class="form-label">
+                                        Hasta
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="date"
+                                           id="availability_date_until"
+                                           name="date_until"
+                                           class="form-control">
+
+                                </div>
+
+
+                                <div class="col-md-12 mb-3">
+
+                                    <label class="form-label">
+                                        Días disponibles
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+
+                                    <div class="d-flex flex-wrap gap-3">
+
+                                        <div class="form-check">
+
+                                            <input class="form-check-input availability-day"
+                                                   type="checkbox"
+                                                   id="availability_monday"
+                                                   name="days[]"
+                                                   value="1">
+
+                                            <label class="form-check-label"
+                                                   for="availability_monday">
+                                                Lunes
+                                            </label>
+
+                                        </div>
+
+
+                                        <div class="form-check">
+
+                                            <input class="form-check-input availability-day"
+                                                   type="checkbox"
+                                                   id="availability_tuesday"
+                                                   name="days[]"
+                                                   value="2">
+
+                                            <label class="form-check-label"
+                                                   for="availability_tuesday">
+                                                Martes
+                                            </label>
+
+                                        </div>
+
+
+                                        <div class="form-check">
+
+                                            <input class="form-check-input availability-day"
+                                                   type="checkbox"
+                                                   id="availability_wednesday"
+                                                   name="days[]"
+                                                   value="3">
+
+                                            <label class="form-check-label"
+                                                   for="availability_wednesday">
+                                                Miércoles
+                                            </label>
+
+                                        </div>
+
+
+                                        <div class="form-check">
+
+                                            <input class="form-check-input availability-day"
+                                                   type="checkbox"
+                                                   id="availability_thursday"
+                                                   name="days[]"
+                                                   value="4">
+
+                                            <label class="form-check-label"
+                                                   for="availability_thursday">
+                                                Jueves
+                                            </label>
+
+                                        </div>
+
+
+                                        <div class="form-check">
+
+                                            <input class="form-check-input availability-day"
+                                                   type="checkbox"
+                                                   id="availability_friday"
+                                                   name="days[]"
+                                                   value="5">
+
+                                            <label class="form-check-label"
+                                                   for="availability_friday">
+                                                Viernes
+                                            </label>
+
+                                        </div>
+
+
+                                        <div class="form-check">
+
+                                            <input class="form-check-input availability-day"
+                                                   type="checkbox"
+                                                   id="availability_saturday"
+                                                   name="days[]"
+                                                   value="6">
+
+                                            <label class="form-check-label"
+                                                   for="availability_saturday">
+                                                Sábado
+                                            </label>
+
+                                        </div>
+
+
+                                        <div class="form-check">
+
+                                            <input class="form-check-input availability-day"
+                                                   type="checkbox"
+                                                   id="availability_sunday"
+                                                   name="days[]"
+                                                   value="7">
+
+                                            <label class="form-check-label"
+                                                   for="availability_sunday">
+                                                Domingo
+                                            </label>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="form-text">
+                                        Se generará disponibilidad para los días seleccionados dentro del periodo indicado.
+                                    </div>
+
+                                </div>
+
+
+                                <div id="availability_hours"
+                                     class="col-md-12"
+                                     style="display:none;">
+
+                                    <div class="row">
+
+                                        <div class="col-md-6 mb-3">
+
+                                            <label for="availability_start_time"
+                                                   class="form-label">
+                                                Hora de inicio
+                                                <span class="text-danger">*</span>
+                                            </label>
+
+                                            <input type="time"
+                                                   id="availability_start_time"
+                                                   name="start_time"
+                                                   class="form-control">
+
+                                        </div>
+
+
+                                        <div class="col-md-6 mb-3">
+
+                                            <label for="availability_end_time"
+                                                   class="form-label">
+                                                Hora de fin
+                                                <span class="text-danger">*</span>
+                                            </label>
+
+                                            <input type="time"
+                                                   id="availability_end_time"
+                                                   name="end_time"
+                                                   class="form-control">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+
+                    <div id="availability_form_error"
+                         class="alert alert-danger mt-3 mb-0"
+                         style="display:none;">
+                        Debe completar correctamente los campos obligatorios.
+                    </div>
+
+
+                    <div id="loading_availability"
+                         class="loading-div">
+
+                        <img alt="Loading"
+                             src="../assets/images/loading.svg">
+
+                        <div class="text-center colorMuted">
+                            Guardando disponibilidad
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+
+                            <button aria-label="Cancelar"
+                                    class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+
+                        <div class="col-md-6 text-end">
+
+                            <button aria-label="Guardar disponibilidad"
+                                    class="btn backgroundPrimary colorWhite"
+                                    onclick="addAvailability([s/$facility->id/s]);"
+                                    id="btn_save_availability">
+                                Guardar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="modal_availability_reservations"
+     class="hidden-print modal fade">
+
+    <div class="modal-dialog modal-lg" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Detalle de disponibilidad
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="container-modal py-4">
+
+                    <div id="availability_reservations_content"></div>
+
+                </div>
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-12 text-end">
+
+                            <button class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cerrar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="modal_delete_availability"
+     class="hidden-print modal fade"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    <i class="fa-solid fa-calendar-xmark me-2"></i>
+                    Detalle de disponibilidad
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="container-modal py-4">
+
+                    <div class="mb-3">
+                        <span class="font_weight500">Fecha:</span>
+                        <span id="delete_availability_period"></span>
+                    </div>
+
+                    <div class="alert alert-success mb-0">
+                        <i class="fa-solid fa-circle-check me-2"></i>
+                        No hay reservas para esta disponibilidad. Puede eliminarla si lo desea.
+                    </div>
+
+                    <div id="delete_availability_error"
+                         class="alert alert-danger mt-3"
+                         style="display:none;">
+                    </div>
+
+                    <input type="hidden" id="delete_availability_id" value="">
+                    <input type="hidden" id="delete_availability_start" value="">
+                    <input type="hidden" id="delete_availability_end" value="">
+
+                </div>
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <button type="button"
+                                    class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-6 text-end">
+
+                            <button type="button"
+                                    id="btn_delete_availability"
+                                    class="btn btn-danger"
+                                    onclick="deleteAvailability([s/$facility->id/s]);">
+                                <i class="fa-solid fa-trash me-1"></i>
+                                Eliminar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

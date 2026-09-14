@@ -1,0 +1,310 @@
+[s/$title/s]
+
+<div class="row mt-4">
+
+    <div class="col-md-8">
+
+        <div class="card">
+
+            <div class="card-header font_weight500">
+
+                Datos de la cerradura
+
+            </div>
+
+            <div class="card-body">
+
+                <form id="form_data" name="form_data" autocomplete="off">
+                    
+                    <div class="row mt-2">
+                        
+                        <div class="col-md-12">
+                            <i>Solo es posible modificar el nombre de la cerradura. El resto de campos son informativos 
+                                y se actualizan automáticamente durante la sincronización.
+                            </i>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="row mt-4">
+
+                        <div class="col-md-4">
+
+                            <label class="colorTertiary font_weight500" for="nombre">
+                                Nombre
+                            </label>
+                            <div>
+                                <input type="text" class="form-control" placeholder="Nombre" id="nombre" name="nombre" value="[s/$model->lock_alias/s]" required>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <label class="colorTertiary font_weight500" for="ttlock_name">
+                                Nombre Ttlock
+                            </label>
+                            <div>
+                                <input type="text" class="form-control" id="ttlock_name" name="ttlock_name" value="[s/$model->lock_name/s]" readonly>
+                            </div>
+
+                        </div>
+                        
+                        <div class="col-md-4">
+
+                            <label class="colorTertiary font_weight500" for="bateria">
+                                Nivel de batería
+                            </label>
+                            <div>
+                                <input type="text" class="form-control" id="bateria" name="bateria" value="[s/$model->electric_quantity/s] %" readonly>
+                            </div>
+
+                        </div>
+                        
+
+                    </div>
+
+                    <div class="row mt-2">
+
+                        <div class="col-md-4">
+
+                            <label class="colorTertiary font_weight500" for="id">
+                                Id
+                            </label>
+
+                            <div class="mt-2">
+                                <input type="text" class="form-control" id="id" name="id" readonly value="[s/$model->id/s]">
+                            </div>
+
+                        </div>
+                        
+                        <div class="col-md-4">
+
+                           <label class="colorTertiary font_weight500" for="ttlock_id">
+                                Ttlock Id
+                            </label>
+
+                            <div class="mt-2">
+                                <input type="text" class="form-control" id="ttlock_id" name="ttlock_id" readonly value="[s/$model->ttlock_lock_id/s]">
+                            </div>
+
+                        </div>
+                        
+                        <div class="col-md-4">
+
+                            <label class="colorTertiary font_weight500" for="ttlock_mac">
+                                MAC
+                            </label>
+                            <div>
+                                <input type="text" class="form-control" id="ttlock_mac" name="ttlock_mac" value="[s/$model->lock_mac/s]" readonly>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                    
+                    <div class="row mt-2">
+
+                        <div class="col-md-4">
+
+                            <label class="colorTertiary font_weight500" for="paso_libre">
+                                Modo Paso libre
+                            </label>
+
+                            <div class="mt-2">
+                                <input type="text" class="form-control" id="paso_libre" name="paso_libre" readonly 
+                                       value="[s/$model->id/s]"
+                                       [s/if $model->passage_mode==2/s]Desactivado[s/else/s]Activado[s//if/s]>
+                            </div>
+
+                        </div>
+                        
+                        <div class="col-md-4">
+
+                           <label class="colorTertiary font_weight500" for="algoritmo">
+                                Versión algoritmo
+                            </label>
+
+                            <div class="mt-2">
+                                <input type="text" class="form-control" id="algoritmo" name="algoritmo" readonly value="v[s/$model->keyboard_pwd_version/s]">
+                            </div>
+
+                        </div>
+                        
+                        <div class="col-md-4">
+
+                            [s/assign var=offset value=$model->timezone_raw_offset/3600000/s]
+                            <label class="colorTertiary font_weight500" for="ttlock_mac">
+                                Offset
+                            </label>
+                            <div>
+                                <input type="text" class="form-control" id="ttlock_mac" name="ttlock_mac" 
+                                       value="[s/if $offset >= 0/s]+[s//if/s][s/$offset|string_format:'%02d'/s]:00" 
+                                       readonly>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                    
+
+                </form>
+                
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div id="loading" class="loading-div">
+                            <img alt="Loading" src="../assets/images/loading.svg">
+                            <div class="text-center colorMuted">Guardando datos</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+
+                    <div class="col-md-6">
+                        <button aria-label="Save changes" id="btn_save" class="btn backgroundTertiary colorWhite" onclick="actualizarCerradura([s/$model->id/s]);">Guardar</button>
+                    </div>
+                    
+                    <div class="col-md-6 text-end">
+
+                        <a href="../cerraduras"
+                           class="btn backgroundMuted colorWhite">
+                            Volver
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+     <div class="col-md-4">
+         
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <div class="card">
+
+                    <div class="card-header font_weight500">
+
+                        Estado
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+                            <div class="col-md-4 mt-2">
+                                Online:
+                            </div>
+
+                            <div class="col-md-4 mt-2">
+                                <i class="fa-solid fa-wifi [s/if $model->has_gateway==1/s]colorAccent[s/else/s]colorError[s//if/s]"></i>
+                            </div>
+
+
+                        </div>
+                        
+                        <div class="row">
+
+                            <div class="col-md-4 mt-2">
+                                Gateway:
+                            </div>
+
+                            <div class="col-md-4 mt-2">
+                                <a aria-label="Ver gateway" class="colorBase9 cursor_pointer" href="../editgateway/[s/$model->gateway_id/s]">
+                                    [s/$model->gateway_name/s]
+                                </a>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <div class="row mt-2">
+
+            <div class="col-md-12">
+
+                <div class="card">
+
+                    <div class="card-header font_weight500">
+
+                        Opciones
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+                            <div class="col-md-4 mt-2">
+                                <a aria-label="activity" class="colorTertiary" href="../auditcerradura/[s/$model->id/s]">
+                                    <i class="fa-solid fa-circle-info"></i> Actividad
+                                </a>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+         
+         <div class="row mt-3 g-3">
+
+             <div class="col-6">
+                 <button
+                     type="button"
+                     id="btn_unlock_lock"
+                     class="btn-lock-action btn-lock-open w-100"
+                     onclick="abrirCerradura([s/$model->id/s]);">
+
+                     <i class="fa-solid fa-lock-open"></i>
+
+                     <span>Abrir cerradura</span>
+
+                 </button>
+             </div>
+
+             <div class="col-6">
+                 <button
+                     type="button"
+                     id="btn_lock_lock"
+                     class="btn-lock-action btn-lock-close w-100"
+                     onclick="cerrarCerradura([s/$model->id/s]);">
+
+                     <i class="fa-solid fa-lock"></i>
+
+                     <span>Cerrar cerradura</span>
+
+                 </button>
+             </div>
+
+         </div>
+
+     </div>
+
+</div>

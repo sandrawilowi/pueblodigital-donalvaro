@@ -1,0 +1,447 @@
+[s/$title/s]
+
+<div class="row">
+
+    <div class="col-lg-8">
+
+        <!-- DATOS PERSONALES -->
+        <div class="card">
+
+            <div class="card-header font_weight500">
+                Datos personales
+            </div>
+
+            <div class="card-body">
+
+                <form id="form_profile">
+
+                    <div id="profile_form_error"
+                         class="alert alert-danger"
+                         style="display:none;">
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6 mt-2">
+
+                            <label for="first_name"
+                                   class="colorBase7 font_weight500">
+                                Nombre *
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="first_name"
+                                   name="first_name"
+                                   value="[s/$model->first_name|escape/s]"
+                                   required>
+
+                        </div>
+
+                        <div class="col-md-6 mt-2">
+
+                            <label for="last_name"
+                                   class="colorBase7 font_weight500">
+                                Apellidos *
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="last_name"
+                                   name="last_name"
+                                   value="[s/$model->last_name|escape/s]"
+                                   required>
+
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+
+                            <label for="email"
+                                   class="colorBase7 font_weight500">
+                                Email
+                            </label>
+
+                            <input type="email"
+                                   class="form-control"
+                                   id="email"
+                                   value="[s/$model->email|escape/s]"
+                                   required>
+
+                            <small class="colorMuted">
+                                El correo electrónico no puede modificarse desde el perfil.
+                            </small>
+
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+
+                            <label for="phone"
+                                   class="colorBase7 font_weight500">
+                                Teléfono
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="phone"
+                                   name="phone"
+                                   value="[s/$model->phone|default:''|escape/s]">
+
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+
+                            <label for="country_id"
+                                   class="colorBase7 font_weight500">
+                                País
+                            </label>
+
+                            <div class="custom-select">
+
+                                <select class="form-control"
+                                        id="country_id"
+                                        name="country_id">
+
+                                    <option value="">
+                                        Seleccione un país
+                                    </option>
+
+                                    [s/foreach from=$countries item=country/s]
+
+                                        <option value="[s/$country->id/s]"
+                                                [s/if $model->country_id == $country->id/s]selected[s//if/s]>
+                                            [s/$country->nom|default:$country->country_name/s]
+                                        </option>
+
+                                    [s//foreach/s]
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+
+                            <label for="province_id"
+                                   class="colorBase7 font_weight500">
+                                Provincia
+                            </label>
+
+                            <div class="custom-select">
+
+                                <select class="form-control"
+                                        id="province_id"
+                                        name="province_id"
+                                        [s/if empty($provinces)/s]disabled[s//if/s]>
+
+                                    [s/if !empty($provinces)/s]
+
+                                        <option value="">
+                                            Seleccione una provincia
+                                        </option>
+
+                                        [s/foreach from=$provinces item=province/s]
+
+                                            <option value="[s/$province->id/s]"
+                                                    data-province="1"
+                                                    [s/if $model->province_id == $province->id/s]selected[s//if/s]>
+                                                [s/$province->name/s]
+                                            </option>
+
+                                        [s//foreach/s]
+
+                                    [s/else/s]
+
+                                        <option value="">
+                                            Seleccione primero un país
+                                        </option>
+
+                                    [s//if/s]
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+
+                            <label for="city"
+                                   class="colorBase7 font_weight500">
+                                Localidad
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="city"
+                                   name="city"
+                                   value="[s/$model->city|default:''|escape/s]">
+
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+
+                            <label for="postal_code"
+                                   class="colorBase7 font_weight500">
+                                Código postal
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="postal_code"
+                                   name="postal_code"
+                                   value="[s/$model->postal_code|default:''|escape/s]">
+
+                        </div>
+
+                        <div class="col-md-12 mt-3">
+
+                            <label for="address"
+                                   class="colorBase7 font_weight500">
+                                Dirección
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="address"
+                                   name="address"
+                                   value="[s/$model->address|default:''|escape/s]">
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="card-footer text-end">
+
+                <button type="button"
+                        id="btn_save_profile"
+                        class="btn backgroundTertiary colorWhite"
+                        onclick="actualizarPerfil();">
+
+                    <i class="fa-solid fa-floppy-disk me-1"></i>
+                    Guardar cambios
+
+                </button>
+
+                <div id="loading_profile"
+                     class="spinner-border spinner-border-sm ms-2"
+                     role="status"
+                     style="display:none;">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CAMBIO DE CONTRASEÑA -->
+        <div class="card mt-3">
+
+            <div class="card-header font_weight500">
+                Cambiar contraseña
+            </div>
+
+            <div class="card-body">
+
+                <form id="form_profile_password">
+
+                    <div id="profile_password_form_error"
+                         class="alert alert-danger"
+                         style="display:none;">
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-12 mt-2">
+
+                            <label for="current_password"
+                                   class="colorBase7 font_weight500">
+                                Contraseña actual *
+                            </label>
+
+                            <input type="password"
+                                   class="form-control"
+                                   id="current_password"
+                                   name="current_password"
+                                   autocomplete="current-password">
+
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+
+                            <label for="new_password"
+                                   class="colorBase7 font_weight500">
+                                Nueva contraseña *
+                            </label>
+
+                            <input type="password"
+                                   class="form-control"
+                                   id="new_password"
+                                   name="new_password"
+                                   autocomplete="new-password">
+
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+
+                            <label for="new_password_confirm"
+                                   class="colorBase7 font_weight500">
+                                Repetir nueva contraseña *
+                            </label>
+
+                            <input type="password"
+                                   class="form-control"
+                                   id="new_password_confirm"
+                                   name="new_password_confirm"
+                                   autocomplete="new-password">
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="card-footer text-end">
+
+                <button type="button"
+                        id="btn_save_profile_password"
+                        class="btn backgroundTertiary colorWhite"
+                        onclick="actualizarPasswordPerfil();">
+
+                    <i class="fa-solid fa-key me-1"></i>
+                    Cambiar contraseña
+
+                </button>
+
+                <div id="loading_profile_password"
+                     class="spinner-border spinner-border-sm ms-2"
+                     role="status"
+                     style="display:none;">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-lg-4">
+
+        <!-- IMAGEN DE PERFIL -->
+        <div class="card">
+
+            <div class="card-header font_weight500">
+                Imagen de perfil
+            </div>
+
+            <div class="card-body">
+
+                <form id="form_profile_image"
+                      enctype="multipart/form-data">
+
+                    <input type="file"
+                           id="profile_image"
+                           name="profile_image"
+                           accept=".jpg,.jpeg,.png,.webp"
+                           class="d-none">
+
+                    <input type="hidden"
+                           id="remove_profile_image"
+                           name="remove_profile_image"
+                           value="0">
+
+                    <div id="profile_image_form_error"
+                         class="alert alert-danger"
+                         style="display:none;">
+                    </div>
+
+                    <div id="profile_dropzone"
+                         class="text-center cursor_pointer p-4 border rounded"
+                         [s/if !empty($model->photo)/s]style="display:none;"[s//if/s]>
+
+                        <i class="fa-solid fa-cloud-arrow-up fa-2x colorMuted mb-3"></i>
+
+                        <div class="font_weight500">
+                            Arrastra una imagen aquí
+                        </div>
+
+                        <div class="colorMuted mt-1">
+                            o pulsa para seleccionarla
+                        </div>
+
+                        <small class="colorMuted d-block mt-2">
+                            JPG, PNG o WEBP
+                        </small>
+
+                    </div>
+
+                    <div id="profile_image_preview"
+                         class="text-center"
+                         [s/if empty($model->photo)/s]style="display:none;"[s//if/s]>
+
+                        <img id="profile_image_preview_img"
+                             src="[s/if !empty($model->photo)/s][s/$model->photo/s][s//if/s]"
+                             alt="Imagen de perfil"
+                             class="img-fluid rounded mb-3"
+                             style="max-height:250px;">
+
+                        <div>
+
+                            <button type="button"
+                                    id="btn_change_profile_image"
+                                    class="btn backgroundMuted colorWhite btn-sm">
+
+                                <i class="fa-solid fa-image me-1"></i>
+                                Cambiar
+
+                            </button>
+
+                            <button type="button"
+                                    id="btn_remove_profile_image"
+                                    class="btn btn-outline-danger btn-sm ms-1">
+
+                                <i class="fa-solid fa-trash me-1"></i>
+                                Quitar
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="card-footer text-end">
+
+                <button type="button"
+                        id="btn_save_photo"
+                        class="btn backgroundTertiary colorWhite"
+                        onclick="actualizarFotoPerfilUsuario([s/$model->id/s],'perfil');">
+
+                    <i class="fa-solid fa-floppy-disk me-1"></i>
+                    Guardar imagen
+
+                </button>
+
+                <div id="loading_photo"
+                     class="spinner-border spinner-border-sm ms-2"
+                     role="status"
+                     style="display:none;">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

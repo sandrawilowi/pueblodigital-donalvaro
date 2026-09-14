@@ -1,0 +1,278 @@
+[s/$title/s]
+
+<div class="card">
+
+    <div class="card-header font_weight500 d-flex justify-content-between align-items-center">
+
+        <span class="font_weight500">
+            Buscar Historial
+        </span>
+
+        <i id="iconCollapseFilterHistorial"
+           class="fa-solid fa-square-minus cursor_pointer ms-auto"
+           onclick="toggleFilter('collapseFilterHistorial', this)"
+           aria-label="Mostrar/Ocultar filtros">
+        </i>
+
+    </div>
+
+    <div id="collapseFilterHistorial" class="collapse show">
+
+        <div class="card-body">
+
+            <form id="filterHistorial" name="filterHistorial">
+
+                <div class="row">
+
+                    <div class="col-md-3 mt-2">
+
+                        <label class="colorBase7 font_weight500" for="dateFromFilter">
+                            Desde
+                        </label>
+
+                        <div>
+                            <input type="date"
+                                   class="form-control"
+                                   id="dateFromFilter"
+                                   name="dateFromFilter"
+                                   onkeypress="ngFilter(event,'btnFilter')">
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 mt-2">
+
+                        <label class="colorBase7 font_weight500" for="dateToFilter">
+                            Hasta
+                        </label>
+
+                        <div>
+                            <input type="date"
+                                   class="form-control"
+                                   id="dateToFilter"
+                                   name="dateToFilter"
+                                   onkeypress="ngFilter(event,'btnFilter')">
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 mt-2">
+
+                        <label class="colorBase7 font_weight500" for="facilityFilter">
+                            Instalación
+                        </label>
+
+                        <div class="custom-select">
+
+                            <select class="form-control"
+                                    id="facilityFilter"
+                                    name="facilityFilter"
+                                    onkeypress="ngFilter(event,'btnFilter')">
+
+                                <option value="" selected>Todas</option>
+
+                                [s/foreach from=$facilities item=facility/s]
+
+                                    <option value="[s/$facility->id/s]">
+                                        [s/$facility->name/s]
+                                    </option>
+
+                                [s//foreach/s]
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 mt-2">
+
+                        <label class="colorBase7 font_weight500" for="resultFilter">
+                            Resultado
+                        </label>
+
+                        <div class="custom-select">
+
+                            <select class="form-control"
+                                    id="resultFilter"
+                                    name="resultFilter"
+                                    onkeypress="ngFilter(event,'btnFilter')">
+
+                                <option value="" selected>Todos</option>
+                                <option value="1">Permitido</option>
+                                <option value="0">Denegado</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+            <div class="row mt-4">
+
+                <div class="col-md-6">
+
+                    <button aria-label="Buscar historial"
+                            class="btn btn-primary px-4"
+                            id="btnFilter"
+                            onclick="formFilter('filterHistorial');"
+                            onkeypress="ngFilter(event,'btnFilter')">
+                        Buscar
+                    </button>
+
+                </div>
+
+                <div class="col-md-6 text-end">
+
+                    <button type="button"
+                            aria-label="Limpiar"
+                            class="btn btn-clear"
+                            onclick="clearForm('filterHistorial');">
+
+                        <i class="fa-regular fa-trash-can"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="mt-4" id="insertTableHistorial">
+[s/if $results|count>0/s]
+
+
+        <table id="dt_access_history" class="table table-hover align-middle">
+
+            <thead>
+
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Fecha</th>
+                    <th class="text-center">Usuario</th>
+                    <th class="text-center">PIN</th>
+                    <th class="text-center">Instalación</th>
+                    <th class="text-center">Cerradura</th>
+                    <th class="text-center">Evento</th>
+                    <th class="text-center">Resultado</th>
+                    <th class="text-center">Motivo</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                [s/assign "cont" 1/s]
+                [s/foreach from=$results item=result/s]
+
+                    <tr>
+
+                        <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+
+                            <a href="viewhistorial/[s/$result->id/s]">
+                                [s/$result->id/s]
+                            </a>
+
+                        </td>
+
+                        <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                            [s/$result->event_at|date_format:"%d/%m/%Y %H:%M:%S"/s]
+                        </td>
+
+                        <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+
+                            [s/if !empty($result->user_name)/s]
+
+                                [s/$result->user_name/s]
+
+                            [s/else/s]
+
+                                -
+
+                            [s//if/s]
+
+                        </td>
+
+                        <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+
+                            [s/if !empty($result->pin)/s]
+
+                                [s/$result->pin/s]
+
+                            [s/else/s]
+
+                                -
+
+                            [s//if/s]
+
+                        </td>
+
+                        <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                            [s/$result->facility_name|default:'-'/s]
+                        </td>
+
+                        <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                            [s/$result->lock_alias|default:'-'/s]
+                        </td>
+
+                        <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                            [s/$result->event_type/s]
+                        </td>
+
+                        <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+
+                            [s/if $result->access_granted == 1/s]
+
+                                <span class="badge bg-success">
+                                    Permitido
+                                </span>
+
+                            [s/else/s]
+
+                                <span class="badge bg-danger">
+                                    Denegado
+                                </span>
+
+                            [s//if/s]
+
+                        </td>
+
+                        <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                            [s/$result->failure_reason|default:'-'/s]
+                        </td>
+
+                    </tr>
+
+                    [s/assign "cont" $cont+1/s]
+                    [s/if $cont>2/s]
+                    [s/assign "cont" 1/s]
+                    [s//if/s]
+                    [s//foreach/s]
+
+            </tbody>
+
+        </table>
+
+[s/else/s]
+
+    <div class="card mt-3">
+
+        <div class="card-body colorMuted">
+            No hay resultados.
+        </div>
+
+    </div>
+
+[s//if/s]
+
+</div>

@@ -1,0 +1,567 @@
+[s/$title/s]
+
+<div id="buscador">
+
+    <div class="card">
+
+        <div class="card-header font_weight500 d-flex justify-content-between align-items-center">
+
+            <span class="font_weight500">
+                Buscar Pin
+            </span>
+
+            <i id="iconCollapseFilterCerraduras"
+               class="fa-solid fa-square-minus cursor_pointer ms-auto"
+               onclick="toggleFilter('collapseFilterPins', this)"
+               aria-label="Mostrar/Ocultar filtros">
+            </i>
+
+        </div>
+
+        <div id="collapseFilterPins" class="collapse show">
+            <div class="card-body">
+                <form id="filterPins" name="filterPins">
+
+                <div class="row">
+
+                    <div class="col-md-3 mt-2">
+
+                        <label class="colorBase7 font_weight500" for="pinFilter">Pin</label>
+
+                        <div>
+                            <input type="number"
+                                   class="form-control"
+                                   id="pinFilter"
+                                   name="pinFilter"
+                                   onkeypress="ngFilter(event,'btnFilter')">
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 mt-2">
+
+                        <label class="colorBase7 font_weight500" for="facilityFilter">Instalación</label>
+
+                        <div class="custom-select">
+
+                            <select class="form-control"
+                                    id="facilityFilter"
+                                    name="facilityFilter"
+                                    onkeypress="ngFilter(event,'btnFilter')">
+
+                                <option value="" selected>Todas</option>
+
+                                [s/foreach from=$facilities item=facility/s]
+
+                                    <option value="[s/$facility->id/s]">
+                                        [s/$facility->name/s]
+                                    </option>
+
+                                [s//foreach/s]
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 mt-2">
+
+                        <label class="colorBase7 font_weight500" for="statusFilter">Estado</label>
+
+                        <div class="custom-select">
+
+                            <select class="form-control"
+                                    id="statusFilter"
+                                    name="statusFilter"
+                                    onkeypress="ngFilter(event,'btnFilter')">
+
+                                <option value="" selected>Todos</option>
+
+                                [s/foreach from=$pin_statuses item=pin_status/s]
+
+                                    <option value="[s/$pin_status->id/s]">
+                                        [s/$pin_status->name/s]
+                                    </option>
+
+                                [s//foreach/s]
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+                <div class="row mt-4">
+
+                    <div class="col-md-6">
+                        <button aria-label="Buscar cerraduras" class="btn btn-primary px-4" id="btnFilter" 
+                                onclick="formFilter('filterPins');" onkeypress="ngFilter(event, 'btnFilter')">
+                            Buscar
+                        </button>
+                    </div>
+
+                    <div  class="col-md-6 text-end">
+                        <button type="button" aria-label="Limpiar" class="btn btn-clear" onclick="clearForm('filterPins');">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="mt-4" id="insertTableCerraduras">
+
+    [s/if $results|count>0/s]
+    <table id="dt_pins" class="table border" data-ordering="true" style="table-layout:fixed; width: 100%">
+        <thead>
+            <tr class="text-center">
+                <th class="text-center">ID</th>
+                <th class="text-center">Pin</th>
+                <th class="text-center">Instalación</th>
+                <th class="text-center">Tipo</th>
+                <th class="text-center">Acceso</th>
+                <th class="text-center">Estado</th>  
+                <th class="text-center">Desde</th>
+                <th class="text-center">Hasta</th>
+                <th class="text-center">Acciones</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+
+            [s/assign "cont" 1/s]
+            [s/foreach from=$results item=result/s]
+
+            <tr class="text-center">
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->id/s]
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    <a aria-label="Editar pin" class="cursor_pointer" href="editpin/[s/$result->id/s]">
+                    [s/$result->pin/s]
+                    </a>
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    <a aria-label="Editar instalación" class="colorTertiary cursor_pointer" href="editinstalacion/[s/$result->facility_id/s]">
+                    [s/$result->facility_name/s]
+                    </a>
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->pin_type/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->access_type/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->pin_status_code/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->valid_from/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->valid_until/s]
+                </td>
+                
+
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    <div class="row">
+
+                        [s/if $result->pin_type == 'MANUAL'/s]
+
+                        <i class="fa-solid fa-ban cursor_pointer"
+                           title="Revocar PIN"
+                           data-bs-toggle="modal"
+                           data-bs-target="#modal_revoke_pin_[s/$result->id/s]">
+                        </i>
+
+                        [s//if/s]
+
+                    </div>
+                </td>
+
+            </tr>
+            
+
+            [s/assign "cont" $cont+1/s]
+            [s/if $cont>2/s]
+                [s/assign "cont" 1/s]
+            [s//if/s]
+
+            [s//foreach/s]
+
+        </tbody>
+    </table>
+    [s/else/s]
+    <div class="card mt-3">
+
+        <div class="card-body colorMuted">
+            No hay resultados.
+        </div>
+
+    </div>
+
+    [s//if/s]
+    
+    [s/foreach from=$results item=result/s]
+
+[s/if $result->pin_type == 'MANUAL'/s]
+
+<div id="modal_revoke_pin_[s/$result->id/s]" class="hidden-print modal fade">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Revocar PIN
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="container-modal py-4">
+
+                    <div class="card-body">
+
+                        <div class="mb-3">
+                            ¿Está seguro de que quiere revocar este PIN?
+                            Recuerde que ya no se podrá acceder con él a la instalación.
+                        </div>
+
+                        <div class="font_weight500 text-center">
+                            [s/$result->pin/s]
+                        </div>
+
+                    </div>
+
+                    <div id="loading_revoke_pin_[s/$result->id/s]" class="loading-div">
+
+                        <img alt="Loading" src="assets/images/loading.svg">
+
+                        <div class="text-center colorMuted">
+                            Revocando PIN
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+
+                            <button aria-label="Cancelar"
+                                    class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-6 text-end">
+
+                            <button aria-label="Revocar PIN"
+                                    class="btn backgroundPrimary colorWhite"
+                                    onclick="revokePin([s/$result->id/s]);"
+                                    id="btn_revoke_pin_[s/$result->id/s]">
+                                Revocar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+[s//if/s]
+
+[s//foreach/s]
+    
+
+</div>
+
+
+<div id="modal_add" class="hidden-print modal fade">
+
+    <div class="modal-dialog modal-lg" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Crear Pin de acceso
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="container-modal py-4">
+
+                    <form id="form_add_pin" name="form_add_pin" autocomplete="off">
+
+                        <div class="row">
+
+                            <div class="col-md-12 mb-3">
+
+                                <label for="facility_id" class="form-label">
+                                    Instalación
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <select id="facility_id"
+                                        name="facility_id"
+                                        class="form-select">
+
+                                    <option value="">
+                                        Seleccione una instalación
+                                    </option>
+
+                                    [s/foreach from=$facilities item=facility/s]
+
+                                        <option value="[s/$facility->id/s]">
+                                            [s/$facility->name/s]
+                                        </option>
+
+                                    [s//foreach/s]
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="col-md-12 mb-3">
+
+                                <div class="form-check">
+
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           id="generate_pin"
+                                           name="generate_pin"
+                                           value="1"
+                                           checked>
+
+                                    <label class="form-check-label" for="generate_pin">
+                                        Generar PIN automáticamente
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+
+                                <label for="pin_code" class="form-label">
+                                    PIN
+                                </label>
+
+                                <input type="text"
+                                       id="pin_code"
+                                       name="pin_code"
+                                       class="form-control"
+                                       inputmode="numeric"
+                                       autocomplete="off"
+                                       minlength="[s/$pin_min_length/s]"
+                                       maxlength="[s/$pin_max_length/s]"
+                                       data-min-length="[s/$pin_min_length/s]"
+                                       data-max-length="[s/$pin_max_length/s]"
+                                       disabled>
+
+                                <div class="form-text">
+                                    El PIN se generará automáticamente.
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label d-block">
+                                    Tipo de acceso
+                                </label>
+
+                                <div class="form-check mt-2">
+
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           id="is_permanent"
+                                           name="is_permanent"
+                                           value="1">
+
+                                    <label class="form-check-label" for="is_permanent">
+                                        Permanente
+                                    </label>
+
+                                </div>
+
+                                <div class="form-check mt-2">
+
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           id="is_one_time"
+                                           name="is_one_time"
+                                           value="1">
+
+                                    <label class="form-check-label" for="is_one_time">
+                                        Un solo uso
+                                    </label>
+
+                                </div>
+
+                                <div class="form-text">
+                                    Si no se marca ninguna opción, el PIN será temporal.
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+
+                                <label for="valid_from" class="form-label">
+                                    Válido desde
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <input type="datetime-local"
+                                       id="valid_from"
+                                       name="valid_from"
+                                       class="form-control">
+
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+
+                                <label for="valid_until" class="form-label">
+                                    Válido hasta
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <input type="datetime-local"
+                                       id="valid_until"
+                                       name="valid_until"
+                                       class="form-control">
+
+                                <div class="form-text">
+                                    No es necesario si el PIN es permanente.
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-12 mb-3">
+
+                                <label for="description" class="form-label">
+                                    Descripción
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <input type="text"
+                                       id="description"
+                                       name="description"
+                                       class="form-control"
+                                       maxlength="255"
+                                       autocomplete="off">
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+
+                    <div id="pin_form_error"
+                         class="alert alert-danger mt-3 mb-0"
+                         style="display:none;">
+                    </div>
+
+                </div>
+
+
+                <div id="loading" class="loading-div">
+                    <img alt="Loading" src="assets/images/loading.svg">
+                    <div class="text-center colorMuted">
+                        Creando pin de acceso
+                    </div>
+                </div>
+
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+
+                            <button aria-label="Cancelar"
+                                    class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-6 text-end">
+
+                            <button aria-label="Crear Pin"
+                                    id="btn_add_pin"
+                                    class="btn backgroundPrimary colorWhite"
+                                    onclick="addPin();">
+                                Guardar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

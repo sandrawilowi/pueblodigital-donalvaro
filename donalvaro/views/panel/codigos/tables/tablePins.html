@@ -1,0 +1,189 @@
+[s/if $results|count>0/s]
+    <table id="dt_pins" class="table border" data-ordering="true" style="table-layout:fixed; width: 100%">
+        <thead>
+            <tr class="text-center">
+                <th class="text-center">ID</th>
+                <th class="text-center">Pin</th>
+                <th class="text-center">Instalación</th>
+                <th class="text-center">Tipo</th>
+                <th class="text-center">Acceso</th>
+                <th class="text-center">Estado</th>  
+                <th class="text-center">Desde</th>
+                <th class="text-center">Hasta</th>
+                <th class="text-center">Acciones</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+
+            [s/assign "cont" 1/s]
+            [s/foreach from=$results item=result/s]
+
+            <tr class="text-center">
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->id/s]
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    <a aria-label="Editar pin" class="colorBase9 cursor_pointer" href="editpin/[s/$result->id/s]">
+                    [s/$result->pin/s]
+                    </a>
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    <a aria-label="Editar instalación" class="colorTertiary cursor_pointer" href="editinstalacion/[s/$result->facility_id/s]">
+                    [s/$result->facility_name/s]
+                    </a>
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->pin_type/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->access_type/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->pin_status_code/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->valid_from/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->valid_until/s]
+                </td>
+                
+
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    <div class="row">
+
+                        [s/if $result->pin_type == 'MANUAL'/s]
+
+                        <i class="fa-solid fa-ban cursor_pointer"
+                           title="Revocar PIN"
+                           data-bs-toggle="modal"
+                           data-bs-target="#modal_revoke_pin_[s/$result->id/s]">
+                        </i>
+
+                        [s//if/s]
+
+                    </div>
+                </td>
+
+            </tr>
+            
+
+            [s/assign "cont" $cont+1/s]
+            [s/if $cont>2/s]
+                [s/assign "cont" 1/s]
+            [s//if/s]
+
+            [s//foreach/s]
+
+        </tbody>
+    </table>
+    [s/else/s]
+    <div class="card mt-3">
+
+        <div class="card-body colorMuted">
+            No hay resultados.
+        </div>
+
+    </div>
+
+    [s//if/s]
+    
+    
+    [s/foreach from=$results item=result/s]
+
+[s/if $result->pin_type == 'MANUAL'/s]
+
+<div id="modal_revoke_pin_[s/$result->id/s]" class="hidden-print modal fade">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Revocar PIN
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="container-modal py-4">
+
+                    <div class="card-body">
+
+                        <div class="mb-3">
+                            ¿Está seguro de que quiere revocar este PIN?
+                            Recuerde que ya no se podrá acceder con él a la instalación.
+                        </div>
+
+                        <div class="font_weight500 text-center">
+                            [s/$result->pin/s]
+                        </div>
+
+                    </div>
+
+                    <div id="loading_revoke_pin_[s/$result->id/s]" class="loading-div">
+
+                        <img alt="Loading" src="assets/images/loading.svg">
+
+                        <div class="text-center colorMuted">
+                            Revocando PIN
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+
+                            <button aria-label="Cancelar"
+                                    class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-6 text-end">
+
+                            <button aria-label="Revocar PIN"
+                                    class="btn backgroundPrimary colorWhite"
+                                    onclick="revokePin([s/$result->id/s]);"
+                                    id="btn_revoke_pin_[s/$result->id/s]">
+                                Revocar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+[s//if/s]
+
+[s//foreach/s]

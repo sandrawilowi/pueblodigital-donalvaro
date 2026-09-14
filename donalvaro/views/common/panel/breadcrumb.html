@@ -1,0 +1,27 @@
+<!--begin::Row-->
+<div class="row">
+
+    <div class="col-sm-12">
+        <ol class="breadcrumb text-14 float-sm-end">
+
+            [s/if $pageLink|count==0/s]
+            <li class="breadcrumb-item"><em><a href="dashboard"><i class="nav-icon fa-solid fa-gauge-high"></i> Dashboard</a></em></li>
+            [s/else/s]
+            <li class="breadcrumb-item"><em><a href="[s/$extraUrl/s]dashboard"><i class="nav-icon fa-solid fa-gauge-high"></i> Dashboard</a></em></li>
+            [s//if/s]
+
+            [s/foreach from=$pageLink item=page/s]
+            <i class="fa-solid fa-angle-right ms-2"></i>
+            [s/if !$page->last/s]
+            <li class="breadcrumb-item ms-2"><a href="[s/$page->link/s]">[s/$page->name/s]</a></li>
+            [s/else/s]
+            <li class="breadcrumb-item active ms-2" aria-current="page">[s/$page->name/s]</li>
+            [s//if/s]
+
+            [s//foreach/s]
+        </ol>
+
+    </div>
+</div>
+<!--end::Row-->
+

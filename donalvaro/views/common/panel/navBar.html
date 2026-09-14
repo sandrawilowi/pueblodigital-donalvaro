@@ -1,0 +1,94 @@
+<!--begin::Header-->
+<nav class="app-header navbar navbar-expand">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <!--begin::Start Navbar Links-->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                    <i class="fas fa-bars"></i>
+                </a>
+            </li>
+
+            <li class="nav-item d-none d-md-block">
+                <a href="[s/$extraUrl/s]documentacion" class="nav-link">
+                    <i class="fa-solid fa-book" aria-hidden="true"></i>
+                    Documentación
+                </a>
+            </li>
+        </ul>
+        <!--end::Start Navbar Links-->
+
+        <!--begin::End Navbar Links-->
+        <ul class="navbar-nav ms-auto">
+
+            <!--begin::Notifications Dropdown Menu-->
+            <li class="nav-item dropdown">
+                <a class="nav-link" data-bs-toggle="dropdown" href="#">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="navbar-badge badge text-bg-warning">1</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                    <span class="dropdown-item dropdown-header">1 Notificaciones</span>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fa-solid fa-envelope me-2"></i> 4 nuevos mensajes
+                        <span class="float-end text-secondary fs-7">3 mins</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fa-solid fa-file-lines me-2"></i> 3 nuevas alarmas
+                        <span class="float-end text-secondary fs-7">2 days</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item dropdown-footer"> Ver todas </a>
+                </div>
+            </li>
+            <!--end::Notifications Dropdown Menu-->
+
+            <!--begin::Fullscreen Toggle-->
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-lte-toggle="fullscreen">
+                    <i data-lte-icon="maximize" class="fa-solid fa-expand"></i>
+                    <i data-lte-icon="minimize" class="fa-solid fa-compress d-none"></i>
+                </a>
+            </li>
+            <!--end::Fullscreen Toggle-->
+
+
+            <!--begin::User Menu Dropdown-->
+            <li class="nav-item dropdown user-menu">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                    <img
+                        src="[s/$extraUrl/s][s/$user->photo/s]"
+                        class="user-image rounded-circle shadow"
+                        alt="User Image"
+                        />
+                    <span class="d-none d-md-inline">[s/$user->first_name/s] [s/$user->last_name/s]</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                    <!--begin::User Image-->
+                    <li class="user-header text-bg-primary">
+                        <img
+                            src="[s/$extraUrl/s][s/$user->photo/s]"
+                            class="rounded-circle shadow"
+                            alt="User Image"
+                            />
+                    </li>
+                    <!--end::User Image-->
+
+                    <!--begin::Menu Footer-->
+                    <li class="user-footer">
+                        <a href="[s/$extraUrl/s]perfil" class="btn btn-outline-secondary">Perfil</a>
+                        <a href="[s/$extraUrl/s]logout" class="btn btn-outline-danger float-end">Salir</a>
+                    </li>
+                    <!--end::Menu Footer-->
+                </ul>
+            </li>
+            <!--end::User Menu Dropdown-->
+        </ul>
+        <!--end::End Navbar Links-->
+    </div>
+    <!--end::Container-->
+</nav>
+<!--end::Header-->

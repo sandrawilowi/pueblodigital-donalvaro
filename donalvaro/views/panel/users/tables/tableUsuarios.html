@@ -1,0 +1,174 @@
+ [s/if $results|count>0/s]
+    <table id="dt_usuarios" class="table border" data-ordering="true" style="table-layout:fixed; width: 100%">
+        <thead>
+            <tr class="text-center">
+                <th class="text-center">ID</th>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Apellidos</th>
+                <th class="text-center">Email</th>
+                <th class="text-center">Teléfono</th>                  
+                <th class="text-center">Acciones</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+
+            [s/assign "cont" 1/s]
+            [s/foreach from=$results item=result/s]
+
+            <tr class="text-center">
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->id/s]
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    <a aria-label="[s/$result->first_name/s]" class="colorBase9 cursor_pointer" href="editusuario/[s/$result->id/s]">
+                    [s/$result->first_name/s]
+                    </a>
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    <a aria-label="[s/$result->last_name/s]" class="colorBase9 cursor_pointer" href="editusuario/[s/$result->id/s]">
+                    [s/$result->last_name/s]
+                    </a>
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->email/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->phone/s]
+                </td>
+
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    <div class="row">
+
+                        <div class="col-md-4">
+
+                            [s/if $result->status==1/s]
+                            <a aria-label="Desactivar Cerradura" class="cursor_pointer" href="javascript: void(0)" onclick="activeUser([s/$result->id/s],0)" id="btnActiveDeviceLink[s/$result->id/s]">
+                                <i class="ph-fill ph-power text-22 colorAccent" id="btnActiveDevice[s/$result->id/s]"></i>
+                            </a>
+                            
+                            [s/elseif $result->status==0/s]
+                            <a aria-label="Activar Cerradura" class="cursor_pointer" href="javascript: void(0)" onclick="activeUser([s/$result->id/s],1)" id="btnActiveDeviceLink[s/$result->id/s]">
+                                <i class="ph-fill ph-power text-22 colorWarning" id="btnActiveDevice[s/$result->id/s]"></i>
+                            </a>
+
+                            [s//if/s]
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            [s/if $result->status == 2/s]
+
+                            <a id="btnBlockUserLink[s/$result->id/s]"
+                               href="javascript:void(0);"
+                               title="Desbloquear usuario"
+                               onclick="blockUser([s/$result->id/s],0)">
+                                <i id="btnBlockUser[s/$result->id/s]"
+                                   class="fa-solid fa-lock colorWarning"></i>
+                            </a>
+
+                            [s/else/s]
+
+                            <a id="btnBlockUserLink[s/$result->id/s]"
+                               href="javascript:void(0);"
+                               title="Bloquear usuario"
+                               onclick="blockUser([s/$result->id/s],1)">
+                                <i id="btnBlockUser[s/$result->id/s]"
+                                   class="fa-solid fa-lock-open colorMuted"></i>
+                            </a>
+
+                            [s//if/s]
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <a aria-label="modal delete" class="colorBase9 cursor_pointer" href="javascript: void(0)" data-bs-toggle="modal" data-bs-target="#modal_delete[s/$result->id/s]">
+                                <i class="ph-fill ph-trash text-22 colorError"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                </td>
+
+            </tr>
+            
+
+            [s/assign "cont" $cont+1/s]
+            [s/if $cont>2/s]
+                [s/assign "cont" 1/s]
+            [s//if/s]
+
+            [s//foreach/s]
+
+        </tbody>
+    </table>
+    [s/else/s]
+    <div class="card mt-3">
+
+        <div class="card-body colorMuted">
+            No hay resultados.
+        </div>
+
+    </div>
+
+    [s//if/s]
+
+    [s/foreach from=$results item=result/s]
+
+<div id="modal_delete[s/$result->id/s]" class="hidden-print modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header modal-header-error">
+                <div class="text-20 colorBase7 font_weight500">Eliminar Usuario</div>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="container-modal-error">
+
+
+                    <div class="mt-2 text-center">
+                        ¿Está seguro que quiere eliminar este cliente? No se podrán recuperar los datos.
+                        <br>
+                        <strong>[s/$result->first_name/s] [s/$result->last_name/s]</strong>
+                    </div>
+                    
+                    <div id="loading-delete" class="loading-div">
+                        <img alt="Loading" src="assets/images/loading.svg">
+                        <div class="text-center colorMuted">Eliminando usuario</div>
+                    </div>
+
+
+                </div>
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+                            <button aria-label="Cancelar" class="btn backgroundMuted colorWhite" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                        </div>
+
+                        <div class="col-md-6 text-end">
+                            <button aria-label="Eliminar Cerradura" id="btn_delete"
+                                    class="btn backgroundError colorWhite" onclick="deleteUser([s/$result->id/s])">
+                                Eliminar
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+[s//foreach/s]

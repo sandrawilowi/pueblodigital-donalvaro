@@ -1,0 +1,497 @@
+[s/$title/s]
+
+<div class="container-fluid">
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3 class="mb-1 colorTertiary">Mis bonos</h3>
+
+            <p class="colorMuted mb-0">
+                Consulta los bonos que has adquirido y su estado actual.
+            </p>
+        </div>
+    </div>
+
+
+    [s/if !empty($bonuses)/s]
+
+    <div class="row g-4">
+
+        [s/foreach $bonuses as $bonus/s]
+
+            <div class="col-md-6 col-xl-4">
+
+                <div class="card h-100 shadow-sm">
+
+                    <div class="d-flex align-items-center justify-content-center backgroundLight"
+                         style="height:180px;">
+
+                        <i class="fa-solid fa-ticket fa-2x colorAccent"></i>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+
+                            <h5 class="mb-0">
+                                [s/$bonus->bonus_name|escape/s]
+                            </h5>
+
+                            [s/if $bonus->status == 0/s]
+
+                                <span class="badge backgroundWarning">
+                                    Pendiente
+                                </span>
+
+                            [s/elseif $bonus->status == 1/s]
+
+                                <span class="badge backgroundAccent">
+                                    Activo
+                                </span>
+
+                            [s/elseif $bonus->status == 2/s]
+
+                                <span class="badge backgroundError">
+                                    Bloqueado
+                                </span>
+
+                            [s/else/s]
+
+                                <span class="badge backgroundMuted">
+                                    No disponible
+                                </span>
+
+                            [s//if/s]
+
+                        </div>
+
+
+                        [s/if !empty($bonus->bonus_description)/s]
+
+                            <p class="colorMuted mb-3">
+                                [s/$bonus->bonus_description|escape/s]
+                            </p>
+
+                        [s//if/s]
+
+
+                        [s/if !empty($bonus->facilities)/s]
+
+                            <div class="mb-3">
+
+                                <div class="fw-semibold mb-1">
+                                    Válido para:
+                                </div>
+
+                                [s/foreach $bonus->facilities as $bonus_facility/s]
+
+                                    <div class="colorMuted">
+                                        <i class="fa-solid fa-location-dot colorPrimary me-1"></i>
+
+                                        <a href="[s/$extraUrl/s]ver-instalacion/[s/$bonus_facility->id/s]"
+                                           class="text-decoration-none">
+                                            [s/$bonus_facility->name|escape/s]
+                                        </a>
+                                    </div>
+
+                                [s//foreach/s]
+
+                            </div>
+
+                        [s//if/s]
+
+
+                        <div class="mb-3">
+
+                            [s/if $bonus->bonus_type == 'TIME'/s]
+
+                                <div>
+                                    Tipo de bono:
+                                    <strong>Uso ilimitado</strong>
+                                </div>
+
+                            [s/else/s]
+
+                                <div>
+                                    Usos iniciales:
+                                    <strong>[s/$bonus->initial_uses/s]</strong>
+                                </div>
+
+                                <div>
+                                    Usos disponibles:
+                                    <strong>[s/$bonus->remaining_uses/s]</strong>
+                                </div>
+
+                            [s//if/s]
+
+                            <div>
+                                Precio:
+                                <strong>[s/$bonus->purchase_price|string_format:"%.2f"/s] €</strong>
+                            </div>
+
+                        </div>
+
+
+                        [s/if !empty($bonus->valid_from)/s]
+
+                            <div class="colorMuted">
+                                Válido desde:
+                                <strong>[s/$bonus->valid_from|date_format:"%d/%m/%Y"/s]</strong>
+                            </div>
+
+                        [s//if/s]
+
+
+                        [s/if !empty($bonus->expires_at)/s]
+
+                            <div class="colorMuted">
+                                Caduca:
+                                <strong>[s/$bonus->expires_at|date_format:"%d/%m/%Y"/s]</strong>
+                            </div>
+
+                        [s/elseif $bonus->status == 1 && $bonus->bonus_type == 'USES'/s]
+
+                            <div class="colorMuted">
+                                Sin fecha de caducidad
+                            </div>
+
+                        [s//if/s]
+
+
+                        [s/if $bonus->status == 0/s]
+
+                            <div class="backgroundMutedLight rounded p-3 mt-3">
+                                Este bono está pendiente de confirmación.
+                            </div>
+
+                        [s//if/s]
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        [s//foreach/s]
+
+    </div>
+
+[s/else/s]
+
+    <div class="card shadow-sm">
+
+        <div class="card-body text-center py-5">
+
+            <i class="fa-solid fa-ticket fa-2x colorMuted mb-3"></i>
+
+            <h5>No tienes bonos</h5>
+
+            <p class="colorMuted mb-0">
+                Consulta los bonos disponibles para adquirir uno.
+            </p>
+
+        </div>
+
+    </div>
+
+[s//if/s]
+
+
+<section class="mb-5 mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+            <h3 class="mb-1 colorTertiary">Bonos disponibles para comprar</h3>
+
+            <p class="colorMuted mb-0">
+                Consulta los bonos disponibles y adquiere el que mejor se adapte a tus necesidades.
+            </p>
+        </div>
+
+    </div>
+
+
+    [s/if !empty($available_bonuses)/s]
+
+        <div class="row g-4">
+
+            [s/foreach $available_bonuses as $bonus/s]
+
+                <div class="col-md-6 col-xl-4">
+
+                    <div class="card h-100 shadow-sm">
+
+                        <div class="card-body d-flex flex-column">
+
+                            <div class="facility-card-icon facility-bonus-icon mb-3 colorAccent">
+                                <i class="fa-solid fa-ticket"></i>
+                            </div>
+
+                            <h5 class="colorPrimary mb-2">
+                                [s/$bonus->name|escape/s]
+                            </h5>
+
+
+                            [s/if !empty($bonus->description)/s]
+
+                                <p class="colorMuted">
+                                    [s/$bonus->description|escape/s]
+                                </p>
+
+                            [s//if/s]
+
+
+                            <div class="mb-2">
+
+                                [s/if $bonus->bonus_type == 'TIME'/s]
+
+                                    <strong>Uso ilimitado</strong>
+
+                                [s/else/s]
+
+                                    <strong>[s/$bonus->total_uses/s] usos</strong>
+
+                                [s//if/s]
+
+                                ·
+
+                                <strong>
+                                    [s/$bonus->price|string_format:"%.2f"/s] €
+                                </strong>
+
+                            </div>
+
+
+                            <div class="colorMuted mb-3">
+
+                                [s/if $bonus->validity_mode == 'DAYS'/s]
+
+                                    [s/if !empty($bonus->validity_days)/s]
+
+                                        Validez:
+                                        [s/$bonus->validity_days/s] días
+
+                                    [s/else/s]
+
+                                        Sin límite de días
+
+                                    [s//if/s]
+
+                                [s/elseif $bonus->validity_mode == 'CALENDAR_WEEK'/s]
+
+                                    Validez: semana natural
+
+                                [s/elseif $bonus->validity_mode == 'CALENDAR_MONTH'/s]
+
+                                    Validez: mes natural
+
+                                [s/elseif $bonus->validity_mode == 'CALENDAR_YEAR'/s]
+
+                                    Validez: año natural
+
+                                [s//if/s]
+
+                            </div>
+
+
+                            [s/if !empty($bonus->facilities)/s]
+
+                                <div class="mb-3">
+
+                                    <div class="fw-semibold mb-1">
+                                        Válido para:
+                                    </div>
+
+                                    [s/foreach $bonus->facilities as $bonus_facility/s]
+
+                                        <div>
+                                            <i class="fa-solid fa-location-dot colorPrimary me-1"></i>
+
+                                            <a href="[s/$extraUrl/s]ver-instalacion/[s/$bonus_facility->id/s]"
+                                               class="text-decoration-none">
+                                                [s/$bonus_facility->name|escape/s]
+                                            </a>
+                                        </div>
+
+                                    [s//foreach/s]
+
+                                </div>
+
+                            [s//if/s]
+
+
+                            <div class="mt-auto">
+                                [s/if !empty($bonus->payment_methods)/s]
+
+                                <button type="button"
+                                        class="btn backgroundPrimary colorWhite w-100"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalBuyBonus[s/$bonus->id/s]">
+                                    <i class="fa-solid fa-cart-shopping me-2"></i>
+                                    Comprar bono
+                                </button>
+
+                                [s/else/s]
+
+                                <button type="button"
+                                        class="btn btn-secondary w-100"
+                                        disabled>
+                                    No disponible para compra
+                                </button>
+
+                                [s//if/s]
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                [s/if !empty($bonus->payment_methods)/s]
+                <div class="modal fade"
+                     id="modalBuyBonus[s/$bonus->id/s]"
+                     tabindex="-1"
+                     aria-hidden="true">
+
+                    <div class="modal-dialog modal-dialog-centered">
+
+                        <div class="modal-content">
+
+                            <div class="modal-header backgroundPrimary colorWhite">
+
+                                <h5 class="modal-title">
+                                    Comprar bono
+                                </h5>
+
+                                <button type="button"
+                                        class="btn colorWhite"
+                                        data-bs-dismiss="modal">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+
+                            </div>
+
+                            <div class="modal-body">
+
+                                <div class="mb-3">
+
+                                    <label class="form-label colorMuted">
+                                        Bono seleccionado
+                                    </label>
+
+                                    <div class="fw-semibold">
+                                        [s/$bonus->name|escape/s]
+                                    </div>
+
+                                    <div class="colorPrimary fw-semibold">
+                                        [s/$bonus->price|string_format:"%.2f"/s] €
+                                    </div>
+
+                                </div>
+
+
+                                [s/if !empty($bonus->facilities)/s]
+
+                                    <div class="mb-3">
+
+                                        <label class="form-label colorMuted">
+                                            Válido para
+                                        </label>
+
+                                        [s/foreach $bonus->facilities as $bonus_facility/s]
+
+                                            <div>
+                                                <i class="fa-solid fa-location-dot colorPrimary me-1"></i>
+                                                [s/$bonus_facility->name|escape/s]
+                                            </div>
+
+                                        [s//foreach/s]
+
+                                    </div>
+
+                                [s//if/s]
+
+
+                                <div class="mb-3">
+
+                                    <label for="buy_bonus_payment_method_[s/$bonus->id/s]"
+                                           class="form-label">
+
+                                        Método de pago
+                                        <span class="colorError">*</span>
+
+                                    </label>
+
+                                    <select class="form-select"
+                                            id="buy_bonus_payment_method_[s/$bonus->id/s]">
+
+                                        <option value="">
+                                            Seleccione un método de pago
+                                        </option>
+
+                                        [s/foreach $bonus->payment_methods as $method/s]
+
+                                            <option value="[s/$method->payment_method_id/s]">
+                                                [s/$method->name|escape/s]
+                                            </option>
+
+                                        [s//foreach/s]
+
+                                    </select>
+
+                                </div>
+
+
+                                [s/if !empty($bonus->pending_payment_instructions)/s]
+
+                                    <div class="backgroundMutedLight rounded p-3 mb-3">
+                                        [s/$bonus->pending_payment_instructions|escape:'html'|nl2br/s]
+                                    </div>
+
+                                [s//if/s]
+
+
+                                <div class="d-flex justify-content-end gap-2">
+
+                                    <button type="button"
+                                            class="btn btn-secondary"
+                                            data-bs-dismiss="modal">
+                                        Cancelar
+                                    </button>
+
+                                    <button type="button"
+                                            id="btn_buy_bonus_[s/$bonus->id/s]"
+                                            class="btn backgroundPrimary colorWhite"
+                                            onclick="buyBonus([s/$bonus->id/s]);">
+                                        Confirmar compra
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                [s//if/s]
+            [s//foreach/s]
+
+        </div>
+
+    [s/else/s]
+
+        <div class="colorMuted">
+            No hay bonos disponibles actualmente.
+        </div>
+
+    [s//if/s]
+
+</section>
+
+</div>

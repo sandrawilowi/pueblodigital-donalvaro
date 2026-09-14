@@ -1,0 +1,622 @@
+[s/$title/s]
+
+<div id="buscador">
+    
+    <div class="card">
+
+        <div class="card-header font_weight500 d-flex justify-content-between align-items-center">
+
+            <span class="font_weight500">
+                Buscar Instalación
+            </span>
+
+            <i id="iconCollapseFilterCerraduras"
+               class="fa-solid fa-square-minus cursor_pointer ms-auto"
+               onclick="toggleFilter('collapseFilterInst', this)"
+               aria-label="Mostrar/Ocultar filtros">
+            </i>
+
+        </div>
+
+        <div id="collapseFilterInst" class="collapse show">
+            <div class="card-body">
+                <form id="filterInstalaciones" name="filterInstalaciones">
+
+                    <div class="row">
+
+                        <div class="col-md-3 mt-2">
+
+                            <label class="colorBase7 font_weight500" for="nameFilter">Nombre</label>
+                            <div>
+                                <input type="text" class="form-control" id="nameFilter" name="nameFilter" placeholder="Nombre" onkeypress="ngFilter(event,'btnFilter')">
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mt-2">
+
+                            <label class="colorBase7 font_weight500"
+                                   for="cityFilter">
+                                Localidad
+                            </label>
+
+                            <div>
+                                <input type="text"
+                                       class="form-control"
+                                       id="cityFilter"
+                                       name="cityFilter"
+                                       placeholder="Localidad"
+                                       onkeypress="ngFilter(event,'btnFilter')">
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-3 mt-2">
+
+                            <label class="colorBase7 font_weight500"
+                                   for="provinceFilter">
+                                Provincia
+                            </label>
+
+                            <div>
+
+                                <select class="selectpicker form-control"
+                                        id="provinceFilter"
+                                        name="provinceFilter[]"
+                                        multiple
+                                        data-width="100%"
+                                        data-live-search="true"
+                                        data-actions-box="true"
+                                        data-selected-text-format="count > 2"
+                                        title="Provincia">
+
+                                    [s/foreach from=$provinces item=province/s]
+
+                                    <option value="[s/$province->id/s]">
+                                        [s/$province->name/s]
+                                    </option>
+
+                                    [s//foreach/s]
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-3 mt-2">
+
+                            <label class="colorBase7 font_weight500" for="statusFilter">Estado</label>
+                            <div class="custom-select">
+                                <select class="form-control" id="statusFilter" name="statusFilter" onkeypress="ngFilter(event,'btnFilter')">
+                                    <option value="" selected>Todos</option>                                
+                                    <option value="1">Activa</option>
+                                    <option value="0">Desactivada</option>
+                                    <option value="2">Bloqueada</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </form>
+
+                <div class="row mt-4">
+
+                    <div class="col-md-6">
+                        <button aria-label="Buscar cerraduras" class="btn btn-primary px-4" id="btnFilter" 
+                                onclick="formFilter('filterInstalaciones');" onkeypress="ngFilter(event,'btnFilter')">
+                            Buscar
+                        </button>
+                    </div>
+
+                    <div  class="col-md-6 text-end">
+                        <button type="button" aria-label="Limpiar" class="btn btn-clear" onclick="clearForm('filterInstalaciones');">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="mt-4" id="insertTableCerraduras">
+
+    [s/if $results|count>0/s]
+    <table id="dt_instalacion" class="table border" data-ordering="true" style="table-layout:fixed; width: 100%">
+        <thead>
+            <tr class="text-center">
+                <th class="text-center">ID</th>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Dirección</th>
+                <th class="text-center">Reserva Activada</th>
+                <th class="text-center">Disponibilidad</th>                  
+                <th class="text-center">Acciones</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+
+            [s/assign "cont" 1/s]
+            [s/foreach from=$results item=result/s]
+
+            <tr class="text-center">
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->id/s]
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    <a aria-label="[s/$result->name/s]" class="colorBase9 cursor_pointer" href="editinstalacion/[s/$result->id/s]">
+                    [s/$result->name/s]
+                    </a>
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->address/s]
+                </td>
+                [s/if $result->booking_enabled==1/s]
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] colorBase12">
+                    Si
+                </td>
+                [s/else/s]
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] colorBase12">
+                    No
+                </td>
+                [s//if/s]
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->capacity/s]
+                </td>
+
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            [s/if $result->status==1/s]
+                            <a aria-label="Desactivar Cerradura" class="cursor_pointer" href="javascript: void(0)" onclick="activeFacility([s/$result->id/s],0)" id="btnActiveDeviceLink[s/$result->id/s]">
+                                <i class="ph-fill ph-power text-22 colorAccent" id="btnActiveDevice[s/$result->id/s]"></i>
+                            </a>
+                            
+                            [s/elseif $result->status==0/s]
+                            <a aria-label="Activar Cerradura" class="cursor_pointer" href="javascript: void(0)" onclick="activeFacility([s/$result->id/s],1)" id="btnActiveDeviceLink[s/$result->id/s]">
+                                <i class="ph-fill ph-power text-22 colorWarning" id="btnActiveDevice[s/$result->id/s]"></i>
+                            </a>
+
+                            [s//if/s]
+
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <a aria-label="modal delete" class="colorBase9 cursor_pointer" href="javascript: void(0)" data-bs-toggle="modal" data-bs-target="#modal_delete[s/$result->id/s]">
+                                <i class="ph-fill ph-trash text-22 colorError"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                </td>
+
+            </tr>
+            
+
+            [s/assign "cont" $cont+1/s]
+            [s/if $cont>2/s]
+                [s/assign "cont" 1/s]
+            [s//if/s]
+
+            [s//foreach/s]
+
+        </tbody>
+    </table>
+    [s/else/s]
+    <div class="card mt-3">
+
+        <div class="card-body colorMuted">
+            No hay resultados.
+        </div>
+
+    </div>
+
+    [s//if/s]
+    
+
+    [s/foreach from=$results item=result/s]
+
+<div id="modal_delete[s/$result->id/s]" class="hidden-print modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header modal-header-error">
+                <div class="text-20 colorBase7 font_weight500">Eliminar Instalación</div>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="container-modal-error">
+
+
+                    <div class="mt-2 text-center">
+                        ¿Está seguro que quiere eliminar esta instalación? No se podrán recuperar los datos.
+                        <br>
+                        <strong>[s/$result->name/s]</strong>
+                    </div>
+                    
+                    <div id="loading-delete" class="loading-div">
+                        <img alt="Loading" src="assets/images/loading.svg">
+                        <div class="text-center colorMuted">Creando instalación</div>
+                    </div>
+
+
+                </div>
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+                            <button aria-label="Cancelar" class="btn backgroundMuted colorWhite" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                        </div>
+
+                        <div class="col-md-6 text-end">
+                            <button aria-label="Eliminar Cerradura" id="btn_delete"
+                                    class="btn backgroundError colorWhite" onclick="deleteFacility([s/$result->id/s])">
+                                Eliminar
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+[s//foreach/s]
+    
+</div>
+
+
+
+<div id="modal_add" class="hidden-print modal fade">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="fs-5 font_weight500">
+                    Crear Instalación
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+            </div>
+
+            <div class="modal-body">
+                <div class="container-modal py-4">
+                    
+                    <div class="card-body">
+                        <form id="form_new_facility" name="form_new_facility">
+                        <div class="row">
+
+                            <div class="col-md-9 mb-3">
+                                <label for="facility_name" class="form-label">
+                                    Nombre
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <input type="text"
+                                       id="facility_name"
+                                       name="facility_name"
+                                       class="form-control"
+                                       maxlength="150"
+                                       autocomplete="off">
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <label for="facility_capacity" class="form-label">
+                                    Capacidad reservable
+                                </label>
+
+                                <input type="number"
+                                       id="facility_capacity"
+                                       name="facility_capacity"
+                                       class="form-control"
+                                       min="1"
+                                       step="1"
+                                       value="1">
+                                <div class="form-text">
+                                    Máximo de unidades o plazas que pueden reservarse simultáneamente.
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12 mb-3">
+                                <label for="facility_description" class="form-label">
+                                    Descripción
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <textarea id="facility_description"
+                                          name="facility_description"
+                                          class="form-control"
+                                          rows="3" required></textarea>
+                            </div>
+
+
+                            <div class="col-md-12 mb-3">
+                                <label for="facility_address" class="form-label">
+                                    Dirección
+                                </label>
+
+                                <input type="text"
+                                       id="facility_address"
+                                       name="facility_address"
+                                       class="form-control"
+                                       maxlength="255"
+                                       autocomplete="off">
+                            </div>
+
+
+                            
+
+                            <div class="col-md-5 mb-3">
+                                <label for="facility_city" class="form-label">
+                                    Localidad
+                                </label>
+
+                                <input type="text"
+                                       id="facility_city"
+                                       name="facility_city"
+                                       class="form-control"
+                                       maxlength="150"
+                                       autocomplete="off">
+                            </div>
+
+                            <div class="col-md-5 mb-3">
+                                <label for="facility_province_id" class="form-label">
+                                    Provincia
+                                </label>
+
+                                <select id="facility_province_id"
+                                        name="facility_province_id"
+                                        class="form-select">
+
+                                    <option value="">
+                                        Seleccione una provincia
+                                    </option>
+
+                                    [s/foreach from=$provinces item=province/s]
+                                    <option value="[s/$province->id/s]">
+                                        [s/$province->name/s]
+                                    </option>
+                                    [s//foreach/s]
+
+                                </select>
+                            </div>
+
+                            <div class="col-md-2 mb-3">
+                                <label for="facility_postal_code" class="form-label">
+                                    C. Postal
+                                </label>
+
+                                <input type="text"
+                                       id="facility_postal_code"
+                                       name="facility_postal_code"
+                                       class="form-control"
+                                       maxlength="10"
+                                       autocomplete="off">
+                            </div>
+
+
+                            <div class="col-md-12 mb-3">
+
+                                <label class="form-label">
+                                    Imagen de portada
+                                </label>
+
+                                <div id="facility_dropzone"
+                                     class="border rounded p-4 text-center cursor_pointer">
+
+                                    <i class="fa-solid fa-cloud-arrow-up fs-2 mb-2"></i>
+
+                                    <div class="fw-semibold">
+                                        Arrastra una imagen aquí
+                                    </div>
+
+                                    <div class="text-muted small">
+                                        o haz clic para seleccionarla
+                                    </div>
+
+                                    <div class="text-muted small mt-2">
+                                        Formatos permitidos: JPG, PNG y WEBP
+                                    </div>
+
+                                </div>
+
+
+                                <input type="file"
+                                       id="facility_image"
+                                       name="facility_image"
+                                       accept="image/jpeg,image/png,image/webp"
+                                       class="d-none">
+
+
+                                <div id="facility_image_preview"
+                                     class="mt-3"
+                                     style="display:none;">
+
+                                    <img id="facility_image_preview_img"
+                                         src=""
+                                         alt="Vista previa"
+                                         class="img-fluid rounded"
+                                         style="max-height:220px;">
+
+                                    <div class="mt-2">
+
+                                        <button type="button"
+                                                id="btn_change_facility_image"
+                                                class="btn btn-sm btn-outline-secondary me-2">
+
+                                            <i class="fa-solid fa-image me-1"></i>
+                                            Cambiar imagen
+
+                                        </button>
+
+                                        <button type="button"
+                                                id="btn_remove_facility_image"
+                                                class="btn btn-sm btn-outline-danger">
+
+                                            <i class="fa-solid fa-trash me-1"></i>
+                                            Quitar imagen
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-12 mb-3">
+
+                                <label class="form-label d-block">
+                                    Opciones
+                                </label>
+
+                                <div class="form-check mb-2">
+
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           id="booking_enabled"
+                                           name="booking_enabled"
+                                           value="1"
+                                           checked>
+
+                                    <label class="form-check-label"
+                                           for="booking_enabled">
+                                        Permitir reservas
+                                    </label>
+
+                                </div>
+
+                                <div id="booking_type_container"
+                                     class="mb-3">
+
+                                    <label for="booking_type_id"
+                                           class="form-label">
+                                        Tipo de reserva
+                                    </label>
+
+                                    <select id="booking_type_id"
+                                            name="booking_type_id"
+                                            class="form-select">
+
+                                        <option value="">
+                                            Seleccione un tipo de reserva
+                                        </option>
+
+                                        [s/foreach from=$booking_types item=booking_type/s]
+
+                                        <option value="[s/$booking_type->id/s]">
+                                            [s/$booking_type->name/s]
+                                        </option>
+
+                                        [s//foreach/s]
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="form-check mb-2">
+
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           id="access_enabled"
+                                           name="access_enabled"
+                                           value="1"
+                                           checked>
+
+                                    <label class="form-check-label"
+                                           for="access_enabled">
+                                        Control de acceso habilitado
+                                    </label>
+
+                                </div>
+
+
+                                <div class="form-check">
+
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           id="requires_guest_information"
+                                           name="requires_guest_information"
+                                           value="1">
+
+                                    <label class="form-check-label"
+                                           for="requires_guest_information">
+                                        Requiere datos de huéspedes
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        
+                    </form>
+
+                    </div>
+
+                    <div id="facility_form_error"
+                         class="alert alert-danger mt-3 mb-0"
+                         style="display:none;">
+                        Debe completar los campos obligatorios.
+                    </div>
+
+
+                    <div id="loading" class="loading-div">
+                        <img alt="Loading" src="assets/images/loading.svg">
+                        <div class="text-center colorMuted">Creando instalación</div>
+                    </div>
+
+                </div>
+                
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+                            <button aria-label="Cancelar" class="btn backgroundMuted colorWhite" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                        </div>
+
+                        <div class="col-md-6 text-end">
+                            <button aria-label="Eliminar Cerradura" 
+                                    class="btn backgroundPrimary colorWhite"
+                                    onclick="addFacility()"
+                                    id="btn_guardar_facility">
+                                Guardar
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,111 @@
+[s/$title/s]
+
+<div class="container-fluid">
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <p class="text-muted mb-0">
+                Consulta las instalaciones disponibles y accede a toda la información antes de realizar tu reserva.
+            </p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        [s/if !empty($facilities)/s]
+
+            [s/foreach $facilities as $facility/s]
+
+                <div class="col-xl-3 col-lg-4 col-md-6">
+
+                    <div class="card h-100 shadow-sm">
+
+                        [s/if !empty($facility->image)/s]
+
+                            <img src="[s/$extraUrl/s]assets/images/facilities/[s/$facility->image/s]"
+                                 class="card-img-top"
+                                 alt="[s/$facility->name|escape/s]"
+                                 style="height: 220px; object-fit: cover;">
+
+                        [s/else/s]
+
+                            <div class="d-flex align-items-center justify-content-center bg-light"
+                                 style="height: 220px;">
+                                <i class="fa-solid fa-building fs-1 text-muted"></i>
+                            </div>
+
+                        [s//if/s]
+
+                        <div class="card-body d-flex flex-column">
+
+                            <h5 class="card-title mb-2">
+                                [s/$facility->name|escape/s]
+                            </h5>
+
+                            [s/if !empty($facility->city)/s]
+
+                                <div class="text-muted mb-3">
+                                    <i class="fa-solid fa-location-dot me-1"></i>
+                                    [s/$facility->city|escape/s]
+                                </div>
+
+                            [s//if/s]
+
+                            [s/if !empty($facility->description)/s]
+
+                                <p class="card-text text-muted">
+                                    [s/$facility->description|escape|truncate:140:"..."/s]
+                                </p>
+
+                            [s//if/s]
+
+                            [s/if !empty($facility->capacity)/s]
+
+                                <div class="mb-3">
+                                    <i class="fa-solid fa-users me-1"></i>
+                                    Capacidad:
+                                    <strong>[s/$facility->capacity/s]</strong>
+                                </div>
+
+                            [s//if/s]
+
+                            <div class="mt-auto">
+                                <a href="[s/$extraUrl/s]ver-instalacion/[s/$facility->id/s]"
+                                   class="btn backgroundPrimary colorWhite w-100">
+                                    Ver instalación
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            [s//foreach/s]
+
+        [s/else/s]
+
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-body text-center py-5">
+
+                        <i class="fa-solid fa-building fs-1 text-muted d-block mb-3"></i>
+
+                        <h5 class="mb-1">No hay instalaciones disponibles</h5>
+
+                        <p class="text-muted mb-0">
+                            Actualmente no hay instalaciones disponibles para reservar.
+                        </p>
+
+                    </div>
+                </div>
+
+            </div>
+
+        [s//if/s]
+
+    </div>
+
+</div>

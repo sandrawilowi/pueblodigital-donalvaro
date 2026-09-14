@@ -1,0 +1,411 @@
+<div class="card">
+
+    <div class="card-header font_weight500">
+        Resumen de la reserva
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+
+                <div class="colorMuted small">
+                    Instalación
+                </div>
+
+                <div class="font_weight500">
+                    [s/$reservation.facility_name/s]
+                </div>
+
+            </div>
+
+            [s/if empty($client_reservation)/s]
+            <div class="col-md-6 mb-3">
+
+                <div class="colorMuted small">
+                    Cliente
+                </div>
+
+                <div class="font_weight500">
+                    [s/$reservation.user_name/s]
+                </div>
+
+            </div>
+            [s//if/s]
+            
+            
+            <div class="col-md-3 mb-3">
+
+                <div class="colorMuted small">
+                    Nº personas
+                </div>
+
+                <div class="font_weight500">
+                    [s/$reservation.people_count/s]
+                </div>
+
+            </div>
+
+            [s/if $reservation.booking_type == 'DATE_RANGE'/s]
+
+                <div class="col-md-4 mb-3">
+
+                    <div class="colorMuted small">
+                        Fecha de entrada
+                    </div>
+
+                    <div class="font_weight500">
+                        [s/$reservation.start_at|date_format:"%d/%m/%Y %H:%M"/s]
+                    </div>
+
+                </div>
+
+                <div class="col-md-4 mb-3">
+
+                    <div class="colorMuted small">
+                        Fecha de salida
+                    </div>
+
+                    <div class="font_weight500">
+                        [s/$reservation.end_at|date_format:"%d/%m/%Y %H:%M"/s]
+                    </div>
+
+                </div>
+
+            [s/else/s]
+
+            <div class="col-md-4 mb-3">
+
+                <div class="small colorMuted">
+                    Inicio
+                </div>
+
+                <div class="font_weight500">
+                    [s/$reservation.start_at|date_format:"%d/%m/%Y %H:%M"/s]
+                </div>
+
+            </div>
+
+            <div class="col-md-4 mb-3">
+
+                <div class="small colorMuted">
+                    Fin
+                </div>
+
+                <div class="font_weight500">
+                    [s/$reservation.end_at|date_format:"%d/%m/%Y %H:%M"/s]
+                </div>
+
+            </div>
+
+            <div class="col-md-4 mb-3">
+
+                <div class="small colorMuted">
+                    Duración
+                </div>
+
+                <div class="font_weight500">
+                    [s/$reservation.duration_formatted/s]
+                </div>
+
+            </div>
+
+
+            [s//if/s]
+
+        </div>
+
+
+        <hr>
+
+
+        <!-- PRECIO -->
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <div class="colorMuted small">
+                    Tarifa aplicada
+                </div>
+
+                <div class="font_weight500">
+                    [s/$reservation.price_name/s]
+                </div>
+
+                [s/if !empty($reservation.price_description)/s]
+
+                    <div class="colorMuted small">
+                        [s/$reservation.price_description/s]
+                    </div>
+
+                [s//if/s]
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <div class="colorMuted small">
+                    Precio
+                </div>
+
+                <div class="font_weight500">
+                    [s/$reservation.unit_price|string_format:"%.2f"/s] €
+                </div>
+
+                <div class="colorMuted small">
+                    [s/$reservation.billing_unit_type_name/s]
+                    ·
+                    [s/$reservation.billing_period_name/s]
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <div class="colorMuted small">
+                    Importe total
+                </div>
+
+                <div class="font_weight500 fs-5">
+                    [s/$reservation.total_amount|string_format:"%.2f"/s] €
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <hr>
+
+
+        <!-- FORMA DE PAGO -->
+
+        <div class="mb-3">
+
+            <div class="font_weight500 mb-3">
+                Forma de pago
+                <span class="text-danger">*</span>
+            </div>
+
+
+            <!-- BONOS -->
+
+            [s/if !empty($reservation.bonuses)/s]
+
+                [s/foreach from=$reservation.bonuses item=bonus/s]
+
+                    <div class="form-check mb-3">
+
+                        <input class="form-check-input reservation-payment-option"
+                               type="radio"
+                               name="reservation_payment_option"
+                               id="reservation_bonus_[s/$bonus->id/s]"
+                               value="BONUS:[s/$bonus->id/s]"
+                               data-type="BONUS">
+
+                        <label class="form-check-label"
+                               for="reservation_bonus_[s/$bonus->id/s]">
+
+                            <span class="font_weight500">
+                                Bono: [s/$bonus->bonus_name/s]
+                            </span>
+
+                            <span class="colorMuted ms-2">
+                                [s/if $bonus->bonus_type == 'TIME'/s]
+
+                                Uso ilimitado
+
+                                [s/else/s]
+
+                                [s/$bonus->remaining_uses/s] usos disponibles
+
+                                [s//if/s]
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                [s//foreach/s]
+
+            [s//if/s]
+
+
+            <!-- MÉTODOS DE PAGO -->
+
+            [s/foreach from=$reservation.payment_methods item=payment_method/s]
+
+                <div class="form-check mb-3">
+
+                    <input class="form-check-input reservation-payment-option"
+                           type="radio"
+                           name="reservation_payment_option"
+                           id="reservation_payment_[s/$payment_method->payment_method_id/s]"
+                           value="PAYMENT_METHOD:[s/$payment_method->payment_method_id/s]"
+                           data-type="PAYMENT_METHOD"
+                           data-code="[s/$payment_method->code/s]">
+
+                    <label class="form-check-label"
+                           for="reservation_payment_[s/$payment_method->payment_method_id/s]">
+
+                        <span class="font_weight500">
+                            [s/$payment_method->name/s]
+                        </span>
+
+                        [s/if !empty($payment_method->description)/s]
+
+                            <span class="colorMuted ms-2">
+                                [s/$payment_method->description/s]
+                            </span>
+
+                        [s//if/s]
+
+                    </label>
+
+                </div>
+
+            [s//foreach/s]
+
+
+            [s/if empty($reservation.bonuses) && empty($reservation.payment_methods)/s]
+
+                <div class="alert alert-warning mb-0">
+                    No hay ninguna forma de pago disponible para esta instalación.
+                </div>
+
+            [s//if/s]
+
+        </div>
+
+
+        <!-- AVISO PAGO PENDIENTE -->
+
+        <div id="pending_payment_info"
+             class="alert alert-warning mt-3"
+             style="display:none;">
+
+            <div class="font_weight500 mb-1">
+                La reserva quedará pendiente de confirmación.
+            </div>
+
+            [s/if !empty($reservation.pending_payment_instructions)/s]
+
+                <div>
+                    [s/$reservation.pending_payment_instructions|escape:'html'|nl2br/s]
+                </div>
+
+            [s//if/s]
+
+        </div>
+
+        <!-- CONDICIONES DE RESERVA -->
+
+        [s/if !empty($reservation.booking_conditions)/s]
+
+        <div class="mt-3">
+
+            <div class="form-check">
+
+                <input class="form-check-input"
+                       type="checkbox"
+                       id="accept_booking_conditions">
+
+                <label class="form-check-label" for="accept_booking_conditions">
+                    He leído y acepto las
+                    <a href="#"
+                       data-bs-toggle="modal"
+                       data-bs-target="#modalBookingConditions">
+                        condiciones de reserva
+                    </a>.
+                </label>
+
+            </div>
+
+        </div>
+
+        [s//if/s]
+
+
+        <div id="reservation_prepare_error"
+             class="alert alert-danger mt-3"
+             style="display:none;">
+        </div>
+
+
+        <!-- DATOS DE LA RESERVA -->
+
+        <input type="hidden" id="confirm_facility_id" value="[s/$reservation.facility_id/s]">
+<input type="hidden" id="confirm_user_id" value="[s/$reservation.user_id/s]">
+<input type="hidden" id="confirm_start_at" value="[s/$reservation.start_at/s]">
+<input type="hidden" id="confirm_end_at" value="[s/$reservation.end_at/s]">
+<input type="hidden" id="confirm_people_count" value="[s/$reservation.people_count/s]">
+<input type="hidden" id="confirm_requested_units" value="[s/$reservation.requested_units/s]">
+<input type="hidden" id="confirm_facility_price_id" value="[s/$reservation.facility_price_id/s]">
+
+
+        <hr>
+
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <button type="button"
+                    class="btn backgroundMuted colorWhite"
+                    onclick="searchAvailability();">
+                Volver
+            </button>
+
+            <button type="button"
+                    id="btn_confirm_reservation"
+                    class="btn backgroundPrimary colorWhite"
+                    onclick="[s/$confirm_reservation_function|default:'confirmReservation'/s]();">
+                Crear reserva
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+[s/if !empty($reservation.booking_conditions)/s]
+
+    <div class="modal fade"
+         id="modalBookingConditions"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+
+            <div class="modal-content">
+
+                <div class="modal-header backgroundPrimary colorWhite">
+
+                    <h5 class="modal-title">
+                        Condiciones de reserva
+                    </h5>
+
+                    <button type="button"
+                            class="btn colorWhite"
+                            data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    [s/$reservation.booking_conditions|escape:'html'|nl2br/s]
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+[s//if/s]

@@ -1,0 +1,1618 @@
+[s/$title/s]
+
+<div class="row mt-4">
+
+    <div class="col-md-8">
+
+        <div class="card">
+
+            <!-- DATOS DEL USUARIO -->
+            <div class="card-header font_weight500">
+
+                Datos del Usuario
+
+            </div>
+
+            <div class="card-body">
+
+                <form id="form_data" name="form_data" autocomplete="off">
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="colorTertiary font_weight500"
+                                   for="name">
+                                Nombre
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="name"
+                                   name="name"
+                                   maxlength="150"
+                                   value="[s/$model->first_name/s]">
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="colorTertiary font_weight500"
+                                   for="lastname">
+                                Apellidos
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="lastname"
+                                   name="lastname"
+                                   maxlength="255"
+                                   value="[s/$model->last_name/s]">
+
+                        </div>
+
+
+                        <div class="col-md-8 mb-3">
+
+                            <label class="colorTertiary font_weight500"
+                                   for="email">
+                                Email
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="email"
+                                   class="form-control"
+                                   id="email"
+                                   name="email"
+                                   value="[s/$model->email/s]">
+
+                        </div>
+
+
+                        <div class="col-md-4 mb-3">
+
+                            <label class="colorTertiary font_weight500"
+                                   for="phone">
+                                Teléfono
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="phone"
+                                   name="phone"
+                                   maxlength="30"
+                                   value="[s/$model->phone/s]">
+
+                        </div>
+
+
+                        <div class="col-md-12 mb-3">
+
+                            <label class="colorTertiary font_weight500"
+                                   for="address">
+                                Dirección
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="address"
+                                   name="address"
+                                   maxlength="255"
+                                   value="[s/$model->address/s]">
+
+                        </div>
+                        
+                         <div class="col-md-3 mb-3">
+
+                            <label class="colorTertiary font_weight500"
+                                   for="country_id">
+                                País
+                            </label>
+
+                            <select id="country_id"
+                                    name="country_id"
+                                    class="form-select">
+
+                                <option value="">
+                                    Seleccione un país
+                                </option>
+
+                                [s/foreach from=$countries item=country/s]
+
+                                <option value="[s/$country->id/s]"
+                                        [s/if $model->country_id == $country->id/s]selected[s//if/s]>
+                                        [s/$country->nom/s]
+                            </option>
+
+                            [s//foreach/s]
+
+                        </select>
+
+                    </div>
+
+
+                        
+
+
+                        <div class="col-md-3 mb-3">
+
+                            <label class="colorTertiary font_weight500"
+                                   for="province_id">
+                                Provincia
+                            </label>
+
+                            <select id="province_id"
+                                    name="province_id"
+                                    class="form-select"
+                                    [s/if empty($model->country_id)/s]disabled[s//if/s]>
+
+                                    [s/if empty($model->country_id)/s]
+
+                                    <option value="">
+                                    Seleccione primero un país
+                                </option>
+
+                                [s/else/s]
+
+                                <option value="">
+                                    Seleccione una provincia
+                                </option>
+
+                                [s/foreach from=$provinces item=province/s]
+
+                                <option value="[s/$province->id/s]"
+                                        [s/if $model->province_id == $province->id/s]selected[s//if/s]>
+                                        [s/$province->name/s]
+                            </option>
+
+                            [s//foreach/s]
+
+                            [s//if/s]
+
+                        </select>
+
+                    </div>
+
+
+                       <div class="col-md-3 mb-3">
+
+                            <label class="colorTertiary font_weight500"
+                                   for="city">
+                                Localidad
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="city"
+                                   name="city"
+                                   maxlength="150"
+                                   value="[s/$model->city/s]">
+
+                        </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <label class="colorTertiary font_weight500"
+                           for="postal_code">
+                        C. Postal
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           id="postal_code"
+                           name="postal_code"
+                           maxlength="10"
+                           value="[s/$model->postal_code/s]">
+
+                </div>
+
+            </div>
+
+        </form>
+
+
+        <div class="row mt-4">
+
+            <div class="col-md-12">
+
+                <div class="border-top pt-3">
+
+                    <div class="font_weight500 colorTertiary mb-3">
+                        Activación de la cuenta
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-4 mb-2">
+
+                            <span class="font_weight500">
+                                Estado de la cuenta:
+                            </span>
+
+                            [s/if $model->status == 1/s]
+
+                            <span class="colorAccent ms-1">
+                                Activa
+                            </span>
+
+                            [s/elseif $model->status == 2/s]
+
+                            <span class="colorWarning ms-1">
+                                Bloqueada
+                            </span>
+
+                            [s/else/s]
+
+                            <span class="colorMuted ms-1">
+                                Inactiva
+                            </span>
+
+                            [s//if/s]
+
+                        </div>
+
+                        <div class="col-md-4 mb-2">
+
+                            <span class="font_weight500">
+                                Email verificado:
+                            </span>
+
+                            [s/if $model->email_verified_at/s]
+
+                            <span class="colorAccent ms-1">
+                                Sí
+                            </span>
+
+                            [s/else/s]
+
+                            <span class="colorWarning ms-1">
+                                No
+                            </span>
+
+                            [s//if/s]
+
+                        </div>
+
+                        [s/if $token/s]
+
+                        <div class="col-md-4 mb-2">
+
+                            <span class="font_weight500">
+                                Activación enviada:
+                            </span>
+
+                            <span class="colorMuted ms-1">
+                                [s/$token->created_at/s]
+                            </span>
+
+                        </div>
+
+
+                        <div class="col-md-4 mb-2">
+
+                            <span class="font_weight500">
+                                Caduca:
+                            </span>
+
+                            <span class="colorMuted ms-1">
+                                [s/$token->expires_at/s]
+                            </span>
+
+                        </div>
+
+
+                        [s/if $model->email_verified_at/s]
+
+                        <div class="col-md-4 mb-2">
+
+                            <span class="font_weight500">
+                                Activada:
+                            </span>
+
+                            <span class="colorMuted ms-1">
+                                [s/$model->email_verified_at/s]
+                            </span>
+
+                        </div>
+
+                        [s//if/s]
+
+
+                        [s/if $token->used_at/s]
+
+                        <div class="col-md-4 mb-2">
+
+                            <span class="font_weight500">
+                                Token utilizado:
+                            </span>
+
+                            <span class="colorMuted ms-1">
+                                [s/$token->used_at/s]
+                            </span>
+
+                        </div>
+
+                        [s//if/s]
+
+                        [s/else/s]
+
+                        <div class="col-md-8 mb-2">
+
+                            <span class="colorMuted">
+                                No hay ningún token de activación asociado a este usuario.
+                            </span>
+
+                        </div>
+
+                        [s//if/s]
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row mt-4">
+
+            <div class="col-md-12">
+
+                <div id="loading" class="loading-div">
+
+                    <img alt="Loading" src="../assets/images/loading.svg">
+
+                    <div class="text-center colorMuted">
+                        Guardando datos
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row mt-2">
+
+            <div class="col-md-6">
+
+                <button aria-label="Save changes"
+                        id="btn_save"
+                        class="btn backgroundTertiary colorWhite"
+                        onclick="actualizarUsuario([s/$model->id/s],'editcliente');">
+                    Guardar
+                </button>
+
+            </div>
+
+            <div class="col-md-6 text-end">
+
+                <a href="../clientes"
+                   class="btn backgroundMuted colorWhite">
+                    Volver
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    </div>
+
+        <!-- CONTRASEÑA -->
+        <div class="card mt-3">
+
+            <div class="card-header font_weight500 d-flex align-items-center">
+
+                <span>Contraseña</span>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="password-info mb-4">
+
+                    <div class="password-info-title">
+
+                        <i class="fa-solid fa-shield-halved me-2"></i>
+                        La contraseña debe cumplir los siguientes requisitos:
+
+                    </div>
+
+                    <ul>
+                        <li>Al menos 8 caracteres.</li>
+                        <li>Al menos una letra mayúscula.</li>
+                        <li>Al menos una letra minúscula.</li>
+                        <li>Al menos un número.</li>
+                        <li>Al menos un carácter especial: @#$%&+!=?</li>
+                    </ul>
+
+                    <span>También puede generar una contraseña segura automáticamente.</span>
+
+                </div>
+
+
+                <form id="form_password" name="form_password" autocomplete="off">
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="colorTertiary font_weight500"
+                                   for="password">
+                                Nueva contraseña
+                            </label>
+
+                            <div class="password-wrapper">
+
+                                <input id="password"
+                                       type="password"
+                                       name="password"
+                                       class="form-control"
+                                       autocomplete="new-password">
+
+                                <button type="button"
+                                        class="btn-password"
+                                        onclick="toggleRegisterPasswords();"
+                                        aria-label="Mostrar contraseña">
+
+                                    <i id="password-icon"
+                                       class="fa-regular fa-eye"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="colorTertiary font_weight500"
+                                   for="password-confirm">
+                                Repetir contraseña
+                            </label>
+
+                            <input id="password-confirm"
+                                   type="password"
+                                   name="password_confirm"
+                                   class="form-control"
+                                   autocomplete="new-password">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-md-12 text-end">
+
+                            <button type="button"
+                                    class="btn-password-generate"
+                                    onclick="generatePasswordUser();">
+
+                                <i class="fa-solid fa-key me-1"></i>
+                                Generar contraseña
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+
+                <div id="password_form_error"
+                     class="alert alert-danger mt-3 mb-0"
+                     style="display:none;">
+                    Debe completar correctamente los campos.
+                </div>
+
+
+                <div class="row mt-4">
+
+                    <div class="col-md-12">
+
+                        <div id="loading_password" class="loading-div">
+
+                            <img alt="Loading"
+                                 src="../assets/images/loading.svg">
+
+                            <div class="text-center colorMuted">
+                                Guardando contraseña
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row mt-2">
+
+                    <div class="col-md-6">
+
+                        <button type="button"
+                                id="btn_save_password"
+                                class="btn backgroundTertiary colorWhite"
+                                onclick="actualizarPassword([s/$model->id/s]);">
+                            Guardar contraseña
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RESERVAS -->
+    <div class="card mt-3">
+
+        <div class="card-header font_weight500 d-flex align-items-center">
+
+            <span>Reservas</span>
+
+            <i class="fa-solid fa-plus colorWhite cursor_pointer ms-auto"
+               role="button"
+               aria-label="Añadir reserva"
+               data-bs-toggle="modal"
+               data-bs-target="#modal_add_reserve">
+            </i>
+
+        </div>
+
+        <div class="card-body">
+
+            [s/if !empty($reservations)/s]
+
+            <div class="table-responsive">
+
+                <table class="table align-middle mb-0">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Referencia</th>
+
+                            <th>Instalación</th>
+
+                            <th>Inicio</th>
+
+                            <th>Fin</th>
+
+                            <th>Personas</th>
+
+                            <th>Importe</th>
+
+                            <th>Estado</th>
+
+                            <th class="text-end">
+                                Acciones
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        [s/foreach from=$reservations item=reservation/s]
+
+                        <tr>
+
+                            <td>
+                                <a aria-label="[s/$reservation->reference/s]" class="cursor_pointer" href="../editreserva/[s/$reservation->id/s]">
+                                [s/$reservation->reference/s]
+                                </a>
+                            </td>
+
+                            <td>
+                                <a aria-label="[s/$reservation->facility_name/s]" class="colorTertiary cursor_pointer" href="../editinstalacion/[s/$reservation->facility_id/s]">
+                                [s/$reservation->facility_name/s]
+                                </a>
+                            </td>
+
+                            <td>
+                                [s/$reservation->start_at/s]
+                            </td>
+
+                            <td>
+                                [s/$reservation->end_at/s]
+                            </td>
+
+                            <td>
+                                [s/$reservation->people_count/s]
+                            </td>
+
+                            <td>
+                                [s/$reservation->total_amount/s] €
+                            </td>
+
+                            <td>
+
+                                [s/if $reservation->reservation_status_code == 'pending'/s]
+                                <span class="badge bg-warning text-dark">[s/$reservation->reservation_status_name/s]</span>
+
+                                [s/elseif $reservation->reservation_status_code == 'confirmed'/s]
+                                <span class="badge bg-success">[s/$reservation->reservation_status_name/s]</span>
+
+                                [s/elseif $reservation->reservation_status_code == 'cancelled'/s]
+                                <span class="badge bg-danger">[s/$reservation->reservation_status_name/s]</span>
+
+                                [s/elseif $reservation->reservation_status_code == 'completed'/s]
+                                <span class="badge bg-primary">[s/$reservation->reservation_status_name/s]</span>
+
+                                [s/elseif $reservation->reservation_status_code == 'rejected'/s]
+                                <span class="badge bg-danger">[s/$reservation->reservation_status_name/s]</span>
+
+                                [s/elseif $reservation->reservation_status_code == 'no_show'/s]
+                                <span class="badge bg-secondary">[s/$reservation->reservation_status_name/s]</span>
+
+                                [s/else/s]
+                                <span class="badge bg-secondary">[s/$reservation->reservation_status_name/s]</span>
+                                [s//if/s]
+
+                            </td>
+
+                            <td class="text-end">
+
+                                <a href="../editreserva/[s/$reservation->id/s]"
+                                   class="colorTertiary me-2"
+                                   title="Editar reserva">
+
+                                    <i class="fa-solid fa-pen"></i>
+
+                                </a>
+
+                                <a href="../reserva/[s/$reservation->id/s]"
+                                   class="colorAccent"
+                                   title="Ver reserva">
+
+                                    <i class="fa-solid fa-eye"></i>
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        [s//foreach/s]
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            [s/else/s]
+
+            <div class="text-center colorMuted py-4">
+
+                <i class="fa-regular fa-calendar-xmark fs-3 mb-2"></i>
+
+                <div>
+                    Este cliente no tiene reservas.
+                </div>
+
+            </div>
+
+            [s//if/s]
+
+        </div>
+
+    </div>
+
+        <!-- BONOS -->
+        <div class="card mt-3">
+
+            <div class="card-header font_weight500 d-flex align-items-center">
+
+                <span>Bonos</span>
+
+                <i class="fa-solid fa-plus colorWhite cursor_pointer ms-auto"
+                   role="button"
+                   aria-label="Añadir bono"
+                   data-bs-toggle="modal"
+                   data-bs-target="#modal_add_bono">
+                </i>
+
+            </div>
+
+            <div class="card-body">
+
+                [s/if !empty($bonuses)/s]
+
+                <div class="table-responsive">
+
+                    <table class="table align-middle mb-0">
+
+                        <thead>
+
+                            <tr>
+                                <th>Bono</th>
+                                <th>Instalaciones</th>
+                                <th>Usos</th>
+                                <th>Precio</th>
+                                <th>Fecha compra</th>
+                                <th>Validez</th>
+                                <th>Estado</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            [s/foreach from=$bonuses item=bonus/s]
+
+                            <tr>
+
+                                <td>
+                                    [s/$bonus->bonus_name/s]
+                                </td>
+
+                                <td>
+                                    [s/$bonus->facilities/s]
+                                </td>
+
+                                <td>
+                                    [s/if $bonus->bonus_type == 'TIME'/s]
+                                    Ilimitado
+                                    [s/else/s]
+                                    [s/$bonus->remaining_uses/s] / [s/$bonus->initial_uses/s]
+                                    [s//if/s]
+                                </td>
+
+                                <td>
+                                    [s/$bonus->purchase_price/s] €
+                                </td>
+
+                                <td>
+                                    [s/$bonus->purchased_at|date_format:"%d/%m/%Y"/s]
+                                </td>
+
+                                <td>
+                                    [s/if $bonus->valid_from/s]
+                                    [s/$bonus->valid_from|date_format:"%d/%m/%Y"/s]
+                                    [s//if/s]
+
+                                    [s/if $bonus->expires_at/s]
+                                    - [s/$bonus->expires_at|date_format:"%d/%m/%Y"/s]
+                                    [s/else/s]
+                                    - Sin caducidad
+                                    [s//if/s]
+                                </td>
+
+                                <td>
+
+                                    [s/if $bonus->status == 1/s]
+
+                                    <span class="colorAccent">
+                                        Activo
+                                    </span>
+
+                                    [s/else/s]
+
+                                    <span class="colorWarning">
+                                        Inactivo
+                                    </span>
+
+                                    [s//if/s]
+
+                                </td>
+
+
+                                <td class="text-end">
+                                    
+                                    [s/if $bonus->status == 0/s]
+
+                                    <i class="fa-solid fa-circle-check colorAccent cursor_pointer me-2"
+                                       title="Confirmar bono"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#modal_confirm_bonus[s/$bonus->id/s]">
+                                    </i>
+
+                                    [s//if/s]
+
+                                    <i class="fa-solid fa-trash colorError cursor_pointer"
+                                       role="button"
+                                       title="Eliminar bono"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#modal_delete_bonus[s/$bonus->id/s]">
+                                    </i>
+                                </td>
+
+
+                            </tr>
+
+                            [s//foreach/s]
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                [s/else/s]
+
+                <div class="text-center colorMuted py-4">
+
+                    <i class="fa-solid fa-ticket fs-3 mb-2"></i>
+
+                    <div>
+                        Este cliente no tiene bonos.
+                    </div>
+
+                </div>
+
+                [s//if/s]
+
+            </div>
+
+        </div>
+
+
+</div>
+
+<div class="col-md-4">
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <!-- IMAGEN DE PERFIL -->
+            <div class="card">
+
+                <div class="card-header font_weight500 d-flex justify-content-between align-items-center">
+
+                    <span>Imagen de Perfil</span>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form id="form_profile_image" name="form_profile_image">
+
+                        <input type="hidden"
+                               id="remove_profile_image"
+                               name="remove_profile_image"
+                               value="0">
+
+                        <div id="profile_dropzone"
+                             class="border rounded p-4 text-center cursor_pointer">
+
+                            <i class="fa-solid fa-cloud-arrow-up fs-2 mb-2"></i>
+
+                            <div class="fw-semibold">
+                                Arrastra una imagen aquí
+                            </div>
+
+                            <div class="text-muted small">
+                                o haz clic para seleccionarla
+                            </div>
+
+                            <div class="text-muted small mt-2">
+                                Formatos permitidos: JPG, PNG y WEBP
+                            </div>
+
+                        </div>
+
+
+                        <input type="file"
+                               id="profile_image"
+                               name="profile_image"
+                               accept="image/jpeg,image/png,image/webp"
+                               class="d-none">
+
+
+                        <div id="profile_image_preview"
+                             class="mt-3"
+                             [s/if !$model->photo/s]style="display:none;"[s//if/s]>
+
+                             <img id="profile_image_preview_img"
+                             src="[s/if $model->photo/s]../[s/$model->photo/s][s/else/s]../assets/images/usuarios/default_profile.png[s//if/s]"
+                             alt="Vista previa"
+                             class="img-fluid rounded"
+                             style="max-height:220px;">
+
+                            <div class="mt-2">
+
+                                <button type="button"
+                                        id="btn_change_profile_image"
+                                        class="btn btn-sm btn-outline-secondary me-2">
+
+                                    <i class="fa-solid fa-image me-1"></i>
+                                    Cambiar imagen
+
+                                </button>
+
+                                <button type="button"
+                                        id="btn_remove_profile_image"
+                                        class="btn btn-sm btn-outline-danger">
+
+                                    <i class="fa-solid fa-trash me-1"></i>
+                                    Quitar imagen
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+
+                    <div id="profile_image_form_error"
+                         class="alert alert-danger mt-3 mb-0"
+                         style="display:none;">
+                    </div>
+
+
+                    <div class="row mt-4">
+
+                        <div class="col-md-12">
+
+                            <div id="loading_photo" class="loading-div">
+
+                                <img alt="Loading" src="../assets/images/loading.svg">
+
+                                <div class="text-center colorMuted">
+                                    Guardando imagen
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row mt-2">
+
+                        <div class="col-md-6">
+
+                            <button type="button"
+                                    id="btn_save_photo"
+                                    class="btn backgroundTertiary colorWhite"
+                                    onclick="actualizarFotoPerfil([s/$model->id/s],'editcliente');">
+                                Guardar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Display name -->
+    <div class="row mt-2">
+
+        <div class="col-md-12">
+
+            <div class="card">
+
+                <div class="card-header font_weight500 d-flex align-items-center">
+
+                    <span>Nombre para mostrar</span>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form id="form_display_name"
+                          name="form_display_name"
+                          autocomplete="off">
+
+                        <div class="row">
+
+                            <div class="col-md-12 mb-3">
+
+                                <label class="colorTertiary font_weight500"
+                                       for="display_name">
+                                    Nombre para mostrar
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="display_name"
+                                       name="display_name"
+                                       maxlength="150"
+                                       value="[s/$model->display_name/s]">
+
+                                <div class="form-text">
+                                    Nombre que se mostrará en la plataforma en lugar del nombre completo del usuario.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+
+                    <div id="display_name_form_error"
+                         class="alert alert-danger mt-3 mb-0"
+                         style="display:none;">
+                    </div>
+
+
+                    <div class="row mt-4">
+
+                        <div class="col-md-12">
+
+                            <div id="loading_display_name"
+                                 class="loading-div">
+
+                                <img alt="Loading"
+                                     src="../assets/images/loading.svg">
+
+                                <div class="text-center colorMuted">
+                                    Guardando datos
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row mt-2">
+
+                        <div class="col-md-6">
+
+                            <button type="button"
+                                    id="btn_save_display_name"
+                                    class="btn backgroundTertiary colorWhite"
+                                    onclick="actualizarDisplayName([s/$model->id/s],'editcliente');">
+                                Guardar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row mt-2">
+
+        <div class="col-md-12">
+
+            <div class="card">
+
+                <div class="card-header font_weight500">
+
+                    Opciones
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-4 mt-2">
+                            <a aria-label="activity" class="colorTertiary" href="../auditcliente/[s/$model->id/s]">
+                                <i class="fa-solid fa-circle-info"></i> Actividad
+                            </a>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+<div id="modal_add_reserve" class="hidden-print modal fade">
+
+    <div class="modal-dialog modal-lg" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Crear Reserva
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="container-modal py-4">
+
+                    <div class="card-body">
+
+                        <form id="form_add_reservation"
+                              name="form_add_reservation"
+                              autocomplete="off">
+
+                            <input type="hidden"
+                                   id="reservation_user_id"
+                                   name="user_id"
+                                   value="[s/$model->id/s]">
+
+
+                            <div class="row">
+
+                                <div class="col-md-8 mb-3">
+
+                                    <label for="reservation_facility_id"
+                                           class="form-label">
+                                        Instalación
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <select id="reservation_facility_id"
+                                            name="facility_id"
+                                            class="form-select">
+
+                                        <option value="">
+                                            Seleccione una instalación
+                                        </option>
+
+                                        [s/foreach from=$facilities item=facility/s]
+
+                                        <option value="[s/$facility->id/s]">
+                                            [s/$facility->name/s]
+                                        </option>
+
+                                        [s//foreach/s]
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="col-md-4 mb-3">
+
+                                    <label for="reservation_people_count"
+                                           class="form-label">
+                                        Nº de personas
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="number"
+                                           id="reservation_people_count"
+                                           name="people_count"
+                                           class="form-control"
+                                           min="1"
+                                           step="1"
+                                           value="1">
+
+                                </div>
+
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label for="reservation_start_at"
+                                           class="form-label">
+                                        Fecha de inicio
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="datetime-local"
+                                           id="reservation_start_at"
+                                           name="start_at"
+                                           class="form-control">
+
+                                </div>
+
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label for="reservation_end_at"
+                                           class="form-label">
+                                        Fecha de fin
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="datetime-local"
+                                           id="reservation_end_at"
+                                           name="end_at"
+                                           class="form-control">
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+
+                        <div id="reservation_result"
+                             class="mt-3">
+                        </div>
+
+                    </div>
+
+
+                    <div id="reservation_form_error"
+                         class="alert alert-danger mt-3 mb-0"
+                         style="display:none;">
+                        Debe completar correctamente los campos obligatorios.
+                    </div>
+
+
+                    <div id="loading_reservation"
+                         class="loading-div">
+
+                        <img alt="Loading"
+                             src="../assets/images/loading.svg">
+
+                        <div class="text-center colorMuted">
+                            Comprobando disponibilidad
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+
+                            <button type="button"
+                                    class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+
+                        <div class="col-md-6 text-end">
+
+                            <button type="button"
+                                    id="btn_search_reservation"
+                                    class="btn backgroundPrimary colorWhite"
+                                    onclick="searchReservation([s/$model->id/s]);">
+                                <i class="fa-solid fa-magnifying-glass me-1"></i>
+                                Buscar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="modal_add_bono" class="hidden-print modal fade">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Añadir Bono
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="container-modal py-4">
+
+                    <div class="card-body">
+
+                        <form id="form_add_bono"
+                              name="form_add_bono"
+                              autocomplete="off">
+
+                            <input type="hidden"
+                                   id="bonus_user_id"
+                                   name="user_id"
+                                   value="[s/$model->id/s]">
+
+
+                            <div class="row">
+
+                                <div class="mb-3">
+                                    <label for="bonus_id" class="form-label">
+                                        Bono <span class="colorError">*</span>
+                                    </label>
+
+                                    <select class="form-select" id="bonus_id" name="bonus_id">
+                                        <option value="">Seleccione un bono</option>
+
+                                        [s/foreach from=$bonuses_available item=bonus_available/s]
+                                        <option value="[s/$bonus_available->id/s]">
+                                            [s/$bonus_available->name/s]
+                                        </option>
+                                        [s//foreach/s]
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="bonus_valid_from" class="form-label">
+                                        Fecha de inicio <span class="colorError">*</span>
+                                    </label>
+
+                                    <input type="date"
+                                           class="form-control"
+                                           id="bonus_valid_from"
+                                           name="valid_from">
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+
+                    <div id="bonus_form_error"
+                         class="alert alert-danger mt-3 mb-0"
+                         style="display:none;">
+                        Debe seleccionar un bono.
+                    </div>
+
+
+                    <div id="loading_bonus"
+                         class="loading-div">
+
+                        <img alt="Loading"
+                             src="../assets/images/loading.svg">
+
+                        <div class="text-center colorMuted">
+                            Procesando
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+
+                            <button type="button"
+                                    class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+
+                        <div class="col-md-6 text-end">
+
+                            <button type="button"
+                                    id="btn_add_bono"
+                                    class="btn backgroundPrimary colorWhite"
+                                    onclick="addBonus([s/$model->id/s]);">
+                                Añadir
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+[s/if !empty($bonuses)/s]
+[s/foreach from=$bonuses item=bonus/s]
+<div id="modal_delete_bonus[s/$bonus->id/s]"
+     class="hidden-print modal fade">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Eliminar Bono
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="container-modal py-4">
+
+                    <div class="text-center">
+
+                        <i class="fa-solid fa-triangle-exclamation colorWarning fs-1 mb-3"></i>
+
+                        <div class="font_weight500 mb-2">
+                            ¿Está seguro de que desea eliminar este bono?
+                        </div>
+
+                        <div class="colorMuted">
+                            El bono <strong>[s/$bonus->bonus_name/s]</strong> dejará de estar disponible para este usuario.
+                        </div>
+
+                    </div>
+
+                    <div id="loading_delete_bonus[s/$bonus->id/s]"
+                         class="loading-div mt-3">
+
+                        <img alt="Loading"
+                             src="../assets/images/loading.svg">
+
+                        <div class="text-center colorMuted">
+                            Eliminando bono
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+
+                            <button type="button"
+                                    class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-6 text-end">
+
+                            <button type="button"
+                                    id="btn_delete_bonus[s/$bonus->id/s]"
+                                    class="btn backgroundError colorWhite"
+                                    onclick="deleteBonus([s/$bonus->id/s], [s/$model->id/s]);">
+                                Eliminar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+[s/if $bonus->status == 0/s]
+
+    <div class="modal fade"
+         id="modal_confirm_bonus[s/$bonus->id/s]"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <div class="fs-5 font_weight500">
+                        Confirmar bono
+                    </div>
+
+                    <i class="fa-solid fa-xmark fs-5 modal-close"
+                       data-bs-dismiss="modal"
+                       aria-label="Cerrar"></i>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <p>
+                        ¿Está seguro de que desea confirmar este bono?
+                    </p>
+
+                    <p>
+                        El bono <strong>[s/$bonus->bonus_name/s]</strong>
+                        quedará activo para el usuario y comenzará su periodo de validez.
+                    </p>
+
+                    <div id="loading_confirm_bonus[s/$bonus->id/s]"
+                         class="loading-div"
+                         style="display:none;">
+
+                        <img src="../assets/images/loading.svg" alt="Loading">
+                        <span>Activando bono</span>
+
+                    </div>
+
+                    <div class="text-end">
+
+                        <button type="button"
+                                class="btn btn-secondary me-2"
+                                data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+
+                        <button type="button"
+                                id="btn_confirm_bonus_[s/$bonus->id/s]"
+                                class="btn backgroundPrimary colorWhite"
+                                onclick="confirmBonus([s/$bonus->id/s], [s/$model->id/s]);">
+                            Confirmar
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+[s//if/s]
+
+[s//foreach/s]
+[s//if/s]

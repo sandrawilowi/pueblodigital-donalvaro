@@ -1,0 +1,74 @@
+<div class="card">
+
+    <div class="card-header font_weight500">
+        Informe de procedencia
+    </div>
+
+    <div class="card-body">
+
+        [s/if !empty($results)/s]
+
+            <div class="table-responsive">
+
+                <table id="dt_report_origin"
+                       class="table table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+                            <th>País</th>
+                            <th>Provincia</th>
+                            <th>Clientes</th>
+                            <th>Reservas</th>
+                            <th>Porcentaje</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        [s/foreach from=$results item=result/s]
+
+                            <tr>
+
+                                <td>
+                                    [s/$result->country_name/s]
+                                </td>
+
+                                <td>
+                                    [s/$result->province_name/s]
+                                </td>
+
+                                <td>
+                                    [s/$result->clients_count/s]
+                                </td>
+
+                                <td>
+                                    [s/$result->reservations_count/s]
+                                </td>
+
+                                <td>
+                                    [s/$result->percentage|string_format:"%.2f"/s] %
+                                </td>
+
+                            </tr>
+
+                        [s//foreach/s]
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        [s/else/s]
+
+            <div class="colorMuted">
+                No hay datos de procedencia para los filtros seleccionados.
+            </div>
+
+        [s//if/s]
+
+    </div>
+
+</div>

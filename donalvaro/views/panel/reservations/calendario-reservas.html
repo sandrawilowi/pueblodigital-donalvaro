@@ -1,0 +1,227 @@
+[s/$title/s]
+
+<div class="card">
+
+    <div class="card-header font_weight500 d-flex justify-content-between align-items-center">
+
+        <span class="font_weight500">
+            Filtrar Calendario
+        </span>
+
+        <i id="iconCollapseFilterCalendar"
+           class="fa-solid fa-square-minus cursor_pointer ms-auto"
+           onclick="toggleFilter('collapseFilterCalendar', this)"
+           aria-label="Mostrar/Ocultar filtros">
+        </i>
+
+    </div>
+
+    <div id="collapseFilterCalendar" class="collapse show">
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-4 mt-2">
+
+                    <label class="colorBase7 font_weight500" for="calendar_facility_id">
+                        Instalación
+                    </label>
+
+                    <div class="custom-select">
+
+                        <select class="form-control"
+                                id="calendar_facility_id"
+                                name="calendar_facility_id">
+
+                            <option value="" selected>
+                                Todas
+                            </option>
+
+                            [s/foreach from=$facilities item=facility/s]
+
+                                <option value="[s/$facility->id/s]">
+                                    [s/$facility->name/s]
+                                </option>
+
+                            [s//foreach/s]
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card mt-3">
+
+    <div class="card-header font_weight500 d-flex justify-content-between align-items-center">
+
+        <span class="font_weight500">
+            Reservas
+        </span>
+
+        <a href="nueva-reserva"
+           class="colorWhite text-decoration-none ms-auto">
+            <i class="fa-solid fa-plus me-1"></i>
+            Nueva reserva
+        </a>
+
+    </div>
+
+    <div class="card-body">
+
+        <div id="calendar_loading" class="loading-div">
+
+            <img alt="Loading" src="assets/images/loading.svg">
+
+            <div class="text-center colorMuted">
+                Cargando reservas
+            </div>
+
+        </div>
+
+        <div id="reservation_calendar"></div>
+
+    </div>
+
+</div>
+
+
+<div id="modal_calendar_reservation" class="hidden-print modal fade">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Reserva
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="container-modal py-4">
+
+                    <div class="row">
+
+                        <div class="col-md-12 mb-3">
+
+                            <div class="small colorMuted">
+                                Cliente
+                            </div>
+
+                            <a id="calendar_reservation_user"
+                               href="#"
+                               class="font_weight500">
+                            </a>
+
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+
+                            <div class="small colorMuted">
+                                Instalación
+                            </div>
+
+                            <a id="calendar_reservation_facility"
+                               href="#"
+                               class="font_weight500">
+                            </a>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="small colorMuted">
+                                Inicio
+                            </div>
+
+                            <div id="calendar_reservation_start" class="font_weight500"></div>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="small colorMuted">
+                                Fin
+                            </div>
+
+                            <div id="calendar_reservation_end" class="font_weight500"></div>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="small colorMuted">
+                                Estado
+                            </div>
+
+                            <div id="calendar_reservation_status" class="font_weight500"></div>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="small colorMuted">
+                                Referencia
+                            </div>
+
+                            <div id="calendar_reservation_reference" class="font_weight500"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+
+                            <button type="button"
+                                    class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cerrar
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-6 text-end">
+
+                            <a id="calendar_reservation_link"
+                               href="#"
+                               class="btn backgroundPrimary colorWhite">
+                                Ver reserva
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

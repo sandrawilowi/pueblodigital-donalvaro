@@ -1,0 +1,847 @@
+[s/$title/s]
+
+<div class="container-fluid">
+
+    <!-- =========================================================
+         CONTADORES
+         ========================================================= -->
+
+    <div class="row mt-4">
+
+        <!-- Reservas pendientes -->
+        <div class="col-md-3 mb-3">
+
+            <div class="card h-100">
+
+                <div class="card-body d-flex align-items-center justify-content-between">
+
+                    <div>
+
+                        <div class="colorMuted mb-1">
+                            Reservas pendientes
+                        </div>
+
+                        <div class="fs-3 font_weight500">
+                            [s/$pending_reservations_count/s]
+                        </div>
+
+                    </div>
+
+                    <i class="fa-solid fa-clock fs-2 colorWarning"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Reservas de hoy -->
+        <div class="col-md-3 mb-3">
+
+            <div class="card h-100">
+
+                <div class="card-body d-flex align-items-center justify-content-between">
+
+                    <div>
+
+                        <div class="colorMuted mb-1">
+                            Reservas de hoy
+                        </div>
+
+                        <div class="fs-3 font_weight500">
+                            [s/$today_reservations_count/s]
+                        </div>
+
+                    </div>
+
+                    <i class="fa-solid fa-calendar-day fs-2 colorTertiary"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Instalaciones activas -->
+        <div class="col-md-3 mb-3">
+
+            <div class="card h-100">
+
+                <div class="card-body d-flex align-items-center justify-content-between">
+
+                    <div>
+
+                        <div class="colorMuted mb-1">
+                            Instalaciones activas
+                        </div>
+
+                        <div class="fs-3 font_weight500">
+                            [s/$active_facilities_count/s]
+                        </div>
+
+                    </div>
+
+                    <i class="fa-solid fa-building fs-2 colorAccent"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Accesos de hoy -->
+        <div class="col-md-3 mb-3">
+
+            <div class="card h-100">
+
+                <div class="card-body d-flex align-items-center justify-content-between">
+
+                    <div>
+
+                        <div class="colorMuted mb-1">
+                            Accesos de hoy
+                        </div>
+
+                        <div class="fs-3 font_weight500">
+                            [s/$today_accesses_count/s]
+                        </div>
+
+                    </div>
+
+                    <i class="fa-solid fa-door-open fs-2 colorTertiary"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+<!-- =========================================================
+     RESERVAS + BONOS PENDIENTES
+========================================================= -->
+
+<div class="row mb-4">
+
+    <!-- RESERVAS PENDIENTES -->
+    <div class="[s/if $bonuses_enabled/s]col-lg-8[s/else/s]col-12[s//if/s] mb-4 mb-lg-0">
+
+        <div class="card h-100">
+
+            <div class="card-header d-flex justify-content-between align-items-center">
+
+                <div class="font_weight500">
+                    Reservas pendientes
+                </div>
+
+                <a type="button"
+                   class="btn btn-sm backgroundPrimary colorWhite ms-auto"
+                   href="nueva-reserva">
+
+                    <i class="fa-solid fa-plus me-1"></i>
+                    Nueva reserva
+
+                </a>
+
+            </div>
+
+
+            <div class="card-body">
+
+                [s/if !empty($pending_reservations)/s]
+
+                    <div class="table-responsive">
+
+                        <table class="table align-middle mb-0">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Reserva</th>
+                                    <th>Usuario</th>
+                                    <th>Instalación</th>
+                                    <th>Fechas</th>
+                                    <th class="text-end">Acción</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                [s/foreach from=$pending_reservations item=reservation/s]
+
+                                    <tr>
+
+                                        <td>
+
+                                            <a href="editreserva/[s/$reservation->id/s]">
+                                                [s/$reservation->reference/s]
+                                            </a>
+
+                                        </td>
+
+                                        <td>
+
+                                            <a href="editcliente/[s/$reservation->user_id/s]">
+                                                [s/$reservation->user_name/s]
+                                            </a>
+
+                                        </td>
+
+                                        <td>
+
+                                            <a href="editinstalacion/[s/$reservation->facility_id/s]">
+                                                [s/$reservation->facility_name/s]
+                                            </a>
+
+                                        </td>
+
+                                        <td>
+
+                                            <div>
+                                                [s/$reservation->start_at|date_format:"%d/%m/%Y %H:%M"/s]
+                                            </div>
+
+                                            <div class="colorMuted small">
+                                                [s/$reservation->end_at|date_format:"%d/%m/%Y %H:%M"/s]
+                                            </div>
+
+                                        </td>
+
+                                        <td class="text-end">
+
+                                            <button type="button"
+                                                    class="btn btn-sm backgroundPrimary colorWhite"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#modal_confirm_reservation_[s/$reservation->id/s]">
+
+                                                Confirmar
+
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+                                [s//foreach/s]
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                [s/else/s]
+
+                    <div class="colorMuted">
+                        No hay reservas pendientes de confirmar.
+                    </div>
+
+                [s//if/s]
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BONOS PENDIENTES -->
+    [s/if $bonuses_enabled/s]
+    <div class="col-lg-4">
+
+        <div class="card h-100">
+
+            <div class="card-header d-flex justify-content-between align-items-center">
+
+                <div class="font_weight500">
+                    Bonos pendientes
+                </div>
+
+                [s/if !empty($pending_bonuses)/s]
+
+                    <span class="badge backgroundWarning colorWhite ms-auto">
+                        [s/count($pending_bonuses)/s]
+                    </span>
+
+                [s//if/s]
+
+            </div>
+
+
+            <div class="card-body p-0">
+
+                [s/if !empty($pending_bonuses)/s]
+
+                    [s/foreach from=$pending_bonuses item=bonus/s]
+
+                        <div class="dashboard-pending-bonus">
+
+                            <div class="d-flex justify-content-between align-items-start gap-2">
+
+                                <div>
+
+                                    <div class="font_weight500 colorSecondary">
+                                        [s/$bonus->bonus_name|escape/s]
+                                    </div>
+
+                                    <a href="editcliente/[s/$bonus->user_id/s]"
+                                       class="small colorPrimary text-decoration-none">
+
+                                        [s/$bonus->user_name|escape/s]
+
+                                    </a>
+
+                                </div>
+
+                                <div class="font_weight500 colorAccent text-nowrap">
+                                    [s/$bonus->purchase_price|string_format:"%.2f"/s] €
+                                </div>
+
+                            </div>
+
+
+                            <div class="small colorMuted mt-2">
+
+                                <i class="fa-solid fa-building me-1 colorPrimary"></i>
+
+                                [s/$bonus->facility_name|escape/s]
+
+                            </div>
+
+
+                            [s/if !empty($bonus->payment_method_name)/s]
+
+                                <div class="small colorMuted mt-1">
+
+                                    <i class="fa-solid fa-credit-card me-1 colorTertiary"></i>
+
+                                    [s/$bonus->payment_method_name|escape/s]
+
+                                </div>
+
+                            [s//if/s]
+
+
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+
+                                <div class="small colorMuted">
+
+                                    <i class="fa-regular fa-calendar me-1"></i>
+
+                                    [s/$bonus->purchased_at|date_format:"%d/%m/%Y"/s]
+
+                                </div>
+
+
+                                <button type="button"
+                                        class="btn btn-sm backgroundPrimary colorWhite"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modal_confirm_dashboard_bonus[s/$bonus->id/s]">
+
+                                    <i class="fa-solid fa-check me-1"></i>
+                                    Confirmar
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    [s//foreach/s]
+
+                [s/else/s]
+
+                    <div class="text-center colorMuted p-4">
+
+                        <i class="fa-solid fa-circle-check colorAccent fs-4 mb-2"></i>
+
+                        <div>
+                            No hay bonos pendientes.
+                        </div>
+
+                    </div>
+
+                [s//if/s]
+
+            </div>
+
+        </div>
+
+    </div>
+    
+    [s//if/s]
+
+</div>
+
+    <div class="row">
+
+        <!-- =====================================================
+             INSTALACIONES / APERTURA RÁPIDA
+             ===================================================== -->
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card h-100">
+
+                <div class="card-header">
+
+                    <div class="font_weight500">
+                        Instalaciones
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    [s/if !empty($facilities)/s]
+
+                    [s/foreach from=$facilities item=facility/s]
+
+                    <div class="[s/if !$facility@last/s]border-bottom pb-3 mb-3[s//if/s]">
+
+
+                        <!-- Instalación -->
+
+                        <div class="font_weight500 mb-2">
+
+                            <i class="fa-solid fa-building me-1 colorTertiary"></i>
+
+                            <a href="editinstalacion/[s/$facility->id/s]"
+                               class="colorBase9 text-decoration-none"
+                               aria-label="Editar instalación [s/$facility->name/s]">
+                                [s/$facility->name/s]
+                            </a>
+
+                        </div>
+
+                        <!-- Cerraduras -->
+
+                        [s/if !empty($facility->devices)/s]
+
+                        [s/foreach from=$facility->devices item=device/s]
+
+                        <div class="dashboard-lock">
+
+                            <div class="dashboard-lock-info">
+
+                                [s/if $device->device_status == 1/s]
+                                <i class="fa-solid fa-lock colorAccent me-1"></i>
+                                [s/else/s]
+                                <i class="fa-solid fa-lock colorWarning me-1"></i>
+                                [s//if/s]
+
+                                <div class="dashboard-lock-data">
+
+                                    <span class="dashboard-lock-name">
+                                        [s/$device->lock_alias/s]
+                                    </span>
+
+                                    [s/if $device->is_primary == 1/s]
+                                    <span class="badge backgroundTertiary">
+                                        Principal
+                                    </span>
+                                    [s//if/s]
+
+                                </div>
+
+                            </div>
+
+                            [s/if $device->device_status == 1/s]
+
+                            <button type="button"
+                                    id="btn_unlock_lock_[s/$device->ttlock_device_id/s]"
+                                    class="btn-lock-action btn-lock-open btn-lock-dashboard"
+                                    onclick="abrirCerradura([s/$device->ttlock_device_id/s]);">
+
+                                <i class="fa-solid fa-lock-open"></i>
+                                <span>Abrir</span>
+
+                            </button>
+
+                            [s/else/s]
+
+                            <button type="button"
+                                    class="btn-lock-dashboard-disabled"
+                                    disabled>
+
+                                <i class="fa-solid fa-lock"></i>
+                                <span>Inactiva</span>
+
+                            </button>
+
+                            [s//if/s]
+
+                        </div>
+
+                        [s//foreach/s]
+
+
+                        [s/else/s]
+
+                        <div class="small colorMuted mt-1">
+                            <i class="fa-solid fa-circle-info me-1"></i>
+                            Sin cerraduras asociadas.
+                        </div>
+
+                        [s//if/s]
+
+                    </div>
+
+                    [s//foreach/s]
+
+
+                    [s/else/s]
+
+                    <div class="text-center colorMuted py-4">
+
+                        <i class="fa-solid fa-building fs-3 mb-2"></i>
+
+                        <div>
+                            No hay instalaciones activas.
+                        </div>
+
+                    </div>
+
+                    [s//if/s]
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             ÚLTIMOS ACCESOS
+             ===================================================== -->
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card">
+
+    <div class="card-header font_weight500 d-flex justify-content-between align-items-center">
+
+        <span class="font_weight500">
+            Últimos accesos
+        </span>
+
+        <a href="historial-accesos" class="ms-auto">
+            Ver todos
+        </a>
+
+    </div>
+
+    <div class="card-body">
+
+        [s/if !empty($latest_accesses)/s]
+
+        [s/foreach from=$latest_accesses item=access/s]
+
+        <div class="border-bottom py-3">
+
+            <div class="d-flex align-items-start">
+
+                <div class="me-3">
+
+                    [s/if $access->access_granted == 1/s]
+
+                    <i class="fa-solid fa-door-open colorSuccess fs-5"></i>
+
+                    [s/else/s]
+
+                    <i class="fa-solid fa-circle-xmark text-danger fs-5"></i>
+
+                    [s//if/s]
+
+                </div>
+
+                <div class="flex-grow-1">
+
+                    <div class="font_weight500">
+
+                        [s/if !empty($access->user_name)/s]
+
+                        [s/$access->user_name/s]
+
+                        [s/elseif $access->pin_type == 'MANUAL'/s]
+
+                        Manual
+
+                        [s/else/s]
+
+                        Acceso
+
+                        [s//if/s]
+
+                    </div>
+
+                    [s/if !empty($access->access_pin_id)/s]
+
+                    <div class="small mt-1">
+
+                        PIN:
+
+                        <a href="editpin/[s/$access->access_pin_id/s]">
+                            [s/$access->access_pin_id/s]
+                        </a>
+
+                    </div>
+
+                    [s//if/s]
+
+                    [s/if !empty($access->facility_name)/s]
+
+                    <div class="small colorMuted mt-1">
+                        <i class="fa-solid fa-building me-1"></i>
+                        [s/$access->facility_name/s]
+                    </div>
+
+                    [s//if/s]
+
+                    [s/if !empty($access->lock_alias)/s]
+
+                    <div class="small colorMuted mt-1">
+                        <i class="fa-solid fa-key me-1"></i>
+                        [s/$access->lock_alias/s]
+                    </div>
+
+                    [s//if/s]
+
+                    <div class="small colorMuted mt-1">
+                        <i class="fa-regular fa-clock me-1"></i>
+                        [s/$access->event_at|date_format:"%d/%m/%Y %H:%M"/s]
+                    </div>
+
+                    [s/if $access->access_granted != 1 && !empty($access->failure_reason)/s]
+
+                    <div class="small text-danger mt-1">
+                        [s/$access->failure_reason/s]
+                    </div>
+
+                    [s//if/s]
+
+                </div>
+
+            </div>
+
+        </div>
+
+        [s//foreach/s]
+
+        [s/else/s]
+
+        <div class="text-center colorMuted py-5">
+
+            <i class="fa-solid fa-clock-rotate-left fs-2 mb-3"></i>
+
+            <div>
+                No hay accesos registrados.
+            </div>
+
+        </div>
+
+        [s//if/s]
+
+    </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+[s/foreach from=$pending_reservations item=reservation/s]
+
+<div id="modal_confirm_reservation_[s/$reservation->id/s]"
+     class="hidden-print modal fade"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Confirmar reserva
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="container-modal py-4">
+
+                    <div class="mb-3">
+                        ¿Desea confirmar la reserva
+                        <span class="font_weight500">
+                            [s/$reservation->reference/s]
+                        </span>?
+                    </div>
+
+                    <div class="alert alert-info mb-0">
+
+                        <i class="fa-solid fa-circle-info me-2"></i>
+
+                        La reserva pasará al estado <strong>confirmada</strong> y se marcará como <strong>pagada</strong>.
+
+                    </div>
+
+                    <div id="loading_confirm_reservation_[s/$reservation->id/s]"
+                         class="loading-div">
+
+                        <img alt="Loading"
+                             src="assets/images/loading.svg">
+
+                        <div class="text-center colorMuted">
+                            Confirmando reserva
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+
+                            <button type="button"
+                                    class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-6 text-end">
+
+                            <button type="button"
+                                    id="btn_confirm_pending_reservation_[s/$reservation->id/s]"
+                                    class="btn btn-success"
+                                    onclick="confirmPendingReservation([s/$reservation->id/s]);">
+
+                                <i class="fa-solid fa-check me-1"></i>
+                                Confirmar
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+[s//foreach/s]
+
+<!-- =========================================================
+     MODALES BONOS PENDIENTES
+========================================================= -->
+[s/if $bonuses_enabled/s]
+[s/foreach from=$pending_bonuses item=bonus/s]
+
+    <div class="modal fade"
+         id="modal_confirm_dashboard_bonus[s/$bonus->id/s]"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <div class="fs-5 font_weight500">
+                        Confirmar bono
+                    </div>
+
+                    <i class="fa-solid fa-xmark fs-5 modal-close"
+                       data-bs-dismiss="modal"
+                       aria-label="Cerrar"></i>
+
+                </div>
+
+
+                <div class="modal-body">
+
+                    <p>
+                        ¿Desea confirmar el bono
+                        <strong>[s/$bonus->bonus_name|escape/s]</strong>?
+                    </p>
+
+                    <p>
+                        El bono quedará activo para
+                        <strong>[s/$bonus->user_name|escape/s]</strong>
+                        y comenzará su periodo de validez.
+                    </p>
+
+
+                    <div id="loading_confirm_dashboard_bonus[s/$bonus->id/s]"
+                         class="loading-div"
+                         style="display:none;">
+
+                        <img src="assets/images/loading.svg" alt="Loading">
+
+                        <span>
+                            Confirmando bono
+                        </span>
+
+                    </div>
+
+
+                    <div class="text-end">
+
+                        <button type="button"
+                                class="btn btn-secondary me-2"
+                                data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+
+                        <button type="button"
+                                id="btn_confirm_dashboard_bonus_[s/$bonus->id/s]"
+                                class="btn backgroundPrimary colorWhite"
+                                onclick="confirmDashboardBonus([s/$bonus->id/s]);">
+
+                            Confirmar
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+[s//foreach/s]
+
+[s//if/s]

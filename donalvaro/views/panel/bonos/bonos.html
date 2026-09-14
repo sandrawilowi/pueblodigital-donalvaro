@@ -1,0 +1,430 @@
+[s/$title/s]
+
+<div id="buscador">
+    
+    <div class="card">
+
+        <div class="card-header font_weight500 d-flex justify-content-between align-items-center">
+
+            <span class="font_weight500">
+                Buscar Bono
+            </span>
+
+            <i id="iconCollapseFilterCerraduras"
+               class="fa-solid fa-square-minus cursor_pointer ms-auto"
+               onclick="toggleFilter('collapseFilterBono', this)"
+               aria-label="Mostrar/Ocultar filtros">
+            </i>
+
+        </div>
+
+        <div id="collapseFilterBono" class="collapse show">
+            <div class="card-body">
+                <form id="filterBonos" name="filterBonos">
+
+                    <div class="row">
+
+                        <div class="col-md-3 mt-2">
+
+                            <label class="colorBase7 font_weight500" for="nameFilter">Nombre</label>
+                            <div>
+                                <input type="text" class="form-control" id="nameFilter" name="nameFilter" placeholder="Nombre" onkeypress="ngFilter(event,'btnFilter')">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mt-2">
+
+                            <label class="colorBase7 font_weight500" for="facilityFilter">Instalación</label>
+
+                            <div>
+                                <select id="facilityFilter"
+                                        name="facilityFilter"
+                                        class="selectpicker form-control"
+                                        data-live-search="true"
+                                        data-size="8"
+                                        data-width="100%"
+                                        title="Todas">
+
+                                    <option value="">Todas</option>
+
+                                    [s/foreach from=$facilities item=facility/s]
+                                    <option value="[s/$facility->id/s]">
+                                        [s/$facility->name/s]
+                                    </option>
+                                    [s//foreach/s]
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-3 mt-2">
+
+                            <label class="colorBase7 font_weight500" for="statusFilter">Estado</label>
+                            <div class="custom-select">
+                                <select class="form-control" id="statusFilter" name="statusFilter" onkeypress="ngFilter(event,'btnFilter')">
+                                    <option value="" selected>Todos</option>                                
+                                    <option value="1">Activa</option>
+                                    <option value="0">Desactivada</option>
+                                    <option value="2">Bloqueada</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </form>
+
+                <div class="row mt-4">
+
+                    <div class="col-md-6">
+                        <button aria-label="Buscar cerraduras" class="btn btn-primary px-4" id="btnFilter" 
+                                onclick="formFilter('filterBonos');" onkeypress="ngFilter(event,'btnFilter')">
+                            Buscar
+                        </button>
+                    </div>
+
+                    <div  class="col-md-6 text-end">
+                        <button type="button" aria-label="Limpiar" class="btn btn-clear" onclick="clearForm('filterBonos');">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="mt-4" id="insertTableCerraduras">
+
+    [s/if $results|count>0/s]
+    <table id="dt_bono" class="table border" data-ordering="true" style="table-layout:fixed; width: 100%">
+        <thead>
+            <tr class="text-center">
+                <th class="text-center">ID</th>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Tipo</th>
+                <th class="text-center">Precio</th>
+                <th class="text-center">Instalaciones</th>                  
+                <th class="text-center">Acciones</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+
+            [s/assign "cont" 1/s]
+            [s/foreach from=$results item=result/s]
+
+            <tr class="text-center">
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->id/s]
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    <a aria-label="[s/$result->name/s]" class="colorBase9 cursor_pointer" href="editbono/[s/$result->id/s]">
+                    [s/$result->name/s]
+                    </a>
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->bonus_type/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] colorBase12 text-center">
+                    [s/$result->price/s]
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->facilities/s]
+                </td>
+
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            [s/if $result->status==1/s]
+                            <a aria-label="Desactivar Bono" class="cursor_pointer" href="javascript: void(0)" onclick="activeBonus([s/$result->id/s],0)" id="btnActiveBonusLink[s/$result->id/s]">
+                                <i class="ph-fill ph-power text-22 colorAccent" id="btnActiveBonus[s/$result->id/s]"></i>
+                            </a>
+                            
+                            [s/elseif $result->status==0/s]
+                            <a aria-label="Activar Bono" class="cursor_pointer" href="javascript: void(0)" onclick="activeBonus([s/$result->id/s],1)" id="btnActiveBonusLink[s/$result->id/s]">
+                                <i class="ph-fill ph-power text-22 colorWarning" id="btnActiveBonus[s/$result->id/s]"></i>
+                            </a>
+
+                            [s//if/s]
+
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <a aria-label="modal delete" class="colorBase9 cursor_pointer" href="javascript: void(0)" data-bs-toggle="modal" data-bs-target="#modal_delete[s/$result->id/s]">
+                                <i class="ph-fill ph-trash text-22 colorError"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                </td>
+
+            </tr>
+            
+
+            [s/assign "cont" $cont+1/s]
+            [s/if $cont>2/s]
+                [s/assign "cont" 1/s]
+            [s//if/s]
+
+            [s//foreach/s]
+
+        </tbody>
+    </table>
+    [s/else/s]
+    <div class="card mt-3">
+
+        <div class="card-body colorMuted">
+            No hay resultados.
+        </div>
+
+    </div>
+
+    [s//if/s]
+    
+
+    [s/foreach from=$results item=result/s]
+
+<div id="modal_delete[s/$result->id/s]" class="hidden-print modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header modal-header-error">
+                <div class="text-20 colorBase7 font_weight500">Eliminar Bono</div>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="container-modal-error">
+
+
+                    <div class="mt-2 text-center">
+                        ¿Está seguro que quiere eliminar este bono? El bono dejará de estar disponible en el sistema.
+                        <br>
+                        <strong>[s/$result->name/s]</strong>
+                    </div>
+                    
+                    <div id="loading-delete" class="loading-div">
+                        <img alt="Loading" src="assets/images/loading.svg">
+                        <div class="text-center colorMuted">Eliminando bono</div>
+                    </div>
+
+
+                </div>
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+                            <button aria-label="Cancelar" class="btn backgroundMuted colorWhite" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                        </div>
+
+                        <div class="col-md-6 text-end">
+                            <button aria-label="Eliminar Cerradura" id="btn_delete"
+                                    class="btn backgroundError colorWhite" onclick="deleteBonus([s/$result->id/s])">
+                                Eliminar
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+[s//foreach/s]
+    
+</div>
+
+
+
+<div id="modal_add" class="hidden-print modal fade">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="fs-5 font_weight500">
+                    Añadir bono
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+            </div>
+
+            <div class="modal-body">
+                <div class="container-modal py-4">
+                    
+                    <form id="form_add_bonus" autocomplete="off">
+
+                    <div class="row">
+
+                        <div class="col-md-12 mb-3">
+                            <label for="bonus_name" class="form-label">
+                                Nombre
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text"
+                                   id="bonus_name"
+                                   name="bonus_name"
+                                   class="form-control"
+                                   maxlength="150">
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="bonus_description" class="form-label">
+                                Descripción
+                            </label>
+
+                            <textarea id="bonus_description"
+                                      name="bonus_description"
+                                      class="form-control"
+                                      rows="3"></textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="bonus_facilities" class="form-label">
+                                Instalaciones <span class="colorError">*</span>
+                            </label>
+
+                            <select id="bonus_facilities" name="facility_ids[]" class="selectpicker form-control" multiple data-live-search="true" data-width="100%" title="Selecciona una o varias instalaciones">
+                                [s/foreach from=$facilities item=facility/s]
+                                <option value="[s/$facility->id/s]">[s/$facility->name/s]</option>
+                                [s//foreach/s]
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="bonus_type" class="form-label">
+                                Tipo de bono
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <select id="bonus_type"
+                                    name="bonus_type"
+                                    class="form-select">
+                                <option value="USES">Por usos</option>
+                                <option value="TIME">Ilimitado por tiempo</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3" id="bonus_total_uses_block">
+                            <label for="bonus_total_uses" class="form-label">
+                                Número de usos
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="number"
+                                   id="bonus_total_uses"
+                                   name="bonus_total_uses"
+                                   class="form-control"
+                                   min="1">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="bonus_price" class="form-label">
+                                Precio
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <div class="input-group">
+                                <input type="number"
+                                       id="bonus_price"
+                                       name="bonus_price"
+                                       class="form-control"
+                                       min="0"
+                                       step="0.01">
+
+                                <span class="input-group-text">€</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="bonus_validity_mode" class="form-label">
+                                Validez
+                            </label>
+
+                            <select id="bonus_validity_mode"
+                                    name="bonus_validity_mode"
+                                    class="form-select">
+                                <option value="">Sin límite de tiempo</option>
+                                <option value="DAYS">Número de días</option>
+                                <option value="CALENDAR_WEEK">Semana natural</option>
+                                <option value="CALENDAR_MONTH">Mes natural</option>
+                                <option value="CALENDAR_YEAR">Año natural</option>
+                            </select>
+                            <small class="form-text colorMuted">
+                                Si no se indica validez, el bono será válido hasta consumir todos sus usos.
+                            </small>
+                        </div>
+
+                        <div class="col-md-6 mb-3" id="bonus_validity_days_block" style="display:none;>
+                            <label for="bonus_validity_days" class="form-label">
+                                Días de validez
+                            </label>
+
+                            <div class="input-group">
+                                <input type="number"
+                                       id="bonus_validity_days"
+                                       name="bonus_validity_days"
+                                       class="form-control"
+                                       min="1">
+
+                                <span class="input-group-text">días</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    </form>
+                    <div id="add_bonus_error"
+                         class="alert alert-danger mt-2"
+                         style="display:none;"></div>
+
+                    <div id="loading_add_bonus" class="loading-div" style="display:none;">
+                        <img src="../assets/images/loading.svg" alt="Loading">
+                        <span>Guardando datos</span>
+                    </div>
+
+                    <div class="text-end mt-4">
+                        <button type="button"
+                                class="btn btn-secondary me-2"
+                                data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+
+                        <button type="button"
+                                id="btn_add_bonus"
+                                class="btn backgroundPrimary colorWhite"
+                                onclick="addBonus();">
+                            Añadir
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

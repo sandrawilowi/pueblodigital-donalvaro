@@ -1,0 +1,447 @@
+ [s/if $results|count>0/s]
+    <table id="dt_reservas" class="table border" data-ordering="true" style="table-layout:fixed; width: 100%">
+        <thead>
+            <tr class="text-center">
+                <th class="text-center">Referencia</th>
+                <th class="text-center">Cliente</th>
+                <th class="text-center">Instalación</th>
+                <th class="text-center">Estado</th>
+                <th class="text-center">Nº Personas</th>
+                <th class="text-center">Precio</th>
+                <th class="text-center">Método Pago</th>
+                <th class="text-center">Fecha de entrada</th>
+                <th class="text-center">Fecha de salida</th>
+                <th class="text-center">Acciones</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+
+            [s/assign "cont" 1/s]
+            [s/foreach from=$results item=result/s]
+
+            <tr class="text-center">
+
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    <a aria-label="[s/$result->reference/s]" class="cursor_pointer" href="editreserva/[s/$result->id/s]">
+                        [s/$result->reference/s]
+                    </a>
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    <a aria-label="[s/$result->first_name/s]" class="colorTertiary cursor_pointer" href="editcliente/[s/$result->user_id/s]">
+                        [s/$result->first_name/s] [s/$result->last_name/s]
+                    </a>
+                </td>
+
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    <a aria-label="[s/$result->facility_name/s]" class="colorTertiary cursor_pointer" href="editinstalacion/[s/$result->facility_id/s]">
+                    [s/$result->facility_name/s]
+                    </a>
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/if $result->status_code == 'pending'/s]
+                    <span class="badge bg-warning text-dark">[s/$result->status_name/s]</span>
+
+                    [s/elseif $result->status_code == 'confirmed'/s]
+                    <span class="badge bg-success">[s/$result->status_name/s]</span>
+
+                    [s/elseif $result->status_code == 'cancelled'/s]
+                    <span class="badge bg-danger">[s/$result->status_name/s]</span>
+
+                    [s/elseif $result->status_code == 'completed'/s]
+                    <span class="badge bg-primary">[s/$result->status_name/s]</span>
+
+                    [s/elseif $result->status_code == 'rejected'/s]
+                    <span class="badge bg-danger">[s/$result->status_name/s]</span>
+
+                    [s/elseif $result->status_code == 'no_show'/s]
+                    <span class="badge bg-secondary">[s/$result->status_name/s]</span>
+
+                    [s/else/s]
+                    <span class="badge bg-secondary">[s/$result->status_name/s]</span>
+                    [s//if/s]
+                </td>
+
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->people_count/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->total_amount/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/if !empty($result->user_bonus_id)/s]
+
+                    <span class="badge bg-info">
+                        Bono
+                    </span>
+
+                    [s/if !empty($result->bonus_name)/s]
+                    <div class="small colorMuted mt-1">
+                        [s/$result->bonus_name/s]
+                    </div>
+                    [s//if/s]
+
+                    [s/elseif !empty($result->payment_method_id)/s]
+
+                    [s/$result->payment_name/s]
+
+                    [s/else/s]
+
+                    <span class="colorMuted">
+                        Sin definir
+                    </span>
+
+                    [s//if/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->start_at|date_format:"%d/%m/%Y %H:%M"/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->end_at|date_format:"%d/%m/%Y %H:%M"/s]
+                </td>
+
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    <div class="row">
+                        
+                        <div class="col-md-6">
+
+                            [s/if $result->status_code != 'cancelled'
+                            && $result->status_code != 'rejected'
+                            && $result->status_code != 'no_show'
+                            && $result->status_code != 'completed'/s]
+
+                            <a aria-label="Cambiar estado"
+                               class="cursor_pointer"
+                               href="javascript:void(0)"
+                               data-bs-toggle="modal"
+                               data-bs-target="#modal_status[s/$result->id/s]">
+
+                                <i class="ph-fill ph-swap text-22 colorPrimary"></i>
+
+                            </a>
+
+                            [s//if/s]
+
+
+
+                        </div>
+
+                        <div class="col-md-6">
+                            [s/if empty($result->user_bonus_id)/s]
+
+                            <a aria-label="Cambiar método de pago"
+                               class="cursor_pointer"
+                               href="javascript:void(0)"
+                               data-bs-toggle="modal"
+                               data-bs-target="#modal_payment[s/$result->id/s]">
+
+                                <i class="ph-fill ph-credit-card text-22 colorMuted"></i>
+
+                            </a>
+
+                            [s//if/s]
+
+
+                        </div>
+
+                    </div>
+                </td>
+
+            </tr>
+            
+
+            [s/assign "cont" $cont+1/s]
+            [s/if $cont>2/s]
+                [s/assign "cont" 1/s]
+            [s//if/s]
+
+            [s//foreach/s]
+
+        </tbody>
+    </table>
+    [s/else/s]
+    <div class="card mt-3">
+
+        <div class="card-body colorMuted">
+            No hay resultados.
+        </div>
+
+    </div>
+
+    [s//if/s]
+    
+    
+[s/foreach from=$results item=result/s]
+
+
+[s/if empty($result->user_bonus_id)/s]
+
+    <div id="modal_payment[s/$result->id/s]"
+         class="hidden-print modal fade"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <div class="fs-5 font_weight500">
+                        Cambiar Método de Pago
+                    </div>
+
+                    <i class="fa-solid fa-xmark fs-5 modal-close"
+                       data-bs-dismiss="modal"
+                       aria-label="Cerrar"></i>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="container-modal py-4">
+
+                        <div class="mb-3">
+
+                            <div class="mb-3">
+                                Reserva:
+                                <span class="font_weight500">
+                                    [s/$result->reference/s]
+                                </span>
+                            </div>
+
+                            <label class="colorBase7 font_weight500"
+                                   for="reservation_payment_[s/$result->id/s]">
+                                Método de pago
+                            </label>
+
+                            <div class="custom-select mt-2">
+
+                                <select id="reservation_payment_[s/$result->id/s]"
+                                        class="form-control">
+
+                                    [s/foreach from=$payment_methods_by_facility[$result->facility_id] item=payment_method/s]
+
+                                    <option value="[s/$payment_method->payment_method_id/s]"
+                                            [s/if $payment_method->payment_method_id == $result->payment_method_id/s]selected[s//if/s]>
+                                            [s/$payment_method->name/s]
+                                </option>
+
+                                [s//foreach/s]
+
+                            </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="alert alert-info mb-0">
+
+                            <i class="fa-solid fa-circle-info me-2"></i>
+
+                            Se modificará el método de pago asociado a esta reserva.
+
+                        </div>
+
+
+                        <div id="payment_reservation_error_[s/$result->id/s]"
+                             class="alert alert-danger mt-3 mb-0"
+                             style="display:none;">
+                        </div>
+
+
+                        <div id="loading_payment_reservation_[s/$result->id/s]"
+                             class="loading-div">
+
+                            <img alt="Loading"
+                                 src="assets/images/loading.svg">
+
+                            <div class="text-center colorMuted">
+                                Actualizando método de pago
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="container-footer mt-2">
+
+                        <div class="row">
+
+                            <div class="col-md-6 text-start">
+
+                                <button type="button"
+                                        class="btn backgroundMuted colorWhite"
+                                        data-bs-dismiss="modal">
+                                    Cancelar
+                                </button>
+
+                            </div>
+
+                            <div class="col-md-6 text-end">
+
+                                <button type="button"
+                                        id="btn_payment_reservation_[s/$result->id/s]"
+                                        class="btn backgroundPrimary colorWhite"
+                                        onclick="changeReservationPayment([s/$result->id/s]);">
+                                    Guardar
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+[s//if/s]
+
+
+[s/if $result->status_code != 'cancelled'
+    && $result->status_code != 'rejected'
+    && $result->status_code != 'no_show'
+    && $result->status_code != 'completed'/s]
+<div id="modal_status[s/$result->id/s]"
+     class="hidden-print modal fade"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Cambiar Estado
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="container-modal py-4">
+
+                    <div class="mb-3">
+
+                        <label for="reservation_status_[s/$result->id/s]"
+                               class="form-label">
+                            Estado
+                        </label>
+
+                        <select id="reservation_status_[s/$result->id/s]"
+                                class="form-select"
+                                onchange="changeReservationStatusReason([s/$result->id/s]);">
+
+                            [s/foreach from=$reservation_statuses item=status/s]
+
+                            [s/if $status->code != 'completed'/s]
+
+                                <option value="[s/$status->id/s]"
+                                        data-code="[s/$status->code/s]"
+                                        [s/if $status->id == $result->reservation_status_id/s]selected[s//if/s]>
+                                        [s/$status->name/s]
+                            </option>
+
+                            [s//if/s]
+
+                            [s//foreach/s]
+
+                        </select>
+
+                    </div>
+                    
+                    <div id="cancellation_reason_container_[s/$result->id/s]" class="mt-3 mb-2" style="display:none;">
+
+                        <label class="colorBase7 font_weight500" for="cancellation_reason_[s/$result->id/s]">
+                            Motivo de cancelación <span class="text-danger">*</span>
+                        </label>
+
+                        <textarea class="form-control"
+                                  id="cancellation_reason_[s/$result->id/s]"
+                                  rows="3"
+                                  maxlength="500"
+                                  placeholder="Indique el motivo de cancelación"></textarea>
+
+                    </div>
+
+                    <div class="alert alert-info mb-0">
+                        <i class="fa-solid fa-circle-info me-2"></i>
+                        El cambio de estado quedará registrado en la auditoría.
+                    </div>
+
+                    <div id="status_reservation_error_[s/$result->id/s]"
+                         class="alert alert-danger mt-3 mb-0"
+                         style="display:none;">
+                    </div>
+
+                    <div id="loading_status_reservation_[s/$result->id/s]"
+                         class="loading-div">
+
+                        <img alt="Loading"
+                             src="assets/images/loading.svg">
+
+                        <div class="text-center colorMuted">
+                            Actualizando estado
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+
+                            <button type="button"
+                                    class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-6 text-end">
+
+                            <button type="button"
+                                    id="btn_status_reservation_[s/$result->id/s]"
+                                    class="btn backgroundPrimary colorWhite"
+                                    onclick="changeReservationStatus([s/$result->id/s]);">
+                                Guardar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+[s//if/s]
+[s//foreach/s]

@@ -1,0 +1,394 @@
+/* =========================================================
+   FICHA PRINCIPAL
+========================================================= */
+
+.facility-main-card,
+.facility-section-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+}
+
+.facility-name {
+    color: var(--pd-secondary);
+    font-weight: 600;
+}
+
+.facility-map {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.facility-map-empty {
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+
+/* =========================================================
+   INFORMACIÓN
+========================================================= */
+
+.facility-modal-image {
+    max-width: 100%;
+    max-height: 75vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+.facility-info-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.facility-info-icon {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(37, 99, 235, 0.10);
+    color: var(--pd-primary);
+}
+
+.facility-description {
+    padding: 15px;
+    background: #f8fafc;
+    border-left: 3px solid var(--pd-primary);
+    border-radius: 7px;
+    color: var(--pd-secondary);
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   TÍTULOS DE SECCIÓN
+========================================================= */
+
+.facility-section-title {
+    color: var(--pd-secondary);
+    font-weight: 600;
+}
+
+.facility-section-title i {
+    color: var(--pd-primary);
+}
+
+
+/* =========================================================
+   GALERÍA
+========================================================= */
+
+.facility-gallery-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.facility-gallery {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    flex: 1;
+}
+
+.facility-gallery::-webkit-scrollbar {
+    display: none;
+}
+
+.facility-gallery-item {
+    flex: 0 0 180px;
+}
+
+.facility-gallery-image {
+    width: 180px;
+    height: 120px;
+    display: block;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: opacity .2s ease, transform .2s ease, border-color .2s ease;
+}
+
+.facility-gallery-image:hover {
+    opacity: .90;
+    transform: scale(1.025);
+    border-color: var(--pd-primary);
+}
+
+
+/* Flechas de la galería */
+
+.facility-gallery-arrow {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dbe3ee;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--pd-primary);
+    font-size: 18px;
+    box-shadow: 0 2px 7px rgba(15, 23, 42, 0.12);
+    transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.facility-gallery-arrow i {
+    color: inherit;
+}
+
+.facility-gallery-arrow:hover {
+    background: var(--pd-primary);
+    border-color: var(--pd-primary);
+    color: #fff;
+}
+
+
+/* =========================================================
+   SERVICIOS
+========================================================= */
+
+.facility-service {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    background: #f8fafc;
+    border-radius: 7px;
+    color: var(--pd-secondary);
+}
+
+.facility-service-icon {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(34, 197, 94, 0.12);
+    color: var(--pd-accent);
+}
+
+.facility-service-icon i {
+    color: inherit;
+}
+
+
+/* =========================================================
+   TARIFAS Y BONOS
+========================================================= */
+
+.facility-price-card,
+.facility-bonus-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 18px;
+    height: 100%;
+    background: #fff;
+    transition: box-shadow .2s ease, transform .2s ease;
+}
+
+.facility-price-card:hover,
+.facility-bonus-card:hover {
+    box-shadow: 0 5px 18px rgba(15, 23, 42, 0.08);
+    transform: translateY(-2px);
+}
+
+.facility-card-icon {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(37, 99, 235, 0.10);
+    color: var(--pd-accent);
+    border-radius: 8px;
+    font-size: 17px;
+}
+
+.facility-card-icon i {
+    color: inherit;
+}
+
+.facility-price {
+    color: var(--pd-tertiary);
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   DATOS DEL BONO
+========================================================= */
+
+.facility-bonus-data {
+    padding: 11px 13px;
+    margin-bottom: 15px;
+    background: #f8fafc;
+    border-radius: 8px;
+    color: var(--pd-secondary);
+}
+
+.facility-bonus-data i {
+    color: var(--pd-primary);
+}
+
+
+/* =========================================================
+   MÉTODOS DE PAGO
+========================================================= */
+
+.facility-payment-method {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 13px;
+    background: #f8fafc;
+    color: var(--pd-secondary);
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+.facility-payment-method i {
+    color: var(--pd-primary);
+}
+
+
+/* =========================================================
+   MODAL FOTO
+========================================================= */
+
+
+#facilityImageModalImg {
+    max-height: 85vh;
+    object-fit: contain;
+}
+
+
+/* =========================================================
+   MODAL COMPRA BONO
+========================================================= */
+
+.facility-selected-bonus {
+    padding: 15px;
+    background: #f8fafc;
+    border-left: 3px solid var(--pd-primary);
+    border-radius: 7px;
+}
+
+.facility-payment-info {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px 14px;
+    background: rgba(37, 99, 235, 0.07);
+    border: 1px solid rgba(37, 99, 235, 0.15);
+    border-radius: 7px;
+    color: var(--pd-secondary);
+}
+
+.facility-payment-info i {
+    color: var(--pd-primary);
+    margin-top: 3px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 767px) {
+
+    .facility-gallery-item {
+        flex: 0 0 145px;
+    }
+
+    .facility-gallery-image {
+        width: 145px;
+        height: 100px;
+    }
+
+    .facility-gallery-arrow {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        font-size: 15px;
+    }
+
+    .facility-name {
+        font-size: 1.6rem;
+    }
+}
+
+.facility-bonus-icon {
+    color: var(--pd-accent);
+    background-color: color-mix(in srgb, var(--pd-accent) 12%, white);
+}
+
+.client-bonus-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+    transition: box-shadow .2s ease, transform .2s ease;
+}
+
+.client-bonus-card:hover {
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.09);
+    transform: translateY(-2px);
+}
+
+.client-bonus-image {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+}
+
+.client-bonus-image-empty {
+    height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--pd-light);
+}
+
+.client-bonus-facility {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.client-bonus-data {
+    padding: 13px 15px;
+    background: var(--pd-light);
+    border-radius: 8px;
+}
+
+.client-bonus-data > div {
+    margin-bottom: 8px;
+}
+
+.client-bonus-data > div:last-child {
+    margin-bottom: 0;
+}
+
+.client-bonus-pending {
+    padding: 11px 13px;
+    background: rgba(245, 158, 11, 0.10);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: 7px;
+    color: var(--pd-warning);
+}

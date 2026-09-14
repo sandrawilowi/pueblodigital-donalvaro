@@ -1,0 +1,2445 @@
+[s/$title/s]
+
+<div class="row mt-4">
+
+    <div class="col-md-8">
+
+        <div class="card">
+
+            <!-- DATOS DE LA INSTALACIÓN -->
+            <div class="card-header font_weight500">
+
+                Datos de la instalación
+
+            </div>
+
+            <div class="card-body">
+
+                <form id="form_data" name="form_data" autocomplete="off">
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="colorTertiary font_weight500"
+                                   for="name">
+                                Nombre
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="name"
+                                   name="name"
+                                   maxlength="150"
+                                   value="[s/$model.facility->name/s]">
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="colorTertiary font_weight500"
+                                   for="capacity">
+                                Capacidad
+                            </label>
+
+                            <input type="number"
+                                   class="form-control"
+                                   id="capacity"
+                                   name="capacity"
+                                   min="1"
+                                   value="[s/$model.facility->capacity/s]">
+
+                            <div class="form-text">
+                                Máximo de unidades o plazas que pueden reservarse simultáneamente.
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-12 mb-3">
+
+                            <label class="colorTertiary font_weight500"
+                                   for="description">
+                                Descripción
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <textarea class="form-control"
+                                      id="description"
+                                      name="description"
+                                      rows="4">[s/$model.facility->description/s]</textarea>
+
+                        </div>
+
+
+                        <div class="col-md-12 mb-3">
+
+                            <label class="colorTertiary font_weight500"
+                                   for="address">
+                                Dirección
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="address"
+                                   name="address"
+                                   maxlength="255"
+                                   value="[s/$model.facility->address/s]">
+
+                        </div>
+
+
+                        <div class="col-md-5 mb-3">
+
+                            <label class="colorTertiary font_weight500"
+                                   for="city">
+                                Localidad
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="city"
+                                   name="city"
+                                   maxlength="150"
+                                   value="[s/$model.facility->city/s]">
+
+                        </div>
+
+
+                        <div class="col-md-5 mb-3">
+
+                            <label class="colorTertiary font_weight500"
+                                   for="province_id">
+                                Provincia
+                            </label>
+
+                            <select id="province_id"
+                                    name="province_id"
+                                    class="form-select">
+
+                                <option value="">
+                                    Seleccione una provincia
+                                </option>
+
+                                [s/foreach from=$provinces item=province/s]
+
+                                <option value="[s/$province->id/s]"
+                                        [s/if $model.facility->province_id == $province->id/s]selected[s//if/s]>
+                                        [s/$province->name/s]
+                            </option>
+
+                            [s//foreach/s]
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-2 mb-3">
+
+                        <label class="colorTertiary font_weight500"
+                               for="postal_code">
+                            C. Postal
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               id="postal_code"
+                               name="postal_code"
+                               maxlength="10"
+                               value="[s/$model.facility->postal_code/s]">
+
+                    </div>
+
+                    <div class="col-md-4 mb-2">
+
+                        <div class="form-check">
+
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   id="booking_enabled"
+                                   name="booking_enabled"
+                                   value="1"
+                                   [s/if $model.facility->booking_enabled==1/s]checked[s//if/s]>
+
+                                   <label class="form-check-label"
+                                   for="booking_enabled">
+                                Permitir reservas
+                            </label>
+
+                        </div>
+
+                        <div id="booking_type_container"
+                             class="mb-4"
+                             [s/if $model.facility->booking_enabled != 1/s]style="display:none;"[s//if/s]>
+
+                             <label class="colorTertiary font_weight500"
+                               for="booking_type_id">
+                                Tipo de reserva
+                             </label>
+
+                            <select id="booking_type_id"
+                                    name="booking_type_id"
+                                    class="form-select">
+
+                                <option value="">
+                                    Seleccione un tipo de reserva
+                                </option>
+
+                                [s/foreach from=$booking_types item=booking_type/s]
+
+                                <option value="[s/$booking_type->id/s]"
+                                         data-code="[s/$booking_type->code/s]"
+                                        [s/if $model.facility->booking_type_id == $booking_type->id/s]selected[s//if/s]>
+                                        [s/$booking_type->name/s]
+                                </option>
+
+                                [s//foreach/s]
+
+                        </select>
+
+                    </div>
+
+                    <div id="booking_hour_config"
+                         class="row"
+                         style="display:none;">
+
+                        <div class="col-md-12 mb-3">
+
+                            <label for="booking_interval_minutes"
+                                   class="colorTertiary font_weight500">
+                                Intervalo de reserva
+                            </label>
+
+                            <select id="booking_interval_minutes"
+                                    name="booking_interval_minutes"
+                                    class="form-select">
+
+                                <option value="">Seleccione un intervalo</option>
+
+                                <option value="15"
+                                        [s/if $model.facility->booking_interval_minutes == 15/s]selected[s//if/s]>
+                                        15 minutos
+                            </option>
+
+                            <option value="30"
+                                    [s/if $model.facility->booking_interval_minutes == 30/s]selected[s//if/s]>
+                                    30 minutos
+                        </option>
+
+                        <option value="60"
+                                [s/if $model.facility->booking_interval_minutes == 60/s]selected[s//if/s]>
+                                1 hora
+                    </option>
+
+                    </select>
+
+                    <div class="form-text">
+                        Determina cada cuánto puede comenzar una reserva.
+                    </div>
+
+                    </div>
+
+
+                    <div class="col-md-12 mb-3">
+
+                        <label for="minimum_booking_minutes"
+                               class="colorTertiary font_weight500">
+                            Duración mínima
+                        </label>
+
+                        <select id="minimum_booking_minutes"
+                                name="minimum_booking_minutes"
+                                class="form-select">
+
+                            <option value="">Seleccione una duración</option>
+
+                            <option value="15"
+                                    [s/if $model.facility->minimum_booking_minutes == 15/s]selected[s//if/s]>
+                                    15 minutos
+                        </option>
+
+                        <option value="30"
+                                [s/if $model.facility->minimum_booking_minutes == 30/s]selected[s//if/s]>
+                                30 minutos
+                    </option>
+
+                    <option value="60"
+                            [s/if $model.facility->minimum_booking_minutes == 60/s]selected[s//if/s]>
+                            1 hora
+                    </option>
+
+                    <option value="90"
+                            [s/if $model.facility->minimum_booking_minutes == 90/s]selected[s//if/s]>
+                            1 hora y 30 minutos
+                    </option>
+
+                    <option value="120"
+                            [s/if $model.facility->minimum_booking_minutes == 120/s]selected[s//if/s]>
+                            2 horas
+                    </option>
+
+                    </select>
+
+                    <div class="form-text">
+                        Tiempo mínimo que debe durar una reserva.
+                    </div>
+
+                    </div>
+
+                    </div>
+
+                    <div id="date_range_booking_options">
+
+                         <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label colorTertiary font_weight500"
+                                       for="check_in_time">
+                                    Hora de entrada
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <input type="time"
+                                       id="check_in_time"
+                                       name="check_in_time"
+                                       class="form-control"
+                                       value="[s/$model->check_in_time|default:''|date_format:'%H:%M'/s]">
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label colorTertiary font_weight500"
+                                       for="check_out_time">
+                                    Hora de salida
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <input type="time"
+                                       id="check_out_time"
+                                       name="check_out_time"
+                                       class="form-control"
+                                       value="[s/$model->check_out_time|default:''|date_format:'%H:%M'/s]">
+
+                            </div>
+
+                        </div>
+
+                        <div class="small colorMuted mb-3">
+                            Estas horas se aplicarán automáticamente a las reservas por rango de fechas.
+                        </div>
+
+                    </div>
+
+                    </div>
+
+
+                    <div class="col-md-4 mb-2">
+
+                        <div class="form-check">
+
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   id="access_enabled"
+                                   name="access_enabled"
+                                   value="1"
+                                   [s/if $model.facility->access_enabled==1/s]checked[s//if/s]>
+
+                                   <label class="form-check-label"
+                                   for="access_enabled">
+                                Control de acceso
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-4 mb-2">
+
+                        <div class="form-check">
+
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   id="requires_guest_information"
+                                   name="requires_guest_information"
+                                   value="1"
+                                   [s/if $model.facility->requires_guest_information==1/s]checked[s//if/s]>
+
+                                   <label class="form-check-label"
+                                   for="requires_guest_information">
+                                Datos de huéspedes
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                        <div class="row mt-4">
+
+                            <div class="col-md-6">
+
+                                <label class="colorTertiary font_weight500"
+                                       for="pin_valid_before_minutes">
+                                    Activar PIN antes de la reserva
+                                </label>
+
+                                <div class="input-group mt-2">
+
+                                    <input type="number"
+                                           class="form-control"
+                                           id="pin_valid_before_minutes"
+                                           name="pin_valid_before_minutes"
+                                           min="0"
+                                           step="1"
+                                           value="[s/$model.facility->pin_valid_before_minutes/s]">
+
+                                    <span class="input-group-text">
+                                        minutos
+                                    </span>
+
+                                </div>
+
+                                <div class="form-text">
+                                    Minutos antes del inicio de la reserva en los que el PIN será válido.
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="colorTertiary font_weight500"
+                                       for="pin_valid_after_minutes">
+                                    Mantener PIN después de la reserva
+                                </label>
+
+                                <div class="input-group mt-2">
+
+                                    <input type="number"
+                                           class="form-control"
+                                           id="pin_valid_after_minutes"
+                                           name="pin_valid_after_minutes"
+                                           min="0"
+                                           step="1"
+                                           value="[s/$model.facility->pin_valid_after_minutes/s]">
+
+                                    <span class="input-group-text">
+                                        minutos
+                                    </span>
+
+                                </div>
+
+                                <div class="form-text">
+                                    Minutos después del final de la reserva durante los que el PIN seguirá siendo válido.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+
+                            <label for="pending_payment_instructions" class="colorTertiary font_weight500">
+                                Instrucciones para pagos pendientes
+                            </label>
+
+                            <textarea id="pending_payment_instructions"
+                                      name="pending_payment_instructions"
+                                      class="form-control"
+                                      rows="3">[s/$model.facility->pending_payment_instructions|escape:'html'/s]</textarea>
+
+                            <div class="form-text">
+                                Este texto se mostrará al usuario cuando la forma de pago seleccionada deje la reserva pendiente de confirmación.
+                            </div>
+
+                        </div>
+                        
+                        <div class="col-12 mb-3">
+
+                            <label for="booking_conditions" class="colorTertiary font_weight500">
+                                Condiciones de reserva
+                            </label>
+
+                            <textarea class="form-control"
+                                      id="booking_conditions"
+                                      name="booking_conditions"
+                                      rows="5"
+                                      maxlength="5000"
+                                      placeholder="Indique las condiciones que debe conocer el usuario antes de realizar una reserva.">[s/$model.facility->booking_conditions|escape/s]</textarea>
+
+                            <div class="form-text">
+                                Estas condiciones se mostrarán al usuario antes de confirmar la reserva y podrán incluirse en los correos relacionados con la reserva.
+                            </div>
+
+                        </div>
+
+                        <div class="row mt-2">
+                        <div class="col-md-12 mb-3">
+
+                            <label class="colorTertiary font_weight500" for="google_maps_url">
+                                Mapa de Google Maps
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="google_maps_url"
+                                   name="google_maps_url"
+                                   maxlength="1000"
+                                   value="[s/$model.facility->google_maps_url|escape:'html'/s]"
+                                   placeholder="URL del mapa de Google Maps">
+
+                            <div class="form-text">
+                                En Google Maps, seleccione Compartir → Insertar un mapa y copie la URL del atributo src.
+                            </div>
+
+                            [s/if !empty($model.facility->google_maps_url)/s]
+
+                            <div class="mt-3">
+
+                                <iframe src="[s/$model.facility->google_maps_url|escape:'html'/s]"
+                                        width="100%"
+                                        height="350"
+                                        style="border:0;"
+                                        allowfullscreen=""
+                                        loading="lazy"
+                                        referrerpolicy="no-referrer-when-downgrade">
+                                </iframe>
+
+                            </div>
+
+                            [s//if/s]
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div id="loading" class="loading-div">
+                        <img alt="Loading" src="../assets/images/loading.svg">
+                        <div class="text-center colorMuted">Guardando datos</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row mt-2">
+
+                <div class="col-md-6">
+                    <button aria-label="Save changes" id="btn_save" class="btn backgroundTertiary colorWhite" onclick="actualizarInstalacion([s/$model.facility->id/s]);">Guardar</button>
+                </div>
+                
+                <div class="col-md-6 text-end">
+
+                    <a href="../instalaciones"
+                       class="btn backgroundMuted colorWhite">
+                        Volver
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- PRECIOS -->
+    <div class="card mt-3">
+
+        <div class="card-header font_weight500 d-flex align-items-center">
+
+            <span>Precios</span>
+
+            <i class="fa-solid fa-plus colorWhite cursor_pointer ms-auto"
+               role="button"
+               aria-label="Añadir precio"
+               data-bs-toggle="modal"
+               data-bs-target="#modal_add_price">
+            </i>
+
+        </div>
+
+        <div class="card-body">
+
+            [s/if !empty($model.prices)/s]
+
+            [s/foreach from=$model.prices item=price/s]
+
+            <div class="d-flex align-items-center justify-content-between
+                 [s/if !$price@last/s]border-bottom pb-3 mb-3[s//if/s]">
+
+                <div>
+
+                    <div class="font_weight500">
+                        [s/$price->name/s]
+                        [s/if $price->status == 0/s]
+                        <span class="badge backgroundMuted colorWhite ms-2"
+                              id="badgeInactivePrice[s/$price->id/s]">
+                            Desactivado
+                        </span>
+                        [s/else/s]
+                        <span class="badge backgroundMuted colorWhite ms-2"
+                              id="badgeInactivePrice[s/$price->id/s]"
+                              style="display:none;">
+                            Desactivado
+                        </span>
+                        [s//if/s]
+                    </div>
+
+                    [s/if !empty($price->description)/s]
+                    <div class="small colorMuted">
+                        [s/$price->description/s]
+                    </div>
+                    [s//if/s]
+
+                    <div class="mt-1">
+
+                        <span class="font_weight500">
+                            [s/$price->price/s] €
+                        </span>
+
+                        <span class="colorMuted">
+                            · [s/$price->billing_unit_type_name/s]
+                            · [s/$price->billing_period_name/s]
+                        </span>
+
+                    </div>
+
+                    [s/if !empty($price->valid_from) || !empty($price->valid_until)/s]
+
+                    <div class="small colorMuted mt-1">
+
+                        [s/if !empty($price->valid_from)/s]
+                        Desde [s/$price->valid_from/s]
+                        [s//if/s]
+
+                        [s/if !empty($price->valid_until)/s]
+                        hasta [s/$price->valid_until/s]
+                        [s//if/s]
+
+                    </div>
+
+                    [s//if/s]
+
+                </div>
+
+                <div>
+
+                    [s/if $price->status == 1/s]
+
+                    <a aria-label="Desactivar precio"
+                       class="cursor_pointer"
+                       href="javascript:void(0)"
+                       onclick="activeFacilityPrice([s/$model.facility->id/s],[s/$price->id/s],0)"
+                       id="btnActivePriceLink[s/$price->id/s]">
+
+                        <i class="fa-solid fa-power-off colorAccent me-3"
+                           id="btnActivePrice[s/$price->id/s]"></i>
+
+                    </a>
+
+                    [s/elseif $price->status == 0/s]
+
+                    <a aria-label="Activar precio"
+                       class="cursor_pointer"
+                       href="javascript:void(0)"
+                       onclick="activeFacilityPrice([s/$model.facility->id/s],[s/$price->id/s],1)"
+                       id="btnActivePriceLink[s/$price->id/s]">
+
+                        <i class="fa-solid fa-power-off colorWarning me-3"
+                           id="btnActivePrice[s/$price->id/s]"></i>
+
+                    </a>
+
+                    [s//if/s]
+
+                    <i class="fa-solid fa-pen colorTertiary cursor_pointer me-3"
+                       role="button"
+                       aria-label="Editar precio"
+                       data-bs-toggle="modal"
+                       data-bs-target="#modal_edit_price[s/$price->id/s]">
+                    </i>
+
+                    <i class="fa-solid fa-trash colorError cursor_pointer"
+                       role="button"
+                       aria-label="Eliminar precio"
+                       data-bs-toggle="modal"
+                       data-bs-target="#modal_delete_price[s/$price->id/s]">
+                    </i>
+
+                </div>
+
+            </div>
+
+            <div id="modal_edit_price[s/$price->id/s]" class="hidden-print modal fade" tabindex="-1">
+
+                <div class="modal-dialog">
+
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+
+                            <div class="fs-5 font_weight500">
+                                Editar precio
+                            </div>
+
+                            <i class="fa-solid fa-xmark cursor_pointer fs-5 ms-auto"
+                               data-bs-dismiss="modal"
+                               aria-label="Cerrar">
+                            </i>
+
+                        </div>
+
+                        <div class="modal-body">
+
+                            <form id="form_edit_price[s/$price->id/s]" autocomplete="off">
+
+                                <div class="row">
+
+                                    <div class="col-md-12">
+
+                                        <label for="price_name_[s/$price->id/s]" class="colorTertiary font_weight500">
+                                            Nombre
+                                            <span class="text-danger">*</span>
+                                        </label>
+
+                                        <input type="text"
+                                               class="form-control mt-2"
+                                               id="price_name_[s/$price->id/s]"
+                                               name="price_name"
+                                               maxlength="150"
+                                               value="[s/$price->name/s]">
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row mt-3">
+
+                                    <div class="col-md-12">
+
+                                        <label for="price_description_[s/$price->id/s]" class="colorTertiary font_weight500">
+                                            Descripción
+                                        </label>
+
+                                        <textarea class="form-control mt-2"
+                                                  id="price_description_[s/$price->id/s]"
+                                                  name="price_description"
+                                                  rows="3">[s/$price->description/s]</textarea>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row mt-3">
+
+                                    <div class="col-md-4">
+
+                                        <label for="price_value_[s/$price->id/s]" class="colorTertiary font_weight500">
+                                            Precio
+                                            <span class="text-danger">*</span>
+                                        </label>
+
+                                        <div class="input-group mt-2">
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   id="price_value_[s/$price->id/s]"
+                                                   name="price_value"
+                                                   min="0"
+                                                   step="0.01"
+                                                   value="[s/$price->price/s]">
+
+                                            <span class="input-group-text">€</span>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-4">
+
+                                        <label for="billing_unit_type_id_[s/$price->id/s]" class="colorTertiary font_weight500">
+                                            Unidad
+                                            <span class="text-danger">*</span>
+                                        </label>
+
+                                        <select id="billing_unit_type_id_[s/$price->id/s]"
+                                                name="billing_unit_type_id"
+                                                class="form-select mt-2">
+
+                                            [s/foreach from=$billing_unit_types item=unit/s]
+
+                                            <option value="[s/$unit->id/s]"
+                                                    [s/if $unit->id == $price->billing_unit_type_id/s]selected[s//if/s]>
+                                                    [s/$unit->name/s]
+                                        </option>
+
+                                        [s//foreach/s]
+
+                                    </select>
+
+                                </div>
+
+                                <div class="col-md-4">
+
+                                    <label for="billing_period_id_[s/$price->id/s]" class="colorTertiary font_weight500">
+                                        Periodo
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <select id="billing_period_id_[s/$price->id/s]"
+                                            name="billing_period_id"
+                                            class="form-select mt-2">
+
+                                        [s/foreach from=$billing_periods item=period/s]
+
+                                        <option value="[s/$period->id/s]"
+                                                [s/if $period->id == $price->billing_period_id/s]selected[s//if/s]>
+                                                [s/$period->name/s]
+                                    </option>
+
+                                    [s//foreach/s]
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row mt-3">
+
+                            <div class="col-md-6">
+
+                                <label for="price_valid_from_[s/$price->id/s]" class="colorTertiary font_weight500">
+                                    Válido desde
+                                </label>
+
+                                <input type="date"
+                                       class="form-control mt-2"
+                                       id="price_valid_from_[s/$price->id/s]"
+                                       name="price_valid_from"
+                                       value="[s/$price->valid_from/s]">
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <label for="price_valid_until_[s/$price->id/s]" class="colorTertiary font_weight500">
+                                    Válido hasta
+                                </label>
+
+                                <input type="date"
+                                       class="form-control mt-2"
+                                       id="price_valid_until_[s/$price->id/s]"
+                                       name="price_valid_until"
+                                       value="[s/$price->valid_until/s]">
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-text">
+                                    Si no se indican fechas de validez, el precio se considerará permanente.
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <div id="loading-modal-edit-price" class="loading-div">
+                                    <img alt="Loading" src="../assets/images/loading.svg">
+                                    <div class="text-center colorMuted">Guardando datos</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <div id="price_edit_form_error_[s/$price->id/s]"
+                         class="alert alert-danger mt-3 mb-0"
+                         style="display:none;">
+                    </div>
+
+                    <div class="container-footer mt-4">
+
+                        <div class="row">
+
+                            <div class="col-md-6 text-start">
+
+                                <button class="btn backgroundMuted colorWhite"
+                                        data-bs-dismiss="modal">
+                                    Cancelar
+                                </button>
+
+                            </div>
+
+                            <div class="col-md-6 text-end">
+
+                                <button id="btn_edit_price_[s/$price->id/s]"
+                                        class="btn backgroundPrimary colorWhite"
+                                        onclick="editFacilityPrice([s/$model.facility->id/s], [s/$price->id/s]);">
+                                    Guardar
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="modal_delete_price[s/$price->id/s]" class="hidden-print modal fade">
+
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+
+                <div class="modal-header modal-header-error">
+                    <div class="text-20 colorBase7 font_weight500">
+                        Eliminar precio
+                    </div>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="container-modal-error">
+
+                        <div class="mt-2 text-center">
+
+                            ¿Está seguro que quiere eliminar este precio?
+
+                            <br><br>
+
+                            <strong>[s/$price->name/s]</strong>
+
+                            <div class="mt-2">
+                                [s/$price->price/s] €
+                                · [s/$price->billing_unit_type_name/s]
+                                · [s/$price->billing_period_name/s]
+                            </div>
+
+                            [s/if !empty($price->description)/s]
+                            <div class="small colorMuted mt-1">
+                                [s/$price->description/s]
+                            </div>
+                            [s//if/s]
+
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <div id="loading-modal-delete-price" class="loading-div">
+                                    <img alt="Loading" src="../assets/images/loading.svg">
+                                    <div class="text-center colorMuted">Guardando datos</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="container-footer mt-2">
+
+                        <div class="row">
+
+                            <div class="col-md-6 text-start">
+
+                                <button aria-label="Cancelar"
+                                        class="btn backgroundMuted colorWhite"
+                                        data-bs-dismiss="modal">
+                                    Cancelar
+                                </button>
+
+                            </div>
+
+                            <div class="col-md-6 text-end">
+
+                                <button aria-label="Eliminar precio"
+                                        id="btn_delete_price_[s/$price->id/s]"
+                                        class="btn backgroundError colorWhite"
+                                        onclick="deleteFacilityPrice([s/$model.facility->id/s], [s/$price->id/s]);">
+                                    Eliminar
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    [s//foreach/s]
+
+    [s/else/s]
+
+    <div class="colorMuted">
+        No hay precios configurados.
+    </div>
+
+    [s//if/s]
+
+</div>
+
+</div>
+
+
+<!-- IMÁGENES -->
+<div class="card mt-3">
+
+    <div class="card-header font_weight500">
+        Imágenes
+    </div>
+
+    <div class="card-body">
+
+        <!-- PORTADA -->
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="font_weight500 mb-2">Imagen de portada</div>
+            </div>
+
+            <div class="col-md-5">
+
+                [s/assign var=cover_found value=false/s]
+
+                [s/foreach from=$model.images item=image/s]
+
+                    [s/if $image->is_cover == 1/s]
+
+                        [s/assign var=cover_found value=true/s]
+
+                        <div id="current_cover_image" class="position-relative">
+
+                            <img src="../assets/images/facilities/[s/$image->filename/s]"
+                                 class="img-fluid rounded"
+                                 style="max-height:220px;"
+                                 alt="Imagen de portada">
+
+                            <span class="badge backgroundPrimary position-absolute top-0 start-0 m-2">
+                                Portada
+                            </span>
+
+                        </div>
+
+                    [s//if/s]
+
+                [s//foreach/s]
+
+
+                [s/if !$cover_found/s]
+
+                    <div id="current_cover_image" class="colorMuted">
+                        No hay imagen de portada.
+                    </div>
+
+                [s//if/s]
+
+            </div>
+
+
+            <div class="col-md-7">
+
+                <div id="facility_cover_dropzone"
+                     class="border rounded p-4 text-center cursor_pointer">
+
+                    <i class="fa-solid fa-cloud-arrow-up fs-2 mb-2"></i>
+
+                    <div class="font_weight500">
+                        Arrastra una nueva portada aquí
+                    </div>
+
+                    <div class="small colorMuted">
+                        o haz clic para seleccionarla
+                    </div>
+
+                    <div class="small colorMuted mt-2">
+                        JPG, PNG o WEBP
+                    </div>
+
+                </div>
+
+                <input type="file"
+                       id="facility_cover_image"
+                       accept="image/jpeg,image/png,image/webp"
+                       class="d-none">
+
+                <div id="facility_cover_preview" class="mt-3" style="display:none;">
+
+                    <img id="facility_cover_preview_img"
+                         src=""
+                         class="img-fluid rounded"
+                         style="max-height:180px;"
+                         alt="Nueva portada">
+
+                    <div class="mt-2">
+
+                        <button type="button"
+                                class="btn btn-sm backgroundMuted colorWhite"
+                                id="btn_remove_cover_preview">
+                            Quitar selección
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <hr class="my-4">
+
+
+        <!-- GALERÍA -->
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <div class="font_weight500 mb-3">
+                    Galería de imágenes
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            [s/foreach from=$model.images item=image/s]
+
+            [s/if $image->is_cover == 0/s]
+
+            <div class="col-md-4 mb-3" id="facility_gallery_image_[s/$image->id/s]">
+
+                <div class="position-relative facility-gallery-existing">
+
+                    <img src="../assets/images/facilities/[s/$image->filename/s]"
+                         class="img-fluid rounded w-100"
+                         style="height:160px; object-fit:cover;"
+                         alt="Imagen de instalación">
+
+                    <div class="position-absolute top-0 end-0 m-2">
+
+                        <i class="fa-solid fa-xmark bg-white colorError rounded p-2 cursor_pointer"
+                           id="btn_delete_gallery_image_[s/$image->id/s]"
+                           role="button"
+                           aria-label="Quitar imagen"
+                           onclick="markExistingGalleryImageForDelete([s/$image->id/s]);">
+                        </i>
+
+                        <i class="fa-solid fa-rotate-left bg-white colorTertiary rounded p-2 cursor_pointer"
+                           id="btn_restore_gallery_image_[s/$image->id/s]"
+                           role="button"
+                           aria-label="Restaurar imagen"
+                           onclick="restoreExistingGalleryImage([s/$image->id/s]);"
+                           style="display:none;">
+                        </i>
+
+                    </div>
+
+                    <div id="delete_badge_gallery_image_[s/$image->id/s]"
+                         class="position-absolute top-50 start-50 translate-middle"
+                         style="display:none;">
+
+                        <span class="badge backgroundError colorWhite">
+                            Se eliminará
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            [s//if/s]
+
+            [s//foreach/s]
+
+        </div>
+
+
+        <div id="facility_gallery_dropzone"
+             class="border rounded p-4 text-center cursor_pointer mt-2">
+
+            <i class="fa-solid fa-images fs-2 mb-2"></i>
+
+            <div class="font_weight500">
+                Arrastra imágenes aquí
+            </div>
+
+            <div class="small colorMuted">
+                o haz clic para seleccionarlas
+            </div>
+
+            <div class="small colorMuted mt-2">
+                Puede seleccionar varias imágenes · JPG, PNG o WEBP
+            </div>
+
+        </div>
+
+        <input type="file"
+               id="facility_gallery_images"
+               accept="image/jpeg,image/png,image/webp"
+               class="d-none"
+               multiple>
+
+
+        <div id="facility_gallery_preview"
+             class="row mt-3">
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div id="loading-images" class="loading-div">
+                    <img alt="Loading" src="../assets/images/loading.svg">
+                    <div class="text-center colorMuted">Guardando datos</div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="facility_images_error"
+             class="alert alert-danger mt-3 mb-0"
+             style="display:none;">
+        </div>
+
+
+        <div class="row mt-4">
+
+            <div class="col-md-12 text-end">
+
+                <button type="button"
+                        id="btn_save_facility_images"
+                        class="btn backgroundPrimary colorWhite"
+                        onclick="saveFacilityImages([s/$model.facility->id/s]);">
+                    Guardar imágenes
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <!-- CERRADURAS -->
+            <div class="card">
+
+                <div class="card-header font_weight500 d-flex justify-content-between align-items-center">
+
+                    <span>Cerraduras</span>
+
+                    <i class="fa-solid fa-plus colorWhite cursor_pointer ms-auto"
+                       role="button"
+                       aria-label="Añadir dispositivo"
+                       data-bs-toggle="modal"
+                       data-bs-target="#modal_add_device">
+                    </i>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="card-body">
+
+                        [s/if !empty($model.devices)/s]
+
+                        [s/foreach from=$model.devices item=device/s]
+
+                        <div class="d-flex align-items-center justify-content-between
+                             [s/if !$device@last/s]border-bottom pb-2 mb-2[s//if/s]">
+
+                            <div>
+
+                                <div class="font_weight500">
+
+                                    [s/if $device->device_status == 1/s]
+                                    <i class="fa-solid fa-lock colorAccent me-1"></i>
+                                    [s/else/s]
+                                    <i class="fa-solid fa-lock colorWarning me-1"></i>
+                                    [s//if/s]
+
+                                    [s/$device->lock_alias/s]
+
+                                    [s/if $device->is_primary == 1/s]
+                                    <span class="badge backgroundTertiary ms-1">
+                                        Principal
+                                    </span>
+                                    [s//if/s]
+
+                                </div>
+
+                            </div>
+
+                            <div>
+
+                                <i class="fa-solid fa-trash colorError cursor_pointer"
+                                   role="button"
+                                   aria-label="Desvincular cerradura"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#modal_remove_device[s/$device->ttlock_device_id/s]">
+                                </i>
+
+                            </div>
+
+                        </div>
+
+                        <div id="modal_remove_device[s/$device->ttlock_device_id/s]"
+                             class="hidden-print modal fade">
+
+                            <div class="modal-dialog" role="document">
+
+                                <div class="modal-content">
+
+                                    <div class="modal-header modal-header-error">
+
+                                        <div class="text-20 colorBase7 font_weight500">
+                                            Desvincular cerradura
+                                        </div>
+
+                                    </div>
+
+                                    <div class="modal-body">
+
+                                        <div class="container-modal-error">
+
+                                            <div class="mt-2 text-center">
+
+                                                ¿Está seguro de que quiere desvincular esta cerradura de la instalación?
+
+                                                <br><br>
+
+                                                <strong>[s/$device->lock_alias/s]</strong>
+
+                                                [s/if $device->is_primary == 1/s]
+                                                <div class="mt-2 colorWarning">
+                                                    Esta es la cerradura principal de la instalación.
+                                                </div>
+                                                [s//if/s]
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="container-footer mt-4">
+
+                                            <div class="row">
+
+                                                <div class="col-md-6 text-start">
+
+                                                    <button aria-label="Cancelar"
+                                                            class="btn backgroundMuted colorWhite"
+                                                            data-bs-dismiss="modal">
+                                                        Cancelar
+                                                    </button>
+
+                                                </div>
+
+                                                <div class="col-md-6 text-end">
+
+                                                    <button aria-label="Desvincular cerradura"
+                                                            id="btn_remove_device_[s/$device->ttlock_device_id/s]"
+                                                            class="btn backgroundError colorWhite"
+                                                            onclick="removeFacilityDevice([s/$model.facility->id/s],[s/$device->ttlock_device_id/s]);">
+                                                        Desvincular
+                                                    </button>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        [s//foreach/s]
+
+                        [s/else/s]
+
+                        <div class="colorMuted">
+                            No hay cerraduras asociadas.
+                        </div>
+
+                        [s//if/s]
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SERVICIOS -->
+    <div class="row mt-2">
+
+        <div class="col-md-12">
+
+            <div class="card">
+
+                <div class="card-header font_weight500 d-flex align-items-center">
+
+                    <span>Servicios</span>
+
+                    <i class="fa-solid fa-plus colorWhite cursor_pointer ms-auto"
+                       role="button"
+                       aria-label="Añadir servicio"
+                       data-bs-toggle="modal"
+                       data-bs-target="#modal_add_service">
+                    </i>
+
+                </div>
+
+                <div class="card-body">
+
+                    [s/if !empty($model.services)/s]
+
+                    [s/foreach from=$model.services item=service/s]
+
+                    <div class="d-flex align-items-center justify-content-between
+                         [s/if !$service@last/s]border-bottom pb-2 mb-2[s//if/s]">
+
+                        <div>
+
+                            <div class="font_weight500">
+
+                                [s/if !empty($service->icon)/s]
+                                <i class="[s/$service->icon/s] colorTertiary me-1"></i>
+                                [s/else/s]
+                                <i class="fa-solid fa-circle-check colorTertiary me-1"></i>
+                                [s//if/s]
+
+                                [s/$service->name/s]
+
+                            </div>
+
+                            [s/if !empty($service->description)/s]
+                            <div class="small colorMuted">
+                                [s/$service->description/s]
+                            </div>
+                            [s//if/s]
+
+                        </div>
+
+                        <div>
+
+                            <i class="fa-solid fa-trash colorError cursor_pointer"
+                               role="button"
+                               aria-label="Quitar servicio"
+                               data-bs-toggle="modal"
+                               data-bs-target="#modal_remove_service[s/$service->service_id/s]">
+                            </i>
+
+                        </div>
+
+                    </div>
+                    
+                    <div id="modal_remove_service[s/$service->service_id/s]" class="hidden-print modal fade">
+
+                        <div class="modal-dialog" role="document">
+
+                            <div class="modal-content">
+
+                                <div class="modal-header modal-header-error">
+
+                                    <div class="text-20 colorBase7 font_weight500">
+                                        Quitar servicio
+                                    </div>
+
+                                </div>
+
+                                <div class="modal-body">
+
+                                    <div class="container-modal-error">
+
+                                        <div class="mt-2 text-center">
+                                            ¿Está seguro de que quiere quitar este servicio de la instalación?
+
+                                            <br><br>
+
+                                            <strong>[s/$service->name/s]</strong>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="container-footer mt-4">
+
+                                        <div class="row">
+
+                                            <div class="col-md-6 text-start">
+
+                                                <button class="btn backgroundMuted colorWhite"
+                                                        data-bs-dismiss="modal">
+                                                    Cancelar
+                                                </button>
+
+                                            </div>
+
+                                            <div class="col-md-6 text-end">
+
+                                                <button id="btn_remove_service_[s/$service->service_id/s]"
+                                                        class="btn backgroundError colorWhite"
+                                                        onclick="removeFacilityService([s/$model.facility->id/s],[s/$service->service_id/s]);">
+                                                    Quitar
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    [s//foreach/s]
+
+                    [s/else/s]
+
+                    <div class="colorMuted">
+                        No hay servicios asociados.
+                    </div>
+
+                    [s//if/s]
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MÉTODOS DE PAGO -->
+    <div class="row mt-2">
+
+        <div class="col-md-12">
+
+            <div class="card">
+
+                <div class="card-header font_weight500 d-flex align-items-center">
+
+                    <span>Métodos de pago</span>
+
+                    <i class="fa-solid fa-plus colorWhite cursor_pointer ms-auto"
+                       role="button"
+                       aria-label="Añadir método de pago"
+                       data-bs-toggle="modal"
+                       data-bs-target="#modal_add_payment_method">
+                    </i>
+
+                </div>
+
+                <div class="card-body">
+
+                    [s/if !empty($model.payment_methods)/s]
+
+                    [s/foreach from=$model.payment_methods item=payment_method/s]
+
+                    <div class="d-flex align-items-center justify-content-between
+                         [s/if !$payment_method@last/s]border-bottom pb-2 mb-2[s//if/s]">
+
+                        <div>
+
+                            <div class="font_weight500">
+
+                                <i class="fa-solid fa-credit-card colorTertiary me-1"></i>
+
+                                [s/$payment_method->name/s]
+
+                            </div>
+
+                            [s/if !empty($payment_method->description)/s]
+                            <div class="small colorMuted">
+                                [s/$payment_method->description/s]
+                            </div>
+                            [s//if/s]
+
+                        </div>
+
+                        <div>
+
+                            <i class="fa-solid fa-trash colorError cursor_pointer"
+                               role="button"
+                               aria-label="Quitar método de pago"
+                               data-bs-toggle="modal"
+                               data-bs-target="#modal_remove_payment_method[s/$payment_method->payment_method_id/s]">
+                            </i>
+
+                        </div>
+
+                    </div>
+                    
+                    <div id="modal_remove_payment_method[s/$payment_method->payment_method_id/s]"
+                         class="hidden-print modal fade">
+
+                        <div class="modal-dialog" role="document">
+
+                            <div class="modal-content">
+
+                                <div class="modal-header modal-header-error">
+
+                                    <div class="text-20 colorBase7 font_weight500">
+                                        Quitar método de pago
+                                    </div>
+
+                                </div>
+
+                                <div class="modal-body">
+
+                                    <div class="container-modal-error">
+
+                                        <div class="mt-2 text-center">
+
+                                            ¿Está seguro de que quiere quitar este método de pago de la instalación?
+
+                                            <br><br>
+
+                                            <strong>[s/$payment_method->name/s]</strong>
+
+                                            [s/if !empty($payment_method->description)/s]
+                                            <div class="small colorMuted mt-2">
+                                                [s/$payment_method->description/s]
+                                            </div>
+                                            [s//if/s]
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="container-footer mt-4">
+
+                                        <div class="row">
+
+                                            <div class="col-md-6 text-start">
+
+                                                <button class="btn backgroundMuted colorWhite"
+                                                        data-bs-dismiss="modal">
+                                                    Cancelar
+                                                </button>
+
+                                            </div>
+
+                                            <div class="col-md-6 text-end">
+
+                                                <button id="btn_remove_payment_method_[s/$payment_method->payment_method_id/s]"
+                                                        class="btn backgroundError colorWhite"
+                                                        onclick="removeFacilityPaymentMethod([s/$model.facility->id/s],[s/$payment_method->payment_method_id/s]);">
+                                                    Quitar
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    [s//foreach/s]
+
+                    [s/else/s]
+
+                    <div class="colorMuted">
+                        No hay métodos de pago asociados.
+                    </div>
+
+                    [s//if/s]
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    
+    <!-- BONOS -->
+    <div class="row mt-2">
+
+        <div class="col-md-12">
+
+            <div class="card">
+
+                <div class="card-header font_weight500 d-flex align-items-center">
+
+                    <span>Bonos</span>
+
+                </div>
+
+                <div class="card-body">
+
+                    [s/if !empty($model.bonuses)/s]
+
+                    [s/foreach from=$model.bonuses item=bonus/s]
+
+                    <div class="d-flex align-items-center justify-content-between
+                         [s/if !$bonus@last/s]border-bottom pb-2 mb-2[s//if/s]">
+
+                        <div>
+
+                            <div class="font_weight500">
+                                <a href="../editbono/[s/$bonus->id/s]">[s/$bonus->name/s]</a>
+                                [s/if $bonus->status == 0/s]
+                                <span class="badge backgroundMuted colorWhite ms-2"
+                                      id="badgeInactiveBonus[s/$bonus->id/s]">
+                                    Desactivado
+                                </span>
+                                [s/else/s]
+                                <span class="badge backgroundMuted colorWhite ms-2"
+                                      id="badgeInactiveBonus[s/$bonus->id/s]"
+                                      style="display:none;">
+                                    Desactivado
+                                </span>
+                                [s//if/s]
+                            </div>
+
+                            <div class="small colorMuted">
+                                [s/if $bonus->bonus_type == 'TIME'/s]
+                                Uso ilimitado
+                                [s/else/s]
+                                [s/$bonus->total_uses/s] usos
+                                [s//if/s]
+
+                                · [s/$bonus->price/s] €
+
+                                [s/if $bonus->validity_mode == 'DAYS'/s]
+
+                                [s/if !empty($bonus->validity_days)/s]
+                                · [s/$bonus->validity_days/s] días
+                                [s/else/s]
+                                · Sin límite de días
+                                [s//if/s]
+
+                                [s/elseif $bonus->validity_mode == 'CALENDAR_WEEK'/s]
+                                · Semana natural
+                                [s/elseif $bonus->validity_mode == 'CALENDAR_MONTH'/s]
+                                · Mes natural
+                                [s/elseif $bonus->validity_mode == 'CALENDAR_YEAR'/s]
+                                · Año natural
+                                [s//if/s]
+
+                            </div>
+
+                            [s/if !empty($bonus->description)/s]
+                            <div class="small colorMuted">
+                                [s/$bonus->description/s]
+                            </div>
+                            [s//if/s]
+
+                        </div>
+
+                    </div>
+
+
+                    [s//foreach/s]
+
+                    [s/else/s]
+
+                    <div class="colorMuted">
+                        No hay bonos configurados.
+                    </div>
+
+                    [s//if/s]
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- OPCIONES -->
+
+    <div class="row mt-2">
+
+        <div class="col-md-12">
+
+            <div class="card">
+
+                <div class="card-header font_weight500">
+
+                    Opciones
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-4 mt-2">
+                            <a aria-label="activity" class="colorTertiary" href="../disponibilidad-instalacion/[s/$model.facility->id/s]">
+                                <i class="fa-solid fa-calendar-days"></i> Disponibilidad
+                            </a>
+                        </div>
+
+                        <div class="col-md-4 mt-2">
+                            <a aria-label="activity" class="colorTertiary" href="../auditinstalacion/[s/$model.facility->id/s]">
+                                <i class="fa-solid fa-circle-info"></i> Actividad
+                            </a>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+<div id="modal_add_device"
+     class="hidden-print modal fade"
+     tabindex="-1">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Añadir cerradura
+                </div>
+
+                <i class="fa-solid fa-xmark
+                   cursor_pointer fs-5 ms-auto"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar">
+                </i>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form id="form_add_device"
+                      autocomplete="off">
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+                            <label for="ttlock_device_id"
+                                   class="colorTertiary font_weight500">
+                                Cerradura
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <select id="ttlock_device_id"
+                                    name="ttlock_device_id"
+                                    class="form-select mt-2">
+
+                                <option value="">
+                                    Seleccione una cerradura
+                                </option>
+
+                                [s/foreach from=$available_devices item=device/s]
+
+                                <option value="[s/$device->id/s]">
+                                    [s/$device->lock_alias/s]
+                                </option>
+
+                                [s//foreach/s]
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row mt-3">
+
+                        <div class="col-md-12">
+
+                            <div class="form-check">
+
+                                <input type="checkbox"
+                                       class="form-check-input"
+                                       id="is_primary"
+                                       name="is_primary"
+                                       value="1">
+
+                                <label class="form-check-label"
+                                       for="is_primary">
+                                    Dispositivo principal
+                                </label>
+
+                            </div>
+
+                            <div class="form-text">
+                                El dispositivo principal será el acceso
+                                principal de la instalación.
+                            </div>
+
+                        </div>
+
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div id="loading-modal-add-device" class="loading-div">
+                                <img alt="Loading" src="../assets/images/loading.svg">
+                                <div class="text-center colorMuted">Guardando datos</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+
+                <div id="device_form_error"
+                     class="alert alert-danger mt-3 mb-0"
+                     style="display:none;">
+                </div>
+
+                <div class="container-footer mt-4">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+                            <button aria-label="Cancelar" class="btn backgroundMuted colorWhite" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+
+                        <div class="col-md-6 text-end">
+                            <button aria-label="Eliminar Cerradura" 
+                                    class="btn backgroundPrimary colorWhite"
+                                    onclick="addFacilityDevice([s/$model.facility->id/s]);"
+                                    id="btn_guardar_facility">
+                                Añadir
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="modal_add_service"
+     class="hidden-print modal fade"
+     tabindex="-1">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Añadir servicio
+                </div>
+
+                <i class="fa-solid fa-xmark
+                   cursor_pointer fs-5 ms-auto"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar">
+                </i>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form id="form_add_service"
+                      autocomplete="off">
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+                            <label for="service_ids"
+                                   class="colorTertiary font_weight500">
+                                Servicio
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <select id="service_ids"
+                                    name="service_ids[]"
+                                    class="selectpicker form-control mt-2"
+                                    multiple
+                                    data-width="100%"
+                                    data-live-search="true"
+                                    data-actions-box="true"
+                                    data-selected-text-format="count > 2"
+                                    title="Seleccione uno o varios servicios">
+
+                                [s/foreach from=$available_services item=service/s]
+
+                                <option value="[s/$service->id/s]">
+                                    [s/$service->name/s]
+                                </option>
+
+                                [s//foreach/s]
+
+                            </select>
+
+                        </div>
+
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div id="loading-modal-add-service" class="loading-div">
+                                <img alt="Loading" src="../assets/images/loading.svg">
+                                <div class="text-center colorMuted">Guardando datos</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+                <div id="service_form_error"
+                     class="alert alert-danger mt-3 mb-0"
+                     style="display:none;">
+                </div>
+
+                <div class="container-footer mt-4">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+
+                            <button aria-label="Cancelar"
+                                    class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-6 text-end">
+
+                            <button aria-label="Añadir servicio"
+                                    class="btn backgroundPrimary colorWhite"
+                                    onclick="addFacilityService([s/$model.facility->id/s]);"
+                                    id="btn_add_service">
+                                Añadir Seleccionados
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="modal_add_payment_method"
+     class="hidden-print modal fade"
+     tabindex="-1">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Añadir método de pago
+                </div>
+
+                <i class="fa-solid fa-xmark
+                   cursor_pointer fs-5 ms-auto"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar">
+                </i>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form id="form_add_payment_method"
+                      autocomplete="off">
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+                            <label for="payment_method_ids"
+                                   class="colorTertiary font_weight500">
+                                Métodos de pago
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <select id="payment_method_ids"
+                                    name="payment_method_ids[]"
+                                    class="selectpicker form-control mt-2"
+                                    multiple
+                                    data-width="100%"
+                                    data-live-search="true"
+                                    data-actions-box="true"
+                                    data-selected-text-format="count > 2"
+                                    title="Seleccione uno o varios métodos de pago">
+
+                                [s/foreach from=$available_payment_methods item=payment_method/s]
+
+                                <option value="[s/$payment_method->id/s]">
+                                    [s/$payment_method->name/s]
+                                </option>
+
+                                [s//foreach/s]
+
+                            </select>
+
+                        </div>
+
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div id="loading-modal-add-payment" class="loading-div">
+                                <img alt="Loading" src="../assets/images/loading.svg">
+                                <div class="text-center colorMuted">Guardando datos</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+                <div id="payment_method_form_error"
+                     class="alert alert-danger mt-3 mb-0"
+                     style="display:none;">
+                </div>
+
+                <div class="container-footer mt-4">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+
+                            <button aria-label="Cancelar"
+                                    class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-6 text-end">
+
+                            <button aria-label="Añadir método de pago"
+                                    class="btn backgroundPrimary colorWhite"
+                                    onclick="addFacilityPaymentMethod([s/$model.facility->id/s]);"
+                                    id="btn_add_payment_method">
+                                Añadir Seleccionados
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div id="modal_add_price" class="hidden-print modal fade" tabindex="-1">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Añadir precio
+                </div>
+
+                <i class="fa-solid fa-xmark cursor_pointer fs-5 ms-auto"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar">
+                </i>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form id="form_add_price" autocomplete="off">
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+                            <label for="price_name" class="colorTertiary font_weight500">
+                                Nombre
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text"
+                                   class="form-control mt-2"
+                                   id="price_name"
+                                   name="price_name"
+                                   maxlength="150"
+                                   placeholder="Nombre del precio">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row mt-3">
+
+                        <div class="col-md-12">
+
+                            <label for="price_description" class="colorTertiary font_weight500">
+                                Descripción
+                            </label>
+
+                            <textarea class="form-control mt-2"
+                                      id="price_description"
+                                      name="price_description"
+                                      rows="3"
+                                      placeholder="Descripción"></textarea>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row mt-3">
+
+                        <div class="col-md-4">
+
+                            <label for="price_value" class="colorTertiary font_weight500">
+                                Precio
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <div class="input-group mt-2">
+
+                                <input type="number"
+                                       class="form-control"
+                                       id="price_value"
+                                       name="price_value"
+                                       min="0"
+                                       step="0.01">
+
+                                <span class="input-group-text">€</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4">
+
+                            <label for="billing_unit_type_id" class="colorTertiary font_weight500">
+                                Unidad
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <select id="billing_unit_type_id"
+                                    name="billing_unit_type_id"
+                                    class="form-select mt-2">
+
+                                <option value="">
+                                    Seleccione
+                                </option>
+
+                                [s/foreach from=$billing_unit_types item=unit/s]
+                                <option value="[s/$unit->id/s]">
+                                    [s/$unit->name/s]
+                                </option>
+                                [s//foreach/s]
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-md-4">
+
+                            <label for="billing_period_id" class="colorTertiary font_weight500">
+                                Periodo
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <select id="billing_period_id"
+                                    name="billing_period_id"
+                                    class="form-select mt-2">
+
+                                <option value="">
+                                    Seleccione
+                                </option>
+
+                                [s/foreach from=$billing_periods item=period/s]
+                                <option value="[s/$period->id/s]">
+                                    [s/$period->name/s]
+                                </option>
+                                [s//foreach/s]
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row mt-3">
+
+                        <div class="col-md-6">
+
+                            <label for="price_valid_from" class="colorTertiary font_weight500">
+                                Válido desde
+                            </label>
+
+                            <input type="date"
+                                   class="form-control mt-2"
+                                   id="price_valid_from"
+                                   name="price_valid_from">
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label for="price_valid_until" class="colorTertiary font_weight500">
+                                Válido hasta
+                            </label>
+
+                            <input type="date"
+                                   class="form-control mt-2"
+                                   id="price_valid_until"
+                                   name="price_valid_until">
+
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-text">
+                                Si no se indican fechas de validez, el precio se considerará permanente.
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div id="loading-modal-add-price" class="loading-div">
+                                <img alt="Loading" src="../assets/images/loading.svg">
+                                <div class="text-center colorMuted">Guardando datos</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+
+                <div id="price_form_error"
+                     class="alert alert-danger mt-3 mb-0"
+                     style="display:none;">
+                </div>
+
+
+                <div class="container-footer mt-4">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+
+                            <button class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-6 text-end">
+
+                            <button id="btn_add_price"
+                                    class="btn backgroundPrimary colorWhite"
+                                    onclick="addFacilityPrice([s/$model.facility->id/s]);">
+                                Añadir
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

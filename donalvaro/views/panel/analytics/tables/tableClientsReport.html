@@ -1,0 +1,83 @@
+<div class="card">
+
+    <div class="card-header font_weight500">
+        Informe de clientes
+    </div>
+
+    <div class="card-body">
+
+        [s/if !empty($results)/s]
+
+            <div class="table-responsive">
+
+                <table id="dt_report_clients"
+                       class="table table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Email</th>
+                            <th>Provincia</th>
+                            <th>País</th>
+                            <th>Nº reservas</th>
+                            <th class="text-end">Importe</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        [s/foreach from=$results item=result/s]
+
+                            <tr>
+
+                                <td>
+
+                                    <a href="editcliente/[s/$result->id/s]">
+                                        [s/$result->user_name/s]
+                                    </a>
+
+                                </td>
+
+                                <td>
+                                    [s/$result->email/s]
+                                </td>
+
+                                <td>
+                                    [s/$result->province_name|default:'-'/s]
+                                </td>
+
+                                <td>
+                                    [s/$result->country_name|default:'-'/s]
+                                </td>
+
+                                <td>
+                                    [s/$result->reservations_count/s]
+                                </td>
+
+                                <td class="text-end">
+                                    [s/$result->total_amount|string_format:"%.2f"/s] €
+                                </td>
+
+                            </tr>
+
+                        [s//foreach/s]
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        [s/else/s]
+
+            <div class="colorMuted">
+                No hay clientes para los filtros seleccionados.
+            </div>
+
+        [s//if/s]
+
+    </div>
+
+</div>

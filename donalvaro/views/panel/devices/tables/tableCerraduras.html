@@ -1,0 +1,96 @@
+[s/if $results|count>0/s]
+<table id="dt_cerraduras" class="table border" data-ordering="true" style="table-layout:fixed; width: 100%">
+    <thead>
+        <tr class="text-center">
+            <th class="text-center">ID</th>
+            <th class="text-center">Ttlock Id</th>
+            <th class="text-center">Nombre</th>
+            <th class="text-center">Nombre ttlock</th>
+            <th class="text-center">MAC</th>
+            <th class="text-center">Gateway</th>                   
+            <th class="text-center">Acciones</th>
+
+        </tr>
+    </thead>
+
+    <tbody>
+
+        [s/assign "cont" 1/s]
+        [s/foreach from=$results item=result/s]
+
+        <tr class="text-center">
+            <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                [s/$result->id/s]
+            </td>
+            <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                [s/$result->ttlock_lock_id/s]
+            </td>
+            <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                <a aria-label="[s/$result->lock_alias/s]" class="colorBase9 cursor_pointer" href="editdevice/[s/$result->id/s]">
+                    [s/$result->lock_alias/s]
+                </a>
+            </td>
+            <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                [s/$result->lock_name/s]
+            </td>
+            <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                <u>[s/$result->lock_mac/s]</u>
+            </td>
+
+            [s/if $result->has_gateway==1/s]
+            <td class="[s/if $cont==2/s]backgroundLight[s//if/s] colorBase12">
+                Si
+            </td>
+            [s/else/s]
+            <td class="[s/if $cont==2/s]backgroundLight[s//if/s] colorBase12">
+                No
+            </td>
+
+            [s//if/s]
+
+            <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                <div class="row">
+
+                    <div class="col-md-12">
+
+                        [s/if $result->status==1/s]
+                        <a aria-label="Desactivar Cerradura" class="cursor_pointer" href="javascript: void(0)" onclick="activeDevice([s/$result->id/s],0,'cerraduras')" id="btnActiveDeviceLink[s/$result->id/s]">
+                            <i class="ph-fill ph-power text-22 colorAccent" id="btnActiveDevice[s/$result->id/s]"></i>
+                        </a>
+
+                        [s/elseif $result->status==0/s]
+                        <a aria-label="Activar Cerradura" class="cursor_pointer" href="javascript: void(0)" onclick="activeDevice([s/$result->id/s],1,'cerraduras')" id="btnActiveDeviceLink[s/$result->id/s]">
+                            <i class="ph-fill ph-power text-22 colorWarning" id="btnActiveDevice[s/$result->id/s]"></i>
+                        </a>
+
+                        [s//if/s]
+
+                    </div>
+
+                </div>
+            </td>
+
+        </tr>
+
+
+        [s/assign "cont" $cont+1/s]
+        [s/if $cont>2/s]
+        [s/assign "cont" 1/s]
+        [s//if/s]
+
+        [s//foreach/s]
+
+    </tbody>
+</table>
+[s/else/s]
+<div class="card mt-3">
+
+        <div class="card-body colorMuted">
+            No hay resultados.
+        </div>
+
+    </div>
+
+[s//if/s]
+
+    

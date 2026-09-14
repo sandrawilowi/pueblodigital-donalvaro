@@ -1,0 +1,314 @@
+<!--begin::Sidebar-->
+<aside class="app-sidebar bg-body-secondary shadow">
+
+    <!--begin::Sidebar Brand-->
+    <div class="sidebar-brand">
+        <a href="dashboard" class="brand-link">
+            <img
+                src="[s/$extraUrl/s]assets/images/logo/logo-icon.png"
+                alt="Pueblo Digital Don Álvaro"
+                class="brand-image opacity-75 shadow"
+            />
+
+            <span class="brand-text fw-light">Don Álvaro</span>
+        </a>
+    </div>
+    <!--end::Sidebar Brand-->
+
+    <!--begin::Sidebar Wrapper-->
+    <div class="sidebar-wrapper">
+        <nav class="mt-2">
+
+            <!--begin::Sidebar Menu-->
+            <ul
+                class="nav sidebar-menu flex-column"
+                data-lte-toggle="treeview"
+                role="navigation"
+                aria-label="Navegación principal"
+                data-accordion="false"
+                id="navigation"
+            >
+
+                <!-- Dashboard -->
+                <li class="nav-item">
+                    <a href="[s/$extraUrl/s]dashboard" class="nav-link active">
+                        <i class="nav-icon fa-solid fa-gauge-high"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+
+                [s/if $smarty.session.role_user == 3/s]
+
+                <!-- ================================================== -->
+                <!-- CLIENTE -->
+                <!-- ================================================== -->
+
+                <li class="nav-header">GESTIÓN</li>
+
+                <li class="nav-item">
+                    <a href="[s/$extraUrl/s]instalaciones-cliente" class="nav-link">
+                        <i class="nav-icon fa-solid fa-building"></i>
+                        <p>Instalaciones</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="[s/$extraUrl/s]reservas-cliente" class="nav-link">
+                        <i class="nav-icon fa-solid fa-calendar-check"></i>
+                        <p>Mis reservas</p>
+                    </a>
+                </li>
+
+                [s/if $bonusesEnabled/s]
+                <li class="nav-item">
+                    <a href="[s/$extraUrl/s]bonos-cliente" class="nav-link">
+                        <i class="nav-icon fa-solid fa-ticket"></i>
+                        <p>Bonos</p>
+                    </a>
+                </li>
+                [s//if/s]
+
+                [s/else/s]
+
+                <!-- Gestión -->
+                <li class="nav-header">GESTIÓN</li>
+
+                <!-- Reservas -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa-solid fa-calendar-check"></i>
+
+                        <p>
+                            Reservas
+                            <i class="nav-arrow fa-solid fa-chevron-right"></i>
+                        </p>
+                    </a>
+
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="[s/$extraUrl/s]reservas" class="nav-link">
+                                <i class="nav-icon fa-regular fa-circle"></i>
+                                <p>Reservas</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="[s/$extraUrl/s]calendario-reservas" class="nav-link">
+                                <i class="nav-icon fa-regular fa-circle"></i>
+                                <p>Calendario</p>
+                            </a>
+                        </li>
+
+                        
+                    </ul>
+                </li>
+
+                <!-- Instalaciones -->
+                <li class="nav-item">
+                    <a href="[s/$extraUrl/s]instalaciones" class="nav-link">
+                        <i class="nav-icon fa-solid fa-building"></i>
+                        <p>Instalaciones</p>
+                    </a>
+                </li>
+               
+                <!-- Usuarios -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa-solid fa-users"></i>
+
+                        <p>
+                            Usuarios
+                            <i class="nav-arrow fa-solid fa-chevron-right"></i>
+                        </p>
+                    </a>
+
+                    <ul class="nav nav-treeview">
+                        
+                        <li class="nav-item">
+                            <a href="[s/$extraUrl/s]clientes" class="nav-link">
+                                <i class="nav-icon fa-regular fa-circle"></i>
+                                <p>Clientes</p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="[s/$extraUrl/s]usuarios" class="nav-link">
+                                <i class="nav-icon fa-regular fa-circle"></i>
+                                <p>Sistema</p>
+                            </a>
+                        </li>
+
+                        [s/if $smarty.session.role_user == 1/s]
+                        <li class="nav-item">
+                            <a href="[s/$extraUrl/s]roles" class="nav-link">
+                                <i class="nav-icon fa-regular fa-circle"></i>
+                                <p>Roles y permisos</p>
+                            </a>
+                        </li>
+                        [s//if/s]
+                    </ul>
+                </li>
+                
+                <!-- Bonos -->
+                [s/if $bonusesEnabled/s]
+                <li class="nav-item">
+                    <a href="[s/$extraUrl/s]bonos" class="nav-link">
+                        <i class="nav-icon fa-solid fa-ticket"></i>
+                        <p>Bonos</p>
+                    </a>
+                </li>
+                [s//if/s]
+
+                <!-- Accesos -->
+                <li class="nav-header">ACCESOS</li>
+
+                <!-- Códigos PIN -->
+                <li class="nav-item">
+                    <a href="[s/$extraUrl/s]codigos-pin" class="nav-link">
+                        <i class="nav-icon fa-solid fa-key"></i>
+                        <p>
+                            Códigos PIN
+                        </p>
+                    </a>
+
+                    
+                </li>
+
+                <!-- Historial de accesos -->
+                <li class="nav-item">
+                    <a href="[s/$extraUrl/s]historial-accesos" class="nav-link">
+                        <i class="nav-icon fa-solid fa-clock-rotate-left"></i>
+                        <p>Historial de accesos</p>
+                    </a>
+                </li>
+
+                <!-- Análisis -->
+                <li class="nav-header">ANÁLISIS</li>
+
+                <li class="nav-item">
+                    <a href="[s/$extraUrl/s]informes" class="nav-link">
+                        <i class="nav-icon fa-solid fa-chart-line"></i>
+                        <p>Informes</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="[s/$extraUrl/s]estadisticas" class="nav-link">
+                        <i class="nav-icon fa-solid fa-chart-pie"></i>
+                        <p>Estadísticas</p>
+                    </a>
+                </li>
+
+                [s/if $smarty.session.role_user == 1/s]
+                <!-- Sistema -->
+                <li class="nav-header">SISTEMA</li>
+
+                <!-- Dispositivos -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa-solid fa-microchip"></i>
+
+                        <p>
+                            Dispositivos
+                            <i class="nav-arrow fa-solid fa-chevron-right"></i>
+                        </p>
+                    </a>
+
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="[s/$extraUrl/s]cerraduras" class="nav-link">
+                                <i class="nav-icon fa-regular fa-circle"></i>
+                                <p>Cerraduras</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="[s/$extraUrl/s]gateways" class="nav-link">
+                                <i class="nav-icon fa-regular fa-circle"></i>
+                                <p>Gateways</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="[s/$extraUrl/s]status-devices" class="nav-link">
+                                <i class="nav-icon fa-regular fa-circle"></i>
+                                <p>Estado general</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Configuración -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa-solid fa-gear"></i>
+
+                        <p>
+                            Configuración
+                            <i class="nav-arrow fa-solid fa-chevron-right"></i>
+                        </p>
+                    </a>
+
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="[s/$extraUrl/s]settings" class="nav-link">
+                                <i class="nav-icon fa-regular fa-circle"></i>
+                                <p>Configuración general</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="[s/$extraUrl/s]settings-payments" class="nav-link">
+                                <i class="nav-icon fa-regular fa-circle"></i>
+                                <p>Métodos de pago</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="[s/$extraUrl/s]settings-rates" class="nav-link">
+                                <i class="nav-icon fa-regular fa-circle"></i>
+                                <p>Tarifas</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="[s/$extraUrl/s]settings-notifications" class="nav-link">
+                                <i class="nav-icon fa-regular fa-circle"></i>
+                                <p>Notificaciones</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Auditoría -->
+                <li class="nav-item">
+                    <a href="[s/$extraUrl/s]auditoria" class="nav-link">
+                        <i class="nav-icon fa-solid fa-user-clock"></i>
+                        <p>Auditoría</p>
+                    </a>
+                </li>
+                
+                [s//if/s]
+                
+                [s//if/s]
+
+            </ul>
+            <!--end::Sidebar Menu-->
+
+            <!-- Documentación -->
+            <div class="p-3 mt-3 border-top border-secondary border-opacity-25">
+                <a
+                    href="[s/$extraUrl/s]documentacion"
+                    class="btn btn-sm btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2"
+                >
+                    <i class="fa-solid fa-book" aria-hidden="true"></i>
+                    Ver documentación
+                </a>
+            </div>
+
+        </nav>
+    </div>
+    <!--end::Sidebar Wrapper-->
+
+</aside>
+<!--end::Sidebar-->

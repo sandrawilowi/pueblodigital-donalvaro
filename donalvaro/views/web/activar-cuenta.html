@@ -1,0 +1,63 @@
+<main class="section section-light">
+
+    <div class="container activation-wrapper">
+
+        <div class="row justify-content-center w-100">
+
+            <div class="col-md-8 col-lg-7 col-xl-6">
+
+                <div class="activation-card text-center">
+
+                    [s/if $activation_success/s]
+
+                        <div class="activation-icon activation-icon-success">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+
+                        <h1 class="activation-title">
+                            ¡Cuenta activada correctamente!
+                        </h1>
+
+                        <p class="activation-message">
+                            [s/$activation_message|escape:'html'/s]
+                        </p>
+
+                        <a href="../login"
+                           class="btn btn-primary activation-button">
+
+                            Iniciar sesión
+
+                        </a>
+
+                    [s/else/s]
+
+                        <div class="activation-icon activation-icon-error">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </div>
+
+                        <h1 class="activation-title">
+                            No hemos podido activar su cuenta
+                        </h1>
+
+                        <p class="activation-message">
+                            [s/$activation_message|escape:'html'/s]
+                        </p>
+
+                        <a href="../register"
+                           class="btn btn-outline-primary activation-button">
+
+                            Volver al inicio
+
+                        </a>
+
+                    [s//if/s]
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>

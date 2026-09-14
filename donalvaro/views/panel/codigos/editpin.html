@@ -1,0 +1,307 @@
+[s/$title/s]
+
+<div class="row">
+
+    <div class="col-md-8">
+
+        <div class="card">
+
+            <div class="card-header font_weight500">
+                Datos del PIN
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="small colorMuted">
+                            PIN
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->pin/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="small colorMuted">
+                            Instalación
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->facility_name/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="small colorMuted">
+                            Tipo
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->pin_type/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="small colorMuted">
+                            Tipo de acceso
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->access_type/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="small colorMuted">
+                            Estado
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->pin_status_name/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="small colorMuted">
+                            Permanente
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/if $model->is_permanent == 1/s]
+                                Sí
+                            [s/else/s]
+                                No
+                            [s//if/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="small colorMuted">
+                            Válido desde
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->valid_from|date_format:"%d/%m/%Y %H:%M"/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="small colorMuted">
+                            Válido hasta
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->valid_until|date_format:"%d/%m/%Y %H:%M"/s]
+                        </div>
+
+                    </div>
+
+                    [s/if !empty($model->description)/s]
+
+                        <div class="col-md-12 mb-3">
+
+                            <div class="small colorMuted">
+                                Descripción
+                            </div>
+
+                            <div class="font_weight500">
+                                [s/$model->description/s]
+                            </div>
+
+                        </div>
+
+                    [s//if/s]
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="small colorMuted">
+                            Generado
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->generated_at|date_format:"%d/%m/%Y %H:%M"/s]
+                        </div>
+
+                    </div>
+
+                    [s/if !empty($model->revoked_at)/s]
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="small colorMuted">
+                                Revocado
+                            </div>
+
+                            <div class="font_weight500">
+                                [s/$model->revoked_at|date_format:"%d/%m/%Y %H:%M"/s]
+                            </div>
+
+                        </div>
+
+                    [s//if/s]
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        [s/if $model->pin_type == 'RESERVA' && !empty($model->reservation_id)/s]
+
+            <div class="card mt-3">
+
+                <div class="card-header font_weight500">
+                    Reserva asociada
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="small colorMuted">
+                                Referencia
+                            </div>
+
+                            <div class="font_weight500">
+
+                                <a href="../editreserva/[s/$model->reservation_id/s]">
+                                    [s/$model->reservation_reference/s]
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="small colorMuted">
+                                Cliente
+                            </div>
+
+                            <div class="font_weight500">
+                                [s/$model->reservation_user_name/s]
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="small colorMuted">
+                                Fecha de entrada
+                            </div>
+
+                            <div class="font_weight500">
+                                [s/$model->reservation_start_at|date_format:"%d/%m/%Y %H:%M"/s]
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="small colorMuted">
+                                Fecha de salida
+                            </div>
+
+                            <div class="font_weight500">
+                                [s/$model->reservation_end_at|date_format:"%d/%m/%Y %H:%M"/s]
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="small colorMuted">
+                                Nº personas
+                            </div>
+
+                            <div class="font_weight500">
+                                [s/$model->reservation_people_count/s]
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="small colorMuted">
+                                Estado
+                            </div>
+
+                            <div class="font_weight500">
+                                [s/$model->reservation_status_name/s]
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        
+        <div class="row mt-3">
+
+
+            <div class="col-md-12">
+
+                <a href="../codigos-pin"
+                   class="btn backgroundMuted colorWhite">
+                    Volver
+                </a>
+
+            </div>
+
+
+
+        </div>
+
+        [s//if/s]
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="card">
+
+            <div class="card-header font_weight500">
+                Opciones
+            </div>
+
+            <div class="card-body">
+
+                <a href="../auditpin/[s/$model->id/s]"
+                   class="text-decoration-none">
+
+                    <i class="fa-solid fa-circle-info me-2"></i>
+                    Actividad
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

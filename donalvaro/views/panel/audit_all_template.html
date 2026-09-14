@@ -1,0 +1,154 @@
+<div class="mt-4" id="insertTableAudit">
+
+    [s/if $results|count>0/s]
+    <table id="dt_audit_all" class="table border" data-ordering="true" style="table-layout:fixed; width: 100%">
+        <thead>
+            <tr class="text-center">
+                <th class="text-center">Usuario</th>
+                <th class="text-center">Target</th>
+                <th class="text-center">Evento</th>
+                <th class="text-center">Descripción</th>
+                <th class="text-center">Valores previos</th>
+                <th class="text-center">Nuevos valores</th>                   
+                <th class="text-center">Url</th>
+                <th class="text-center">Ip</th>
+                <th class="text-center">User Agent</th>
+                <th class="text-center">Fecha</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            [s/assign "cont" 1/s]
+            [s/foreach from=$results item=result/s]
+
+            <tr class="text-center">
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+                    [s/$result->first_name/s] [s/$result->last_name/s]
+                </td>
+
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] text-center">
+
+                    [s/if !empty($result->target_url)/s]
+
+                    <a href="[s/$result->target_url/s]">
+                        [s/$result->target_name/s]
+                    </a>
+
+                    [s/else/s]
+
+                    [s/$result->target_name|default:'-'/s]
+
+                    [s//if/s]
+
+                </td>
+
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->event/s]
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->event_description/s]
+                </td>
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] wrap">
+                    [s/if !empty($result->old_values)/s]
+                    [s/foreach from=$result->old_values key=field item=value/s]
+                    <div class="small text-start">
+                        <strong>[s/$field/s]:</strong>
+                        [s/$value/s]
+                    </div>
+                    [s//foreach/s]
+                    [s/else/s]
+                    -
+                    [s//if/s]
+                </td>
+
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] wrap">
+                    [s/if !empty($result->new_values)/s]
+                    [s/foreach from=$result->new_values key=field item=value/s]
+                    <div class="small text-start">
+                        <strong>[s/$field/s]:</strong>
+                        [s/$value/s]
+                    </div>
+                    [s//foreach/s]
+                    [s/else/s]
+                    -
+                    [s//if/s]
+                </td>
+
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s] wrap">
+                    <a href="[s/$result->url/s]" class="colorPrimary" target="_blank">
+                        [s/$result->url_name/s]
+                    </a>
+                </td>
+
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->ip_address/s]
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    <span class="cursor_pointer colorAccent" data-bs-toggle="modal" data-bs-target="#modal_user_agent[s/$result->id/s]">
+                        <i class="ph-fill ph-info"></i>
+                    </span>
+                </td>
+                
+                <td class="[s/if $cont==2/s]backgroundLight[s//if/s]">
+                    [s/$result->created_at|date_format:"%d/%m/%Y - %H:%M:%S"/s]
+                </td>
+
+            </tr>
+            
+
+            [s/assign "cont" $cont+1/s]
+            [s/if $cont>2/s]
+                [s/assign "cont" 1/s]
+            [s//if/s]
+
+            [s//foreach/s]
+
+        </tbody>
+    </table>
+    [s/else/s]
+    <div class="card mt-3">
+
+        <div class="card-body colorMuted">
+            No hay resultados.
+        </div>
+
+    </div>
+
+    [s//if/s]
+
+</div>
+
+[s/foreach from=$results item=result/s]
+<div id="modal_user_agent[s/$result->id/s]" class="hidden-print modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="fs-5 font_weight500">
+                    User Agent
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+            </div>
+
+            <div class="modal-body">
+                <div class="container-modal py-4">
+
+                    <div class="text-center">
+
+                        [s/$result->user_agent/s]
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+[s//foreach/s]

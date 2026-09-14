@@ -1,0 +1,176 @@
+<div class="card">
+
+    <div class="card-header">
+        <h5 class="mb-0">
+            Informe de bonos
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        [s/if !empty($results)/s]
+
+            <div class="table-responsive">
+
+                <table id="dt_report_bonuses"
+                       class="table table-bordered table-striped align-middle w-100">
+
+                    <thead>
+
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Bono</th>
+                            <th>Tipo</th>
+                            <th>Instalaciones</th>
+                            <th>Adquirido</th>
+                            <th>Vigencia</th>
+                            <th>Usos</th>
+                            <th>Método de pago</th>
+                            <th>Precio</th>
+                            <th>Estado</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        [s/foreach from=$results item=result/s]
+
+                            <tr>
+
+                                <td>
+
+                                    [s/if !empty($result->user_id)/s]
+
+                                        <a href="editcliente/[s/$result->user_id/s]">
+                                            [s/$result->user_name/s]
+                                        </a>
+
+                                    [s/else/s]
+
+                                        -
+
+                                    [s//if/s]
+
+                                </td>
+
+                                <td>
+                                    [s/$result->bonus_name/s]
+                                </td>
+
+                                <td>
+
+                                    [s/if $result->bonus_type == 'USES'/s]
+                                        Por usos
+                                    [s/elseif $result->bonus_type == 'TIME'/s]
+                                        Por tiempo
+                                    [s/else/s]
+                                        -
+                                    [s//if/s]
+
+                                </td>
+
+                                <td>
+                                    [s/if !empty($result->facilities)/s]
+                                        [s/$result->facilities/s]
+                                    [s/else/s]
+                                        -
+                                    [s//if/s]
+                                </td>
+
+                                <td>
+
+                                    [s/if !empty($result->purchased_at)/s]
+                                        [s/$result->purchased_at|date_format:"%d/%m/%Y %H:%M"/s]
+                                    [s/else/s]
+                                        -
+                                    [s//if/s]
+
+                                </td>
+
+                                <td>
+
+                                    [s/if !empty($result->valid_from)/s]
+
+                                        [s/$result->valid_from|date_format:"%d/%m/%Y"/s]
+                                        -
+
+                                        [s/if !empty($result->expires_at)/s]
+                                            [s/$result->expires_at|date_format:"%d/%m/%Y"/s]
+                                        [s/else/s]
+                                            Sin caducidad
+                                        [s//if/s]
+
+                                    [s/else/s]
+
+                                        -
+
+                                    [s//if/s]
+
+                                </td>
+
+                                <td>
+
+                                    [s/if $result->bonus_type == 'TIME'/s]
+
+                                        Ilimitado
+
+                                    [s/else/s]
+
+                                        [s/$result->remaining_uses/s] / [s/$result->initial_uses/s]
+
+                                    [s//if/s]
+
+                                </td>
+
+                                <td>
+
+                                    [s/if !empty($result->payment_method_name)/s]
+                                        [s/$result->payment_method_name/s]
+                                    [s/else/s]
+                                        -
+                                    [s//if/s]
+
+                                </td>
+
+                                <td>
+                                    [s/$result->purchase_price|string_format:"%.2f"/s] €
+                                </td>
+
+                                <td>
+
+                                    [s/if $result->status == 1/s]
+                                        Activo
+                                    [s/elseif $result->status == 0/s]
+                                        Inactivo
+                                    [s/elseif $result->status == 2/s]
+                                        Bloqueado
+                                    [s/elseif $result->status == 3/s]
+                                        Eliminado
+                                    [s/else/s]
+                                        -
+                                    [s//if/s]
+
+                                </td>
+
+                            </tr>
+
+                        [s//foreach/s]
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        [s/else/s]
+
+            <div class="alert backgroundMutedLight mb-0">
+                No hay resultados para los filtros seleccionados.
+            </div>
+
+        [s//if/s]
+
+    </div>
+
+</div>

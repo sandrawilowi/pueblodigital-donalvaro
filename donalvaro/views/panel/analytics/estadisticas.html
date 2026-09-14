@@ -1,0 +1,450 @@
+[s/$title/s]
+
+<div id="buscador">
+
+    <div class="card">
+
+        <div class="card-header font_weight500 d-flex justify-content-between align-items-center">
+
+            <span class="font_weight500">
+                Filtros
+            </span>
+
+            <i id="iconCollapseFilterStatistics"
+               class="fa-solid fa-square-minus cursor_pointer ms-auto"
+               onclick="toggleFilter('collapseFilterStatistics', this)"
+               aria-label="Mostrar/Ocultar filtros">
+            </i>
+
+        </div>
+
+        <div id="collapseFilterStatistics" class="collapse show">
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-md-3 mt-2">
+
+                        <label class="colorBase7 font_weight500" for="statistics_year">
+                            Año
+                        </label>
+
+                        <div class="custom-select">
+
+                            <select class="form-control"
+                                    id="statistics_year"
+                                    name="statistics_year">
+
+                                [s/foreach from=$years item=year/s]
+
+                                    <option value="[s/$year/s]"
+                                            [s/if $year == $current_year/s]selected[s//if/s]>
+                                        [s/$year/s]
+                                    </option>
+
+                                [s//foreach/s]
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 mt-2">
+
+                        <label class="colorBase7 font_weight500" for="statistics_month">
+                            Mes
+                        </label>
+
+                        <div class="custom-select">
+
+                            <select class="form-control"
+                                    id="statistics_month"
+                                    name="statistics_month">
+
+                                <option value="">Todos</option>
+                                <option value="1">Enero</option>
+                                <option value="2">Febrero</option>
+                                <option value="3">Marzo</option>
+                                <option value="4">Abril</option>
+                                <option value="5">Mayo</option>
+                                <option value="6">Junio</option>
+                                <option value="7">Julio</option>
+                                <option value="8">Agosto</option>
+                                <option value="9">Septiembre</option>
+                                <option value="10">Octubre</option>
+                                <option value="11">Noviembre</option>
+                                <option value="12">Diciembre</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 mt-2">
+
+                        <label class="colorBase7 font_weight500" for="statistics_facility">
+                            Instalación
+                        </label>
+
+                        <div class="custom-select">
+
+                            <select class="form-control"
+                                    id="statistics_facility"
+                                    name="statistics_facility">
+
+                                <option value="">Todas</option>
+
+                                [s/foreach from=$facilities item=facility/s]
+
+                                    <option value="[s/$facility->id/s]">
+                                        [s/$facility->name/s]
+                                    </option>
+
+                                [s//foreach/s]
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div id="statistics_loading" class="loading-div">
+
+    <img alt="Loading" src="assets/images/loading.svg">
+
+    <div class="text-center colorMuted">
+        Cargando estadísticas
+    </div>
+
+</div>
+
+
+<div id="statistics_error"
+     class="alert alert-danger mt-3"
+     style="display:none;">
+</div>
+
+
+<div id="statistics_content">
+
+    <div class="row mt-3">
+
+        <div class="[s/if $bonuses_enabled/s]col-md[s/else/s]col-md-3[s//if/s]">
+
+            <div class="card h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <div class="colorMuted">
+                                Reservas
+                            </div>
+
+                            <div id="statistics_reservations"
+                                 class="fs-3 font_weight500 mt-2">
+                                0
+                            </div>
+
+                        </div>
+
+                        <i class="fa-solid fa-calendar-check fs-2 colorPrimary"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="[s/if $bonuses_enabled/s]col-md[s/else/s]col-md-3[s//if/s]">
+
+            <div class="card h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <div class="colorMuted">
+                                Ingresos
+                            </div>
+
+                            <div id="statistics_income"
+                                 class="fs-3 font_weight500 mt-2">
+                                0,00 €
+                            </div>
+
+                        </div>
+
+                        <i class="fa-solid fa-euro-sign fs-2 colorSuccess"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="[s/if $bonuses_enabled/s]col-md[s/else/s]col-md-3[s//if/s]">
+
+            <div class="card h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <div class="colorMuted">
+                                Accesos
+                            </div>
+
+                            <div id="statistics_accesses"
+                                 class="fs-3 font_weight500 mt-2">
+                                0
+                            </div>
+
+                        </div>
+
+                        <i class="fa-solid fa-door-open fs-2 colorPrimary"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="[s/if $bonuses_enabled/s]col-md[s/else/s]col-md-3[s//if/s]">
+
+            <div class="card h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <div class="colorMuted">
+                                Clientes distintos
+                            </div>
+
+                            <div id="statistics_clients"
+                                 class="fs-3 font_weight500 mt-2">
+                                0
+                            </div>
+
+                        </div>
+
+                        <i class="fa-solid fa-users fs-2 colorPrimary"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        
+        [s/if $bonuses_enabled/s]
+
+        <div class="col-md">
+
+            <div class="card h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <div class="colorMuted">
+                                Bonos
+                            </div>
+
+                            <div id="statistics_bonuses"
+                                 class="fs-3 font_weight500 mt-2">
+                                0
+                            </div>
+
+                        </div>
+
+                        <i class="fa-solid fa-ticket fs-2 colorPrimary"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        [s//if/s]
+
+    </div>
+
+
+    <div class="row mt-3">
+
+        <div class="col-md-6">
+
+            <div class="card h-100">
+
+                <div class="card-header font_weight500">
+                    Evolución de reservas
+                </div>
+
+                <div class="card-body">
+
+                    <div style="height:320px;">
+                        <canvas id="chart_statistics_reservations"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6">
+
+            <div class="card h-100">
+
+                <div class="card-header font_weight500">
+                    Evolución de ingresos
+                </div>
+
+                <div class="card-body">
+
+                    <div style="height:320px;">
+                        <canvas id="chart_statistics_income"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row mt-3">
+
+        <div class="col-md-6">
+
+            <div class="card h-100">
+
+                <div class="card-header font_weight500">
+                    Estado de las reservas
+                </div>
+
+                <div class="card-body">
+
+                    <div style="height:320px;">
+                        <canvas id="chart_statistics_status"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6">
+
+            <div class="card h-100">
+
+                <div class="card-header font_weight500">
+                    Evolución de accesos
+                </div>
+
+                <div class="card-body">
+
+                    <div style="height:320px;">
+                        <canvas id="chart_statistics_accesses"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row mt-3">
+
+        <div class="[s/if $bonuses_enabled/s]col-md-6[s/else/s]col-md-12[s//if/s]">
+
+            <div class="card">
+
+                <div class="card-header font_weight500">
+                    Resultado de los accesos
+                </div>
+
+                <div class="card-body">
+
+                    <div style="height:320px;">
+                        <canvas id="chart_statistics_access_results"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        [s/if $bonuses_enabled/s]
+
+        <div class="col-md-6">
+
+            <div class="card h-100">
+
+                <div class="card-header backgroundPrimary colorWhite">
+                    <strong>Evolución de bonos</strong>
+                </div>
+
+                <div class="card-body">
+                   <div style="height:320px;">
+                        <canvas id="chart_statistics_bonuses"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        [s//if/s]
+
+    </div>
+
+   
+
+</div>

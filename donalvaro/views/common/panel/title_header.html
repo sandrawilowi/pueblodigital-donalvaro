@@ -1,0 +1,29 @@
+<!-- Cabecera -->
+<div class="row border_title_menu">
+
+    <div class="col-md-12">
+
+        <div class="fs-5 colorTertiary">
+            <strong>[s/$title/s]</strong>
+            [s/if $modal/s]
+            <a aria-label="Añadir nuevo" class="colorTertiary" href="javascript: void(0)" data-bs-toggle="modal" data-bs-target="#modal_add">
+                <i class="fa-solid fa-plus fs-5 ms-2"></i></strong>
+            </a>
+            [s/elseif $page!=''/s]
+            <a aria-label="Añadir nuevo" class="colorTertiary" href="[s/$page/s]">
+                <i class="fa-solid fa-plus fs-5 ms-2"></i></strong>
+            </a>
+            [s//if/s]
+        </div>
+
+        <hr>
+
+    </div>
+
+
+</div>
+<!-- Fin Cabecera -->
+
+<div class="mt-4">
+    [s/include file="../../common/panel/alerts.html"/s]
+</div>

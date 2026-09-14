@@ -1,0 +1,1063 @@
+[s/$title/s]
+
+<div class="row">
+
+    <div class="col-md-8">
+
+        <div class="card">
+
+            <div class="card-header font_weight500">
+                Datos de la reserva
+            </div>
+
+            <div class="card-body">
+
+                <form id="formEditReservation" name="formEditReservation">
+
+                    <input type="hidden"
+                           id="reservation_id"
+                           name="reservation_id"
+                           value="[s/$model->id/s]">
+
+
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3">
+
+                            <label class="colorBase7 font_weight500">
+                                Referencia
+                            </label>
+
+                            <div class="form-control backgroundLight">
+                                [s/$model->reference/s]
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4 mb-3">
+
+                            <label class="colorBase7 font_weight500">
+                                Instalación
+                            </label>
+
+                            <div class="form-control backgroundLight">
+                                [s/$model->facility_name/s]
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4 mb-3">
+
+                            <label class="colorBase7 font_weight500">
+                                Cliente
+                            </label>
+
+                            <div class="form-control backgroundLight">
+                                [s/$model->first_name/s] [s/$model->last_name/s]
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-md-3 mb-3">
+
+                            <label class="colorBase7 font_weight500">
+                                Nº personas
+                            </label>
+
+                            <div class="form-control backgroundLight">
+                                [s/$model->people_count/s]
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-3 mb-3">
+
+                            <label class="colorBase7 font_weight500">
+                                Fecha de entrada
+                            </label>
+
+                            <div class="form-control backgroundLight">
+                                [s/$model->start_at|date_format:"%d/%m/%Y %H:%M"/s]
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-3 mb-3">
+
+                            <label class="colorBase7 font_weight500">
+                                Fecha de salida
+                            </label>
+
+                            <div class="form-control backgroundLight">
+                                [s/$model->end_at|date_format:"%d/%m/%Y %H:%M"/s]
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-3 mb-3">
+
+                            <label class="colorBase7 font_weight500">
+                                Importe total
+                            </label>
+
+                            <div class="form-control backgroundLight font_weight500">
+                                [s/$model->total_amount|number_format:2:",":"."/s] €
+                            </div>
+
+                        </div>
+
+                    </div>
+                    
+                    <div class="small colorMuted mt-1">
+                       * Si desea modificar las fechas, cancele esta reserva y cree una nueva.
+                    </div>
+
+
+                    <hr>
+
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="colorBase7 font_weight500">
+                                Tarifa aplicada
+                            </label>
+
+                            <div>
+                                <span class="font_weight500">
+                                    [s/$model->price_name/s]
+                                </span>
+
+                                [s/if !empty($model->price_description)/s]
+                                    <div class="small colorMuted">
+                                        [s/$model->price_description/s]
+                                    </div>
+                                [s//if/s]
+
+                                <div class="small colorMuted mt-1">
+                                    [s/$model->unit_price|number_format:2:",":"."/s] €
+                                    · [s/$model->billing_unit_type_name/s]
+                                    · [s/$model->billing_period_name/s]
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="colorBase7 font_weight500">
+                                Forma de pago actual
+                            </label>
+
+                            <div>
+
+                                [s/if !empty($model->user_bonus_id)/s]
+
+                                    <span class="badge bg-info">
+                                        Bono
+                                    </span>
+
+                                    [s/if !empty($model->bonus_name)/s]
+                                        <span class="ms-2">
+                                            [s/$model->bonus_name/s]
+                                        </span>
+                                    [s//if/s]
+
+                                [s/elseif !empty($model->payment_name)/s]
+
+                                    [s/$model->payment_name/s]
+
+                                [s/else/s]
+
+                                    <span class="colorMuted">
+                                        Sin método de pago
+                                    </span>
+
+                                [s//if/s]
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <hr>
+
+
+                    <div class="row">
+
+                        <div class="col-md-12 mb-3">
+
+                            <label class="colorBase7 font_weight500"
+                                   for="notes">
+                                Notas
+                            </label>
+
+                            <textarea class="form-control"
+                                      id="notes"
+                                      name="notes"
+                                      rows="4"
+                                      maxlength="1000">[s/$model->notes/s]</textarea>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="reservation_edit_error"
+                         class="alert alert-danger mt-3"
+                         style="display:none;">
+                    </div>
+
+
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div id="loading_edit_reservation" class="loading-div">
+                                <img alt="Loading" src="../assets/images/loading.svg">
+                                <div class="text-center colorMuted">Guardando datos</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row mt-3">
+                        
+                        <div class="col-md-6">
+
+                            <button type="button"
+                                    id="btn_edit_reservation"
+                                    class="btn backgroundTertiary colorWhite px-4"
+                                    onclick="editReservation([s/$model->id/s]);">
+                                Guardar
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-6 text-end">
+
+                            <a href="../reservas"
+                               class="btn backgroundMuted colorWhite">
+                                Volver
+                            </a>
+
+                        </div>
+
+                        
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+    [s/if $model->status_code != 'cancelled'
+        && $model->status_code != 'rejected'
+        && $model->status_code != 'no_show'
+        && $model->status_code != 'completed'/s]
+
+        <div class="card">
+
+            <div class="card-header font_weight500">
+                Cambiar estado
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-3">
+
+                    <label class="colorBase7 font_weight500"
+                           for="reservation_status_id">
+                        Estado
+                    </label>
+
+                    <div class="custom-select">
+
+                        <select class="form-control"
+                                id="reservation_status_id"
+                                name="reservation_status_id"
+                                onchange="changeEditReservationStatusReason();">
+
+                            [s/foreach from=$reservation_statuses item=status/s]
+
+                                [s/if $status->code != 'completed'
+        && !($model->status_code == 'confirmed' && $status->code == 'pending')/s]
+
+                                    <option value="[s/$status->id/s]"
+                                            data-code="[s/$status->code/s]"
+                                            [s/if $status->id == $model->reservation_status_id/s]selected[s//if/s]>
+                                        [s/$status->name/s]
+                                    </option>
+
+                                [s//if/s]
+
+                            [s//foreach/s]
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div id="edit_cancellation_reason_container"
+                     class="mb-3"
+                     style="display:none;">
+
+                    <label class="colorBase7 font_weight500"
+                           for="cancellation_reason">
+                        Motivo de cancelación
+                        <span class="text-danger">*</span>
+                    </label>
+
+                    <textarea class="form-control"
+                              id="cancellation_reason"
+                              rows="3"
+                              maxlength="500"
+                              placeholder="Indique el motivo de cancelación"></textarea>
+
+                </div>
+
+
+                <div id="edit_reservation_status_error"
+                     class="alert alert-danger mb-3"
+                     style="display:none;">
+                </div>
+
+                
+                <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div id="loading_edit_reservation_status" class="loading-div">
+                                <img alt="Loading" src="../assets/images/loading.svg">
+                                <div class="text-center colorMuted">Actualizando estado</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                <div class="text-end">
+
+                    <button type="button"
+                            id="btn_edit_reservation_status"
+                            class="btn btn-primary"
+                            onclick="changeEditReservationStatus([s/$model->id/s]);">
+                        Guardar
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    [s//if/s]
+
+
+    [s/if empty($model->user_bonus_id)/s]
+
+        <div class="card mt-2">
+
+            <div class="card-header font_weight500">
+                Cambiar método de pago
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-3">
+
+                    <label class="colorBase7 font_weight500"
+                           for="payment_method_id">
+                        Método de pago
+                    </label>
+
+                    <div class="custom-select">
+
+                        <select class="form-control"
+                                id="payment_method_id"
+                                name="payment_method_id">
+
+                            [s/foreach from=$payment_methods_by_facility[$model->facility_id] item=payment_method/s]
+
+                                <option value="[s/$payment_method->payment_method_id/s]"
+                                        [s/if $payment_method->payment_method_id == $model->payment_method_id/s]selected[s//if/s]>
+                                    [s/$payment_method->name/s]
+                                </option>
+
+                            [s//foreach/s]
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div id="edit_reservation_payment_error"
+                     class="alert alert-danger mb-3"
+                     style="display:none;">
+                </div>
+
+                
+                <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div id="loading_edit_reservation_payment" class="loading-div">
+                                <img alt="Loading" src="../assets/images/loading.svg">
+                                <div class="text-center colorMuted">Actualizando método de pago</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                <div class="text-end">
+
+                    <button type="button"
+                            id="btn_edit_reservation_payment"
+                            class="btn btn-primary"
+                            onclick="changeEditReservationPayment([s/$model->id/s]);">
+                        Guardar
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    [s//if/s]
+
+
+    <div class="card mt-2">
+
+        <div class="card-header font_weight500">
+            Opciones
+        </div>
+
+        <div class="card-body">
+
+            <a href="../auditreserva/[s/$model->id/s]"
+               class="text-decoration-none">
+
+                <i class="fa-solid fa-circle-info me-2"></i>
+                Actividad
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+[s/if $model->requires_guest_information == 1/s]
+
+    <div class="card mt-3">
+
+        <div class="card-header font_weight500 d-flex justify-content-between align-items-center">
+
+            <div>
+                Huéspedes
+
+                <span class="badge
+                    [s/if count($model->guests) >= $model->people_count/s]
+                        bg-success
+                    [s/else/s]
+                        bg-warning text-dark
+                    [s//if/s]
+                    ms-2">
+
+                    [s/count($model->guests)/s] / [s/$model->people_count/s]
+
+                </span>
+            </div>
+
+
+            [s/if count($model->guests) < $model->people_count/s]
+            
+            <i class="fa-solid fa-plus colorWhite cursor_pointer ms-auto"
+               role="button"
+               aria-label="Añadir huésped"
+               data-bs-toggle="modal"
+               data-bs-target="#modal_add_guest">
+            </i>
+
+            [s//if/s]
+
+        </div>
+
+
+        <div class="card-body">
+
+            [s/if count($model->guests) < $model->people_count/s]
+
+                <div class="alert alert-warning">
+
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
+
+                    Esta instalación requiere los datos de todos los huéspedes.
+
+                    Faltan
+                    <strong>
+                        [s/$model->people_count - count($model->guests)/s]
+                    </strong>
+                    por registrar.
+
+                </div>
+
+            [s/else/s]
+
+                <div class="alert alert-success">
+
+                    <i class="fa-solid fa-circle-check me-2"></i>
+
+                    Se han registrado los datos de todos los huéspedes.
+
+                </div>
+
+            [s//if/s]
+
+
+            [s/if !empty($model->guests)/s]
+
+                <div class="table-responsive">
+
+                    <table class="table align-middle">
+
+                        <thead>
+
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Tipo documento</th>
+                                <th>Documento</th>
+                                <th>Titular</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            [s/foreach from=$model->guests item=guest/s]
+
+                                <tr>
+
+                                    <td>
+                                        [s/$guest->full_name/s]
+                                    </td>
+
+                                    <td>
+                                        [s/if !empty($guest->document_type_name)/s]
+                                            [s/$guest->document_type_name/s]
+                                        [s/else/s]
+                                            -
+                                        [s//if/s]
+                                    </td>
+
+                                    <td>
+                                        [s/if !empty($guest->document_number)/s]
+                                            [s/$guest->document_number/s]
+                                        [s/else/s]
+                                            -
+                                        [s//if/s]
+                                    </td>
+
+                                    <td>
+
+                                        [s/if $guest->is_holder == 1/s]
+
+                                            <span class="badge bg-primary">
+                                                Sí
+                                            </span>
+
+                                        [s/else/s]
+
+                                            <span class="colorMuted">
+                                                No
+                                            </span>
+
+                                        [s//if/s]
+
+                                    </td>
+
+                                    <td class="text-end">
+
+                                        <a href="javascript:void(0)"
+                                           class="cursor_pointer me-3"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#modal_edit_guest_[s/$guest->id/s]"
+                                           aria-label="Editar huésped">
+
+                                            <i class="ph-fill ph-pencil-simple text-22 colorPrimary"></i>
+
+                                        </a>
+
+
+                                        <a href="javascript:void(0)"
+                                           class="cursor_pointer"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#modal_delete_guest_[s/$guest->id/s]"
+                                           aria-label="Eliminar huésped">
+
+                                            <i class="ph-fill ph-trash text-22 colorError"></i>
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                            [s//foreach/s]
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            [s/else/s]
+
+                <div class="colorMuted">
+                    No hay huéspedes registrados.
+                </div>
+
+            [s//if/s]
+
+        </div>
+
+    </div>
+
+
+    <!-- MODAL AÑADIR HUÉSPED -->
+
+    <div id="modal_add_guest"
+         class="hidden-print modal fade"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <div class="fs-5 font_weight500">
+                        Añadir huésped
+                    </div>
+
+                    <i class="fa-solid fa-xmark fs-5 modal-close"
+                       data-bs-dismiss="modal"
+                       aria-label="Cerrar"></i>
+
+                </div>
+
+
+                <div class="modal-body">
+
+                    <div class="container-modal py-4">
+
+                        <div class="mb-3">
+
+                            <label class="colorBase7 font_weight500"
+                                   for="guest_full_name">
+                                Nombre completo
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="guest_full_name"
+                                   maxlength="150">
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="colorBase7 font_weight500"
+                                   for="guest_document_type_id">
+                                Tipo de documento
+                            </label>
+
+                            <select class="form-control"
+                                    id="guest_document_type_id">
+
+                                <option value="">
+                                    Seleccione un tipo
+                                </option>
+
+                                [s/foreach from=$document_types item=document_type/s]
+
+                                    <option value="[s/$document_type->id/s]">
+                                        [s/$document_type->name/s]
+                                    </option>
+
+                                [s//foreach/s]
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="colorBase7 font_weight500"
+                                   for="guest_document_number">
+                                Nº de documento
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="guest_document_number"
+                                   maxlength="50">
+
+                        </div>
+
+
+                        <div class="form-check">
+
+                            <input type="checkbox"
+                                   class="form-check-input"
+                                   id="guest_is_holder"
+                                   value="1">
+
+                            <label class="form-check-label"
+                                   for="guest_is_holder">
+                                Titular de la reserva
+                            </label>
+
+                        </div>
+
+
+                        <div id="add_guest_error"
+                             class="alert alert-danger mt-3"
+                             style="display:none;">
+                        </div>
+
+
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <div id="loading_add_guest" class="loading-div">
+                                    <img alt="Loading" src="../assets/images/loading.svg">
+                                    <div class="text-center colorMuted">Guardando datos</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="container-footer mt-2">
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <button type="button"
+                                        class="btn backgroundMuted colorWhite"
+                                        data-bs-dismiss="modal">
+                                    Cancelar
+                                </button>
+
+                            </div>
+
+                            <div class="col-md-6 text-end">
+
+                                <button type="button"
+                                        id="btn_add_guest"
+                                        class="btn btn-primary"
+                                        onclick="addReservationGuest([s/$model->id/s]);">
+                                    Guardar
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    [s/foreach from=$model->guests item=guest/s]
+
+        <!-- MODAL EDITAR HUÉSPED -->
+
+        <div id="modal_edit_guest_[s/$guest->id/s]"
+             class="hidden-print modal fade"
+             tabindex="-1"
+             aria-hidden="true">
+
+            <div class="modal-dialog" role="document">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <div class="fs-5 font_weight500">
+                            Editar huésped
+                        </div>
+
+                        <i class="fa-solid fa-xmark fs-5 modal-close"
+                           data-bs-dismiss="modal"
+                           aria-label="Cerrar"></i>
+
+                    </div>
+
+
+                    <div class="modal-body">
+
+                        <div class="container-modal py-4">
+
+                            <div class="mb-3">
+
+                                <label class="colorBase7 font_weight500"
+                                       for="guest_full_name_[s/$guest->id/s]">
+                                    Nombre completo
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="guest_full_name_[s/$guest->id/s]"
+                                       value="[s/$guest->full_name/s]"
+                                       maxlength="150">
+
+                            </div>
+
+
+                            <div class="mb-3">
+
+                                <label class="colorBase7 font_weight500"
+                                       for="guest_document_type_id_[s/$guest->id/s]">
+                                    Tipo de documento
+                                </label>
+
+                                <select class="form-control"
+                                        id="guest_document_type_id_[s/$guest->id/s]">
+
+                                    <option value="">
+                                        Seleccione un tipo
+                                    </option>
+
+                                    [s/foreach from=$document_types item=document_type/s]
+
+                                        <option value="[s/$document_type->id/s]"
+                                                [s/if $document_type->id == $guest->document_type_id/s]selected[s//if/s]>
+                                            [s/$document_type->name/s]
+                                        </option>
+
+                                    [s//foreach/s]
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="mb-3">
+
+                                <label class="colorBase7 font_weight500"
+                                       for="guest_document_number_[s/$guest->id/s]">
+                                    Nº de documento
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="guest_document_number_[s/$guest->id/s]"
+                                       value="[s/$guest->document_number/s]"
+                                       maxlength="50">
+
+                            </div>
+
+
+                            <div class="form-check">
+
+                                <input type="checkbox"
+                                       class="form-check-input"
+                                       id="guest_is_holder_[s/$guest->id/s]"
+                                       value="1"
+                                       [s/if $guest->is_holder == 1/s]checked[s//if/s]>
+
+                                <label class="form-check-label"
+                                       for="guest_is_holder_[s/$guest->id/s]">
+                                    Titular de la reserva
+                                </label>
+
+                            </div>
+
+
+                            <div id="edit_guest_error_[s/$guest->id/s]"
+                                 class="alert alert-danger mt-3"
+                                 style="display:none;">
+                            </div>
+
+                            
+                            <div class="row mt-4">
+                                <div class="col-md-12">
+                                    <div id="loading_edit_guest_[s/$guest->id/s]" class="loading-div">
+                                        <img alt="Loading" src="../assets/images/loading.svg">
+                                        <div class="text-center colorMuted">Guardando datos</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="container-footer mt-2">
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+
+                                    <button type="button"
+                                            class="btn backgroundMuted colorWhite"
+                                            data-bs-dismiss="modal">
+                                        Cancelar
+                                    </button>
+
+                                </div>
+
+                                <div class="col-md-6 text-end">
+
+                                    <button type="button"
+                                            id="btn_edit_guest_[s/$guest->id/s]"
+                                            class="btn btn-primary"
+                                            onclick="editReservationGuest([s/$guest->id/s]);">
+                                        Guardar
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MODAL ELIMINAR HUÉSPED -->
+
+        <div id="modal_delete_guest_[s/$guest->id/s]"
+             class="hidden-print modal fade"
+             tabindex="-1"
+             aria-hidden="true">
+
+            <div class="modal-dialog" role="document">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <div class="fs-5 font_weight500">
+                            Eliminar huésped
+                        </div>
+
+                        <i class="fa-solid fa-xmark fs-5 modal-close"
+                           data-bs-dismiss="modal"
+                           aria-label="Cerrar"></i>
+
+                    </div>
+
+
+                    <div class="modal-body">
+
+                        <div class="container-modal py-4">
+
+                            <div>
+                                ¿Desea eliminar los datos del huésped?
+                            </div>
+
+                            <div class="font_weight500 mt-3">
+                                [s/$guest->full_name/s]
+                            </div>
+
+
+                            <div class="row mt-4">
+                                <div class="col-md-12">
+                                    <div id="loading_delete_guest_[s/$guest->id/s]" class="loading-div">
+                                        <img alt="Loading" src="../assets/images/loading.svg">
+                                        <div class="text-center colorMuted">Eliminando datos</div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="container-footer mt-2">
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+
+                                    <button type="button"
+                                            class="btn backgroundMuted colorWhite"
+                                            data-bs-dismiss="modal">
+                                        Cancelar
+                                    </button>
+
+                                </div>
+
+                                <div class="col-md-6 text-end">
+
+                                    <button type="button"
+                                            id="btn_delete_guest_[s/$guest->id/s]"
+                                            class="btn btn-danger"
+                                            onclick="deleteReservationGuest([s/$guest->id/s]);">
+
+                                        <i class="fa-solid fa-trash me-1"></i>
+                                        Eliminar
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    [s//foreach/s]
+
+[s//if/s]

@@ -1,0 +1,424 @@
+[s/$title/s]
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="card">
+
+            <div class="card-header font_weight500">
+                Datos del registro seleccionado
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-md-3 mb-3">
+
+                        <div class="small colorMuted">
+                            ID
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->id/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <div class="small colorMuted">
+                            Fecha del evento
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->event_at|date_format:"%d/%m/%Y %H:%M:%S"/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <div class="small colorMuted">
+                            Fecha de recepción
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->received_at|date_format:"%d/%m/%Y %H:%M:%S"/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <div class="small colorMuted">
+                            Resultado
+                        </div>
+
+                        <div class="font_weight500">
+
+                            [s/if $model->access_granted == 1/s]
+
+                                <span class="badge bg-success">
+                                    Permitido
+                                </span>
+
+                            [s/else/s]
+
+                                <span class="badge bg-danger">
+                                    Denegado
+                                </span>
+
+                            [s//if/s]
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="small colorMuted">
+                            Instalación
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->facility_name|default:'-'/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="small colorMuted">
+                            Cerradura
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->lock_alias|default:'-'/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="small colorMuted">
+                            MAC
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->lock_mac|default:'-'/s]
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="small colorMuted">
+                            Evento
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->event_type|default:'-'/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="small colorMuted">
+                            Motivo del fallo
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->failure_reason|default:'-'/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="small colorMuted">
+                            PIN
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->pin|default:'-'/s]
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card mt-3">
+
+            <div class="card-header font_weight500">
+                Datos asociados
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="small colorMuted">
+                            ID del PIN
+                        </div>
+
+                        <div class="font_weight500">
+
+                            [s/if !empty($model->access_pin_id)/s]
+
+                                <a href="../editpin/[s/$model->access_pin_id/s]">
+                                    [s/$model->access_pin_id/s]
+                                </a>
+
+                            [s/else/s]
+
+                                -
+
+                            [s//if/s]
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="small colorMuted">
+                            Tipo de PIN
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->pin_type|default:'-'/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="small colorMuted">
+                            Tipo de acceso
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->access_type|default:'-'/s]
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="small colorMuted">
+                            Reserva
+                        </div>
+
+                        <div class="font_weight500">
+
+                            [s/if !empty($model->reservation_id)/s]
+
+                                <a href="../editreserva/[s/$model->reservation_id/s]">
+                                    [s/$model->reservation_reference/s]
+                                </a>
+
+                            [s/else/s]
+
+                                -
+
+                            [s//if/s]
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="small colorMuted">
+                            Usuario
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->user_name|default:'-'/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="small colorMuted">
+                            Email
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->user_email|default:'-'/s]
+                        </div>
+
+                    </div>
+
+
+                    [s/if !empty($model->reservation_id)/s]
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="small colorMuted">
+                                Inicio de la reserva
+                            </div>
+
+                            <div class="font_weight500">
+                                [s/$model->reservation_start_at|date_format:"%d/%m/%Y %H:%M"/s]
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="small colorMuted">
+                                Fin de la reserva
+                            </div>
+
+                            <div class="font_weight500">
+                                [s/$model->reservation_end_at|date_format:"%d/%m/%Y %H:%M"/s]
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="small colorMuted">
+                                Nº personas
+                            </div>
+
+                            <div class="font_weight500">
+                                [s/$model->reservation_people_count/s]
+                            </div>
+
+                        </div>
+
+                    [s//if/s]
+
+
+                    [s/if !empty($model->pin_description)/s]
+
+                        <div class="col-md-12 mb-3">
+
+                            <div class="small colorMuted">
+                                Descripción del PIN
+                            </div>
+
+                            <div class="font_weight500">
+                                [s/$model->pin_description/s]
+                            </div>
+
+                        </div>
+
+                    [s//if/s]
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card mt-3">
+
+            <div class="card-header font_weight500">
+                Datos técnicos de TTLock
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-md-3 mb-3">
+
+                        <div class="small colorMuted">
+                            ID dispositivo
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->ttlock_device_id/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <div class="small colorMuted">
+                            Record ID
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->ttlock_record_id|default:'-'/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <div class="small colorMuted">
+                            Record Type
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->ttlock_record_type|default:'-'/s]
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <div class="small colorMuted">
+                            Record Type From Lock
+                        </div>
+
+                        <div class="font_weight500">
+                            [s/$model->ttlock_record_type_fromlock|default:'-'/s]
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card mt-3">
+
+            <div class="card-header font_weight500">
+                Payload recibido de TTLock
+            </div>
+
+            <div class="card-body">
+
+                [s/if !empty($model->payload_pretty)/s]
+
+                    <pre class="mb-0"
+                         style="white-space:pre-wrap; word-break:break-word;">[s/$model->payload_pretty|escape:'html'/s]</pre>
+
+                [s/else/s]
+
+                    <div class="colorMuted">
+                        No se ha almacenado payload para este registro.
+                    </div>
+
+                [s//if/s]
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

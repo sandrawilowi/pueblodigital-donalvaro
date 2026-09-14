@@ -1,0 +1,354 @@
+[s/$title/s]
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="card">
+
+            <div class="card-header font_weight500 d-flex align-items-center">
+
+                <span>Datos de la reserva</span>
+
+            </div>
+
+            <div class="card-body">
+
+                <form id="form_reservation" name="form_reservation">
+
+                    <div class="row">
+
+                        <!-- INSTALACIÓN -->
+
+                        <div class="col-md-5 mb-3">
+
+                            <label for="facility_id"
+                                   class="form-label colorTertiary font_weight500">
+
+                                Instalación
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <select id="facility_id"
+                                    name="facility_id"
+                                    class="form-select">
+
+                                <option value="">
+                                    Seleccione una instalación
+                                </option>
+
+                                [s/foreach from=$facilities item=facility/s]
+
+                                    <option value="[s/$facility->id/s]" data-booking-type="[s/$facility->booking_type_code/s]">
+                                        [s/$facility->name/s]
+                                    </option>
+
+                                [s//foreach/s]
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- CLIENTE -->
+
+                        <div class="col-md-5 mb-3">
+
+                            <label for="user_id"
+                                   class="form-label colorTertiary font_weight500">
+
+                                Cliente
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <div class="d-flex gap-2">
+
+                                <select id="user_id"
+                                        name="user_id"
+                                        class="form-select">
+
+                                    <option value="">
+                                        Seleccione un cliente
+                                    </option>
+
+                                    [s/foreach from=$clients item=client/s]
+
+                                        <option value="[s/$client->id/s]">
+                                            [s/$client->first_name/s] [s/$client->last_name/s] - [s/$client->email/s]
+                                        </option>
+
+                                    [s//foreach/s]
+
+                                </select>
+
+                                <button type="button"
+                                        class="btn backgroundPrimary colorWhite"
+                                        title="Crear cliente"
+                                        aria-label="Crear cliente"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modal_quick_client">
+
+                                    <i class="fa-solid fa-plus"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PERSONAS -->
+
+                        <div class="col-md-2 mb-3">
+
+                            <label for="people_count"
+                                   class="form-label colorTertiary font_weight500">
+
+                                Nº personas
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <input type="number"
+                                   id="people_count"
+                                   name="people_count"
+                                   class="form-control"
+                                   value="1"
+                                   min="1">
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- CONFIGURACIÓN DE LA RESERVA -->
+
+<div id="reservation_options"
+     class="mt-3"
+     style="display:none;">
+
+</div>
+
+<div class="row mt-3">
+
+    <div class="col-md-12 text-end">
+
+        <button type="button"
+                id="btn_search_availability"
+                class="btn backgroundPrimary colorWhite"
+                onclick="searchAvailability();"
+                style="display:none;">
+
+            <i class="fa-solid fa-magnifying-glass me-1"></i>
+            Buscar disponibilidad
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<div id="reservation_form_error"
+     class="alert alert-danger mt-3 mb-0"
+     style="display:none;">
+    Debe completar correctamente los campos obligatorios.
+</div>
+
+
+<div id="loading_reservation"
+     class="loading-div mt-3">
+
+    <img alt="Loading"
+         src="assets/images/loading.svg">
+
+    <div class="text-center colorMuted">
+        Comprobando disponibilidad
+    </div>
+
+</div>
+
+<!-- RESULTADO / DISPONIBILIDAD -->
+
+<div id="reservation_availability"
+     class="mt-3"
+     style="display:none;">
+
+</div>
+
+
+<div id="modal_quick_client" class="hidden-print modal fade">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Crear Cliente
+                </div>
+
+                <i class="fa-solid fa-xmark fs-5 modal-close"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar"></i>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="container-modal py-4">
+
+                    <div class="card-body">
+
+                        <form id="form_quick_client"
+                              name="form_quick_client"
+                              autocomplete="off">
+
+                            <div class="row">
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label for="quick_client_first_name"
+                                           class="form-label">
+                                        Nombre
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="text"
+                                           id="quick_client_first_name"
+                                           name="first_name"
+                                           class="form-control"
+                                           maxlength="100">
+
+                                </div>
+
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label for="quick_client_last_name"
+                                           class="form-label">
+                                        Apellidos
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="text"
+                                           id="quick_client_last_name"
+                                           name="last_name"
+                                           class="form-control"
+                                           maxlength="150">
+
+                                </div>
+
+
+                                <div class="col-md-12 mb-3">
+
+                                    <label for="quick_client_email"
+                                           class="form-label">
+                                        Email
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="email"
+                                           id="quick_client_email"
+                                           name="email"
+                                           class="form-control"
+                                           maxlength="190">
+
+                                </div>
+
+
+                                <div class="col-md-12 mb-3">
+
+                                    <label for="quick_client_phone"
+                                           class="form-label">
+                                        Teléfono
+                                    </label>
+
+                                    <input type="text"
+                                           id="quick_client_phone"
+                                           name="phone"
+                                           class="form-control"
+                                           maxlength="30">
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+
+                    <div id="quick_client_form_error"
+                         class="alert alert-danger mt-3 mb-0"
+                         style="display:none;">
+                        Debe completar correctamente los campos obligatorios.
+                    </div>
+
+
+                    <div id="loading_quick_client"
+                         class="loading-div">
+
+                        <img alt="Loading"
+                             src="assets/images/loading.svg">
+
+                        <div class="text-center colorMuted">
+                            Creando cliente
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="container-footer mt-2">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+
+                            <button type="button"
+                                    class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+
+                        <div class="col-md-6 text-end">
+
+                            <button type="button"
+                                    id="btn_save_quick_client"
+                                    class="btn backgroundPrimary colorWhite"
+                                    onclick="addQuickClient();">
+                                Guardar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

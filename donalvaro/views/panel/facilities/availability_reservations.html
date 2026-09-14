@@ -1,0 +1,76 @@
+[s/if !empty($reservations)/s]
+
+    <div class="table-responsive">
+
+        <table class="table align-middle mb-0">
+
+            <thead>
+
+                <tr>
+                    <th>Referencia</th>
+                    <th>Cliente</th>
+                    <th>Periodo</th>
+                    <th>Unidades</th>
+                    <th></th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                [s/foreach from=$reservations item=reservation/s]
+
+                <tr>
+
+                    <td>
+                        <a aria-label="[s/$reservation->reference/s]" class="cursor_pointer" href="../editreserva/[s/$reservation->id/s]">
+                            [s/$reservation->reference/s]
+                        </a>
+                    </td>
+
+                    <td>
+                        <a aria-label="[s/$reservation->first_name/s]" class="colorTertiary cursor_pointer" href="../editcliente/[s/$reservation->user_id/s]">
+                            [s/$reservation->first_name/s]
+                            [s/$reservation->last_name/s]
+                            </a>
+                        </td>
+
+                        <td>
+                            [s/$reservation->start_at/s]
+                            -
+                            [s/$reservation->end_at/s]
+                        </td>
+
+                        <td>
+                            [s/$reservation->reserved_units/s]
+                        </td>
+
+                        <td class="text-end">
+
+                            <a href="../editreserva/[s/$reservation->id/s]"
+                               class="colorPrimary"
+                               title="Ver reserva">
+
+                                <i class="fa-solid fa-eye"></i>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                [s//foreach/s]
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+[s/else/s]
+
+    <div class="colorMuted">
+        No hay reservas asociadas a este periodo.
+    </div>
+
+[s//if/s]

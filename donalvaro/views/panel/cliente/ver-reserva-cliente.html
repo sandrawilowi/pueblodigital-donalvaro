@@ -1,0 +1,784 @@
+[s/$title/s]
+
+
+<!-- =========================================================
+     DATOS GENERALES
+========================================================= -->
+
+<div class="card mb-4">
+
+    <div class="card-header font_weight500">
+        Datos de la reserva
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <div class="small colorMuted">
+                    Referencia
+                </div>
+
+                <div class="font_weight500">
+                    [s/$model->reference|escape/s]
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <div class="small colorMuted">
+                    Instalación
+                </div>
+
+                <div class="font_weight500">
+                    [s/$model->facility_name|escape/s]
+                </div>
+
+            </div>
+
+
+            <div class="col-md-2 mb-3">
+
+                <div class="small colorMuted">
+                    Nº personas
+                </div>
+
+                <div class="font_weight500">
+                    [s/$model->people_count/s]
+                </div>
+
+            </div>
+
+
+            <div class="col-md-2 mb-3">
+
+                <div class="small colorMuted">
+                    Estado
+                </div>
+
+                <div>
+
+                    [s/if $model->status_code == 'pending'/s]
+
+                        <span class="badge backgroundWarning colorWhite">
+                            [s/$model->status_name|escape/s]
+                        </span>
+
+                    [s/elseif $model->status_code == 'confirmed'/s]
+
+                        <span class="badge bg-success">
+                            [s/$model->status_name|escape/s]
+                        </span>
+
+                    [s/elseif $model->status_code == 'cancelled'/s]
+
+                        <span class="badge backgroundError colorWhite">
+                            [s/$model->status_name|escape/s]
+                        </span>
+
+                    [s/else/s]
+
+                        <span class="badge backgroundMuted colorWhite">
+                            [s/$model->status_name|escape/s]
+                        </span>
+
+                    [s//if/s]
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <hr>
+
+
+        [s/if $model->booking_type_code == 'DATE_RANGE'/s]
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <div class="small colorMuted">
+                        Fecha de entrada
+                    </div>
+
+                    <div class="font_weight500">
+                        [s/$model->start_at|date_format:"%d/%m/%Y"/s]
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <div class="small colorMuted">
+                        Fecha de salida
+                    </div>
+
+                    <div class="font_weight500">
+                        [s/$model->end_at|date_format:"%d/%m/%Y"/s]
+                    </div>
+
+                </div>
+
+            </div>
+
+        [s/else/s]
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+
+                    <div class="small colorMuted">
+                        Fecha
+                    </div>
+
+                    <div class="font_weight500">
+                        [s/$model->start_at|date_format:"%d/%m/%Y"/s]
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <div class="small colorMuted">
+                        Hora
+                    </div>
+
+                    <div class="font_weight500">
+                        [s/$model->start_at|date_format:"%H:%M"/s]
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <div class="small colorMuted">
+                        Fin
+                    </div>
+
+                    <div class="font_weight500">
+                        [s/$model->end_at|date_format:"%H:%M"/s]
+                    </div>
+
+                </div>
+
+            </div>
+
+        [s//if/s]
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     TARIFA Y PAGO
+========================================================= -->
+
+<div class="card mb-4">
+
+    <div class="card-header font_weight500">
+        Tarifa y pago
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <div class="small colorMuted">
+                    Tarifa aplicada
+                </div>
+
+                <div class="font_weight500">
+                    [s/$model->price_name|escape/s]
+                </div>
+
+                [s/if !empty($model->price_description)/s]
+
+                    <div class="small colorMuted">
+                        [s/$model->price_description|escape/s]
+                    </div>
+
+                [s//if/s]
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <div class="small colorMuted">
+                    Importe
+                </div>
+
+                <div class="font_weight500 fs-5">
+                    [s/$model->total_amount|string_format:"%.2f"/s] €
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <div class="small colorMuted">
+                    Forma de pago
+                </div>
+
+
+                [s/if !empty($model->user_bonus_id)/s]
+
+                    <div class="font_weight500 colorAccent">
+
+                        <i class="fa-solid fa-ticket me-1"></i>
+
+                        [s/if !empty($model->bonus_name)/s]
+                            [s/$model->bonus_name|escape/s]
+                        [s/else/s]
+                            Bono
+                        [s//if/s]
+
+                    </div>
+
+                [s/elseif !empty($model->payment_name)/s]
+
+                    <div class="font_weight500">
+                        [s/$model->payment_name|escape/s]
+                    </div>
+
+                [s/else/s]
+
+                    <div class="colorMuted">
+                        -
+                    </div>
+
+                [s//if/s]
+
+            </div>
+
+        </div>
+
+
+        [s/if $model->status_code == 'pending' && !empty($model->pending_payment_instructions)/s]
+
+            <div class="backgroundMutedLight p-3 mt-2">
+
+                <div class="font_weight500 colorTertiary mb-2">
+                    Pago pendiente
+                </div>
+
+                <div>
+                    [s/$model->pending_payment_instructions|escape:'html'|nl2br/s]
+                </div>
+
+            </div>
+
+        [s//if/s]
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     DATOS DE HUÉSPEDES
+========================================================= -->
+
+[s/if $model->requires_guest_information == 1/s]
+
+    <div class="card mb-4" id="huespedes">
+
+        <div class="card-header font_weight500 d-flex align-items-center">
+
+            <span>
+                Huéspedes
+            </span>
+
+            <span class="ms-auto">
+                [s/count($model->guests)/s] / [s/$model->people_count/s]
+            </span>
+
+        </div>
+
+        <div class="card-body">
+
+            [s/if count($model->guests) < $model->people_count/s]
+
+                <div class="alert alert-warning">
+
+                    Esta instalación requiere los datos de todos los huéspedes.
+
+                    Faltan
+                    <strong>
+                        [s/$model->people_count - count($model->guests)/s]
+                    </strong>
+                    por registrar.
+
+                </div>
+
+            [s/else/s]
+
+                <div class="alert alert-success">
+                    Se han registrado los datos de todos los huéspedes.
+                </div>
+
+            [s//if/s]
+
+
+            [s/if !empty($model->guests)/s]
+
+                <div class="table-responsive mb-3">
+
+                    <table class="table align-middle">
+
+                        <thead>
+
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Tipo documento</th>
+                                <th>Documento</th>
+                                <th>Titular</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            [s/foreach from=$model->guests item=guest/s]
+
+                                <tr>
+
+                                    <td>
+                                        [s/$guest->full_name|escape/s]
+                                    </td>
+
+                                    <td>
+
+                                        [s/if !empty($guest->document_type_name)/s]
+
+                                            [s/$guest->document_type_name|escape/s]
+
+                                        [s/else/s]
+
+                                            -
+
+                                        [s//if/s]
+
+                                    </td>
+
+                                    <td>
+
+                                        [s/if !empty($guest->document_number)/s]
+
+                                            [s/$guest->document_number|escape/s]
+
+                                        [s/else/s]
+
+                                            -
+
+                                        [s//if/s]
+
+                                    </td>
+
+                                    <td>
+
+                                        [s/if $guest->is_holder == 1/s]
+
+                                            Sí
+
+                                        [s/else/s]
+
+                                            No
+
+                                        [s//if/s]
+
+                                    </td>
+
+                                    <td class="text-end">
+
+                                        [s/if $can_edit_guests/s]
+
+                                        <a href="javascript:void(0)"
+                                           title="Editar huésped"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#modal_edit_guest[s/$guest->id/s]">
+
+                                            <i class="fa-solid fa-pen"></i>
+
+                                        </a>
+
+                                        [s//if/s]
+
+                                    </td>
+
+                                </tr>
+
+                            [s//foreach/s]
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            [s/else/s]
+
+                <div class="colorMuted mb-3">
+                    No hay huéspedes registrados.
+                </div>
+
+            [s//if/s]
+
+
+            [s/if $can_edit_guests && count($model->guests) < $model->people_count/s]
+
+                <button type="button"
+                        class="btn backgroundPrimary colorWhite"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modal_add_guest">
+
+                    <i class="fa-solid fa-user-plus me-1"></i>
+                    Añadir huésped
+
+                </button>
+
+            [s//if/s]
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MODAL AÑADIR HUÉSPED
+    ====================================================== -->
+[s/if $can_edit_guests/s]
+    <div class="modal fade"
+         id="modal_add_guest"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <div class="fs-5 font_weight500">
+                        Añadir huésped
+                    </div>
+
+                    <i class="fa-solid fa-xmark fs-5 modal-close"
+                       data-bs-dismiss="modal"
+                       aria-label="Cerrar"></i>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+
+                        <label for="guest_full_name"
+                               class="form-label colorTertiary font_weight500">
+
+                            Nombre completo
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+                        <input type="text"
+                               id="guest_full_name"
+                               class="form-control">
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label for="guest_document_type_id"
+                               class="form-label colorTertiary font_weight500">
+                            Tipo de documento
+                        </label>
+
+                        <select id="guest_document_type_id"
+                                class="form-control">
+
+                            <option value="">
+                                Seleccione un tipo
+                            </option>
+
+                            [s/foreach from=$document_types item=document_type/s]
+
+                                <option value="[s/$document_type->id/s]">
+                                    [s/$document_type->name|escape/s]
+                                </option>
+
+                            [s//foreach/s]
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label for="guest_document_number"
+                               class="form-label colorTertiary font_weight500">
+                            Nº de documento
+                        </label>
+
+                        <input type="text"
+                               id="guest_document_number"
+                               class="form-control">
+
+                    </div>
+
+
+                    <div class="form-check mb-3">
+
+                        <input type="checkbox"
+                               id="guest_is_holder"
+                               class="form-check-input">
+
+                        <label for="guest_is_holder"
+                               class="form-check-label">
+                            Titular de la reserva
+                        </label>
+
+                    </div>
+
+
+                    <div id="guest_form_error"
+                         class="alert alert-danger"
+                         style="display:none;">
+                    </div>
+
+
+                    <div id="loading_add_guest"
+                         class="loading-div"
+                         style="display:none;">
+
+                        <img src="[s/$extraUrl/s]assets/images/loading.svg"
+                             alt="Loading">
+
+                        <span>
+                            Guardando datos
+                        </span>
+
+                    </div>
+
+
+                    <div class="text-end">
+
+                        <button type="button"
+                                class="btn btn-secondary me-2"
+                                data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+
+                        <button type="button"
+                                id="btn_add_guest"
+                                class="btn backgroundPrimary colorWhite"
+                                onclick="addClientReservationGuest([s/$model->id/s]);">
+                            Guardar
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         EDITAR / ELIMINAR HUÉSPEDES
+    ====================================================== -->
+
+    [s/foreach from=$model->guests item=guest/s]
+
+        <div class="modal fade"
+             id="modal_edit_guest[s/$guest->id/s]"
+             tabindex="-1"
+             aria-hidden="true">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <div class="fs-5 font_weight500">
+                            Editar huésped
+                        </div>
+
+                        <i class="fa-solid fa-xmark fs-5 modal-close"
+                           data-bs-dismiss="modal"
+                           aria-label="Cerrar"></i>
+
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+
+                            <label for="guest_full_name_[s/$guest->id/s]"
+                                   class="form-label colorTertiary font_weight500">
+
+                                Nombre completo
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <input type="text"
+                                   id="guest_full_name_[s/$guest->id/s]"
+                                   class="form-control"
+                                   value="[s/$guest->full_name|escape/s]">
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label for="guest_document_type_id_[s/$guest->id/s]"
+                                   class="form-label colorTertiary font_weight500">
+                                Tipo de documento
+                            </label>
+
+                            <select id="guest_document_type_id_[s/$guest->id/s]"
+                                    class="form-control">
+
+                                <option value="">
+                                    Seleccione un tipo
+                                </option>
+
+                                [s/foreach from=$document_types item=document_type/s]
+
+                                    <option value="[s/$document_type->id/s]"
+                                            [s/if $document_type->id == $guest->document_type_id/s]selected[s//if/s]>
+
+                                        [s/$document_type->name|escape/s]
+
+                                    </option>
+
+                                [s//foreach/s]
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label for="guest_document_number_[s/$guest->id/s]"
+                                   class="form-label colorTertiary font_weight500">
+                                Nº de documento
+                            </label>
+
+                            <input type="text"
+                                   id="guest_document_number_[s/$guest->id/s]"
+                                   class="form-control"
+                                   value="[s/$guest->document_number|escape/s]">
+
+                        </div>
+
+
+                        <div class="form-check mb-3">
+
+                            <input type="checkbox"
+                                   id="guest_is_holder_[s/$guest->id/s]"
+                                   class="form-check-input"
+                                   [s/if $guest->is_holder == 1/s]checked[s//if/s]>
+
+                            <label for="guest_is_holder_[s/$guest->id/s]"
+                                   class="form-check-label">
+                                Titular de la reserva
+                            </label>
+
+                        </div>
+
+
+                        <div id="guest_edit_form_error_[s/$guest->id/s]"
+                             class="alert alert-danger"
+                             style="display:none;">
+                        </div>
+
+
+                        <div id="loading_edit_guest[s/$guest->id/s]"
+                             class="loading-div"
+                             style="display:none;">
+
+                            <img src="[s/$extraUrl/s]assets/images/loading.svg"
+                                 alt="Loading">
+
+                            <span>
+                                Guardando datos
+                            </span>
+
+                        </div>
+
+
+                        <div class="text-end">
+
+                            <button type="button"
+                                    class="btn btn-secondary me-2"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                            <button type="button"
+                                    id="btn_edit_guest_[s/$guest->id/s]"
+                                    class="btn backgroundPrimary colorWhite"
+                                    onclick="editClientReservationGuest([s/$model->id/s], [s/$guest->id/s]);">
+
+                                Guardar
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    [s//foreach/s]
+
+[s//if/s]
+
+[s//if/s]
+
+
+
+<!-- =========================================================
+     VOLVER
+========================================================= -->
+
+<div class="text-end mb-4">
+
+    <a href="../reservas-cliente"
+       class="btn backgroundPrimary colorWhite">
+
+        Volver a mis reservas
+
+    </a>
+
+</div>

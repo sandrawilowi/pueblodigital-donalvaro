@@ -1,0 +1,235 @@
+<div class="card">
+
+    <div class="card-header font_weight500 d-flex align-items-center">
+
+        <span>Disponibilidad encontrada</span>
+
+        <span class="ms-auto badge bg-success">
+            Disponible
+        </span>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-5 mb-3">
+
+                <div class="colorMuted small">
+                    Instalación
+                </div>
+
+                <div class="font_weight500">
+                    [s/$availability.facility_name/s]
+                </div>
+
+            </div>
+
+
+            <div class="col-md-2 mb-3">
+
+                <div class="colorMuted small">
+                    Nº personas
+                </div>
+
+                <div class="font_weight500">
+                    [s/$availability.people_count/s]
+                </div>
+
+            </div>
+
+
+            <div class="col-md-2 mb-3">
+
+                <div class="colorMuted small">
+                    Capacidad
+                </div>
+
+                <div class="font_weight500">
+                    [s/$availability.capacity/s] plazas
+                </div>
+
+            </div>
+
+
+            <div class="col-md-3 mb-3">
+
+                <div class="colorMuted small">
+                    Plazas disponibles
+                </div>
+
+                <div class="font_weight500">
+                    [s/$availability.available_units/s] plazas
+                </div>
+
+            </div>
+
+        </div>
+
+
+        [s/if $availability.booking_type == 'DATE_RANGE'/s]
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <div class="colorMuted small">
+                        Fecha de entrada
+                    </div>
+
+                    <div class="font_weight500">
+                        [s/$availability.start_at|date_format:"%d/%m/%Y"/s]
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <div class="colorMuted small">
+                        Fecha de salida
+                    </div>
+
+                    <div class="font_weight500">
+                        [s/$availability.end_at|date_format:"%d/%m/%Y"/s]
+                    </div>
+
+                </div>
+
+            </div>
+
+        [s/else/s]
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <div class="colorMuted small">
+                        Inicio
+                    </div>
+
+                    <div class="font_weight500">
+                        [s/$availability.start_at|date_format:"%d/%m/%Y %H:%M"/s]
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <div class="colorMuted small">
+                        Fin
+                    </div>
+
+                    <div class="font_weight500">
+                        [s/$availability.end_at|date_format:"%d/%m/%Y %H:%M"/s]
+                    </div>
+
+                </div>
+
+            </div>
+
+        [s//if/s]
+
+
+        <hr>
+
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <div class="colorMuted small">
+                    Tarifa aplicada
+                </div>
+
+                <div class="font_weight500">
+                    [s/$availability.price_name/s]
+                </div>
+
+                [s/if !empty($availability.price_description)/s]
+
+                    <div class="colorMuted small">
+                        [s/$availability.price_description/s]
+                    </div>
+
+                [s//if/s]
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <div class="colorMuted small">
+                    Precio
+                </div>
+
+                <div class="font_weight500">
+                    [s/$availability.unit_price|string_format:"%.2f"/s] €
+                </div>
+
+                <div class="colorMuted small">
+                    [s/$availability.billing_unit_type_name/s]
+                    ·
+                    [s/$availability.billing_period_name/s]
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <div class="colorMuted small">
+                    Importe total
+                </div>
+
+                <div class="font_weight500 fs-5">
+                    [s/$availability.total_amount|string_format:"%.2f"/s] €
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <input type="hidden"
+               id="reservation_confirm_start_at"
+               value="[s/$availability.start_at/s]">
+
+        <input type="hidden"
+               id="reservation_confirm_end_at"
+               value="[s/$availability.end_at/s]">
+
+        <input type="hidden"
+               id="reservation_confirm_booking_type"
+               value="[s/$availability.booking_type/s]">
+
+        <input type="hidden"
+               id="reservation_confirm_requested_units"
+               value="[s/$availability.requested_units/s]">
+
+        <input type="hidden"
+               id="reservation_confirm_facility_price_id"
+               value="[s/$availability.facility_price_id/s]">
+
+
+        <hr>
+
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <div class="colorMuted">
+                La instalación tiene disponibilidad para los datos seleccionados.
+            </div>
+
+            <button type="button"
+                    id="btn_continue_reservation"
+                    class="btn backgroundPrimary colorWhite"
+                    onclick="[s/$continue_reservation_function|default:'continueReservation'/s]();">
+                Continuar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>

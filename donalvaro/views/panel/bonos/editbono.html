@@ -1,0 +1,552 @@
+[s/$title/s]
+
+<div class="row mt-4">
+
+    <div class="col-md-8">
+
+        <div class="card">
+
+            <!-- DATOS DE LA INSTALACIÓN -->
+            <div class="card-header font_weight500">
+
+                Datos del bono
+
+            </div>
+
+            <div class="card-body">
+
+                <form id="form_edit_bonus" name="form_edit_bonus" autocomplete="off">
+
+                    <div class="row">
+
+                        <div class="col-md-12 mb-3">
+                            <label for="bonus_name" class="form-label">
+                                Nombre
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text"
+                                   id="bonus_name"
+                                   name="bonus_name"
+                                   class="form-control"
+                                   maxlength="150" value="[s/$model->name/s]">
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="bonus_description" class="form-label">
+                                Descripción
+                            </label>
+
+                            <textarea id="bonus_description"
+                                      name="bonus_description"
+                                      class="form-control"
+                                      rows="3">[s/$model->description/s]</textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="bonus_facilities" class="form-label">
+                                Instalaciones <span class="colorError">*</span>
+                            </label>
+
+                            <select id="bonus_facilities" name="facility_ids[]" class="selectpicker form-control" multiple data-live-search="true" data-width="100%" title="Selecciona una o varias instalaciones">
+                                [s/foreach from=$facilities item=facility/s]
+                                <option value="[s/$facility->id/s]" [s/if $facility->id|in_array:$facility_ids/s]selected[s//if/s]>
+                                        [s/$facility->name/s]
+                            </option>
+                            [s//foreach/s]
+                        </select>
+                    </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="bonus_type" class="form-label">
+                                Tipo de bono <span class="colorError">*</span>
+                            </label>
+
+                            <select id="bonus_type" name="bonus_type" class="form-select">
+                                <option value="USES" [s/if $model->bonus_type == 'USES'/s]selected[s//if/s]>
+                                        Por usos
+                                </option>
+                                <option value="TIME" [s/if $model->bonus_type == 'TIME'/s]selected[s//if/s]>
+                                        Ilimitado por tiempo
+                                </option>
+                            </select>
+                    </div>
+
+                    <div id="bonus_total_uses_block" class="col-md-6 mb-3" [s/if $model->bonus_type!='USES'/s]style="display:none;"[s//if/s]>
+                            <label for="bonus_total_uses" class="form-label">
+                                Número de usos
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="number"
+                                   id="bonus_total_uses"
+                                   name="bonus_total_uses"
+                                   class="form-control"
+                                   min="1" value="[s/$model->total_uses/s]">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="bonus_price" class="form-label">
+                                Precio
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <div class="input-group">
+                                <input type="number"
+                                       id="bonus_price"
+                                       name="bonus_price"
+                                       class="form-control"
+                                       min="0"
+                                       step="0.01" value="[s/$model->price/s]">
+
+                                <span class="input-group-text">€</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="bonus_validity_mode" class="form-label">
+                                Validez
+                            </label>
+
+                            <select id="bonus_validity_mode" name="bonus_validity_mode" class="form-select">
+                                <option value="">Sin límite de tiempo</option>
+                                <option value="DAYS" [s/if $model->validity_mode == 'DAYS'/s]selected[s//if/s]>
+                                    Número de días
+                                </option>
+                                <option value="CALENDAR_WEEK" [s/if $model->validity_mode == 'CALENDAR_WEEK'/s]selected[s//if/s]>
+                                    Semana natural
+                                </option>
+                                <option value="CALENDAR_MONTH" [s/if $model->validity_mode == 'CALENDAR_MONTH'/s]selected[s//if/s]>
+                                    Mes natural
+                                </option>
+                                <option value="CALENDAR_YEAR" [s/if $model->validity_mode == 'CALENDAR_YEAR'/s]selected[s//if/s]>
+                                    Año natural
+                                </option>
+                            </select>
+                            <small class="form-text colorMuted">
+                                Si no se indica validez, el bono será válido hasta consumir todos sus usos.
+                            </small>
+                        </div>
+
+                        <div id="bonus_validity_days_block" class="col-md-6 mb-3" [s/if $model->validity_mode!='DAYS'/s]style="display:none;"[s//if/s]>
+                             <label for="bonus_validity_days" class="form-label">
+                                Días de validez
+                            </label>
+
+                            <div class="input-group">
+                                <input type="number"
+                                       id="bonus_validity_days"
+                                       name="bonus_validity_days"
+                                       class="form-control"
+                                       min="1"
+                                       value="[s/$model->validity_days/s]">
+                                <span class="input-group-text">días</span>
+                            </div>
+
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+
+                            <label for="pending_payment_instructions" class="form-label">
+                                Instrucciones de pago
+                            </label>
+
+                            <textarea class="form-control"
+                                      id="pending_payment_instructions"
+                                      name="pending_payment_instructions"
+                                      rows="4"
+                                      maxlength="2000"
+                                      placeholder="Ej.: Realice el pago mediante transferencia indicando su nombre y apellidos."></textarea>
+
+                            <div class="form-text">
+                                Estas instrucciones se mostrarán al usuario al comprar el bono y se incluirán en el correo de pago pendiente.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </form>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div id="loading" class="loading-div">
+                            <img alt="Loading" src="../assets/images/loading.svg">
+                            <div class="text-center colorMuted">Guardando datos</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row mt-2">
+
+                    <div class="col-md-6">
+                        <button aria-label="Save changes" id="btn_save" class="btn backgroundTertiary colorWhite" onclick="editBonus([s/$model->id/s]);">Guardar</button>
+                    </div>
+
+                    <div class="col-md-6 text-end">
+
+                        <a href="../bonos"
+                           class="btn backgroundMuted colorWhite">
+                            Volver
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="col-md-4">
+        
+        <!-- MÉTODOS DE PAGO -->
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="card">
+
+                <div class="card-header font_weight500 d-flex align-items-center">
+
+                    <span>Métodos de pago</span>
+
+                    <i class="fa-solid fa-plus colorWhite cursor_pointer ms-auto"
+                       role="button"
+                       aria-label="Añadir método de pago"
+                       data-bs-toggle="modal"
+                       data-bs-target="#modal_add_payment_method">
+                    </i>
+
+                </div>
+
+                <div class="card-body">
+
+                    [s/if !empty($payment_methods)/s]
+
+                    [s/foreach from=$payment_methods item=payment_method/s]
+
+                    <div class="d-flex align-items-center justify-content-between
+                         [s/if !$payment_method@last/s]border-bottom pb-2 mb-2[s//if/s]">
+
+                        <div>
+
+                            <div class="font_weight500">
+
+                                <i class="fa-solid fa-credit-card colorTertiary me-1"></i>
+
+                                [s/$payment_method->name/s]
+
+                            </div>
+
+                            [s/if !empty($payment_method->description)/s]
+                            <div class="small colorMuted">
+                                [s/$payment_method->description/s]
+                            </div>
+                            [s//if/s]
+
+                        </div>
+
+                        <div>
+
+                            <i class="fa-solid fa-trash colorError cursor_pointer"
+                               role="button"
+                               aria-label="Quitar método de pago"
+                               data-bs-toggle="modal"
+                               data-bs-target="#modal_remove_payment_method[s/$payment_method->payment_method_id/s]">
+                            </i>
+
+                        </div>
+
+                    </div>
+                    
+                    <div id="modal_remove_payment_method[s/$payment_method->payment_method_id/s]"
+                         class="hidden-print modal fade">
+
+                        <div class="modal-dialog" role="document">
+
+                            <div class="modal-content">
+
+                                <div class="modal-header modal-header-error">
+
+                                    <div class="text-20 colorBase7 font_weight500">
+                                        Quitar método de pago
+                                    </div>
+
+                                </div>
+
+                                <div class="modal-body">
+
+                                    <div class="container-modal-error">
+
+                                        <div class="mt-2 text-center">
+
+                                            ¿Está seguro de que quiere quitar este método de pago del bono?
+
+                                            <br><br>
+
+                                            <strong>[s/$payment_method->name/s]</strong>
+
+                                            [s/if !empty($payment_method->description)/s]
+                                            <div class="small colorMuted mt-2">
+                                                [s/$payment_method->description/s]
+                                            </div>
+                                            [s//if/s]
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="container-footer mt-4">
+
+                                        <div class="row">
+
+                                            <div class="col-md-6 text-start">
+
+                                                <button class="btn backgroundMuted colorWhite"
+                                                        data-bs-dismiss="modal">
+                                                    Cancelar
+                                                </button>
+
+                                            </div>
+
+                                            <div class="col-md-6 text-end">
+
+                                                <button id="btn_remove_payment_method_[s/$payment_method->payment_method_id/s]"
+                                                        class="btn backgroundError colorWhite"
+                                                        onclick="removeBonusPaymentMethod([s/$model->id/s],[s/$payment_method->payment_method_id/s]);">
+                                                    Quitar
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    [s//foreach/s]
+
+                    [s/else/s]
+
+                    <div class="colorMuted">
+                        No hay métodos de pago asociados.
+                    </div>
+
+                    [s//if/s]
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+        
+        <!-- Instalaciones-->
+        <div class="row mt-2">
+
+            <div class="col-md-12">
+
+                <div class="card">
+
+                    <div class="card-header font_weight500">
+
+                        Instalaciones
+
+                    </div>
+
+                    <div class="card-body">
+
+                        [s/if $assigned_facilities|count > 0/s]
+
+                        <ul class="list-group list-group-flush">
+                            [s/foreach from=$assigned_facilities item=facility/s]
+                            <li class="list-group-item px-0">
+                                <i class="fa-solid fa-building me-2 colorPrimary"></i>
+                                <a href="../editinstalacion/[s/$facility->id/s]" class="colorTertiary">[s/$facility->name/s]</a>
+                            </li>
+                            [s//foreach/s]
+                        </ul>
+
+                        [s/else/s]
+
+                        <span class="colorMuted">Este bono no tiene instalaciones asignadas.</span>
+
+                        [s//if/s]
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- OPCIONES -->
+
+        <div class="row mt-2">
+
+            <div class="col-md-12">
+
+                <div class="card">
+
+                    <div class="card-header font_weight500">
+
+                        Opciones
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+                            <div class="col-md-4 mt-2">
+                                <a aria-label="activity" class="colorTertiary" href="../auditbono/[s/$model->id/s]">
+                                    <i class="fa-solid fa-circle-info"></i> Actividad
+                                </a>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="modal_add_payment_method"
+     class="hidden-print modal fade"
+     tabindex="-1">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="fs-5 font_weight500">
+                    Añadir método de pago
+                </div>
+
+                <i class="fa-solid fa-xmark
+                   cursor_pointer fs-5 ms-auto"
+                   data-bs-dismiss="modal"
+                   aria-label="Cerrar">
+                </i>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form id="form_add_payment_method"
+                      autocomplete="off">
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+                            <label for="payment_method_ids"
+                                   class="colorTertiary font_weight500">
+                                Métodos de pago
+                                <span class="text-danger">*</span>
+                            </label>
+                            
+                            <select id="payment_method_ids"
+                                    name="payment_method_ids[]"
+                                    class="selectpicker form-control mt-2"
+                                    multiple
+                                    data-width="100%"
+                                    data-live-search="true"
+                                    data-actions-box="true"
+                                    data-selected-text-format="count > 2"
+                                    title="Seleccione uno o varios métodos de pago">
+
+                                [s/foreach from=$available_payment_methods item=avail_payment_method/s]
+
+                                <option value="[s/$avail_payment_method->id/s]">
+                                    [s/$avail_payment_method->name/s]
+                                </option>
+
+                                [s//foreach/s]
+
+                            </select>
+
+                        </div>
+
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div id="loading-modal-add-payment" class="loading-div">
+                                <img alt="Loading" src="../assets/images/loading.svg">
+                                <div class="text-center colorMuted">Guardando datos</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+                <div id="payment_method_form_error"
+                     class="alert alert-danger mt-3 mb-0"
+                     style="display:none;">
+                </div>
+
+                <div class="container-footer mt-4">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-start">
+
+                            <button aria-label="Cancelar"
+                                    class="btn backgroundMuted colorWhite"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-6 text-end">
+
+                            <button aria-label="Añadir método de pago"
+                                    class="btn backgroundPrimary colorWhite"
+                                    onclick="addBonusPaymentMethod([s/$model->id/s]);"
+                                    id="btn_add_payment_method">
+                                Añadir Seleccionados
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

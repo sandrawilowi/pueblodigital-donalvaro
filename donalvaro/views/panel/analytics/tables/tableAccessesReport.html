@@ -1,0 +1,130 @@
+<div class="card">
+
+    <div class="card-header font_weight500">
+        Informe de accesos
+    </div>
+
+    <div class="card-body">
+
+        [s/if !empty($results)/s]
+
+            <div class="table-responsive">
+
+                <table id="dt_report_accesses"
+                       class="table table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Cliente</th>
+                            <th>PIN</th>
+                            <th>Instalación</th>
+                            <th>Cerradura</th>
+                            <th>Tipo</th>
+                            <th>Resultado</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        [s/foreach from=$results item=result/s]
+
+                            <tr>
+
+                                <td>
+                                    [s/$result->event_at|date_format:"%d/%m/%Y %H:%M"/s]
+                                </td>
+
+                                <td>
+
+                                    [s/if !empty($result->user_id)/s]
+
+                                        <a href="editcliente/[s/$result->user_id/s]">
+                                            [s/$result->user_name/s]
+                                        </a>
+
+                                    [s/elseif !empty($result->access_pin_id)/s]
+
+                                        Manual
+
+                                    [s/else/s]
+
+                                        -
+
+                                    [s//if/s]
+
+                                </td>
+
+                                <td>
+
+                                    [s/if !empty($result->access_pin_id)/s]
+
+                                        <a href="editpin/[s/$result->access_pin_id/s]">
+                                            [s/$result->pin|default:'-'/s]
+                                        </a>
+
+                                    [s/else/s]
+
+                                        [s/$result->pin|default:'-'/s]
+
+                                    [s//if/s]
+
+                                </td>
+
+                                <td>
+
+                                    [s/if !empty($result->facility_id)/s]
+
+                                        <a href="editinstalacion/[s/$result->facility_id/s]">
+                                            [s/$result->facility_name/s]
+                                        </a>
+
+                                    [s/else/s]
+
+                                        -
+
+                                    [s//if/s]
+
+                                </td>
+
+                                <td>
+                                    [s/$result->lock_alias|default:'-'/s]
+                                </td>
+
+                                <td>
+                                    [s/$result->event_type|default:'-'/s]
+                                </td>
+
+                                <td>
+
+                                    [s/if $result->access_granted == 1/s]
+                                        Permitido
+                                    [s/else/s]
+                                        Denegado
+                                    [s//if/s]
+
+                                </td>
+
+                            </tr>
+
+                        [s//foreach/s]
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        [s/else/s]
+
+            <div class="colorMuted">
+                No hay accesos para los filtros seleccionados.
+            </div>
+
+        [s//if/s]
+
+    </div>
+
+</div>
