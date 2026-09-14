@@ -206,7 +206,7 @@ final class webController extends controller{
         $actionsMap = [
             'login' => ['method' => 'login', 'params' => true, 'files' => false, 'auth' => false],
             'register' => ['method' => 'register', 'params' => true, 'files' => false, 'auth' => false],
-            'recoveryPassword' => ['method' => 'recoverPassword', 'params' => true, 'files' => false, 'auth' => false]
+            'recoverPassword' => ['method' => 'recoverPassword', 'params' => true, 'files' => false, 'auth' => false]
         ];
 
         return parent::executeAction($actionsMap, $params, $files);

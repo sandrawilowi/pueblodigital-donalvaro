@@ -272,3 +272,28 @@ setPassword = function(){
 
 };
 
+recoverPassword = function () {
+
+    var form = $('#form_recovery_password')[0];
+
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    disableBtn('btn_recovery_password');
+
+    var params = {
+        controller: 'webController',
+        function: 'recoverPassword',
+        email: $('#recovery_email').val().trim()
+    };
+
+    sendToServer(JSON.stringify(params), function (Data) {
+
+        enableBtn('btn_recovery_password');
+
+        $('#recovery_password_message').removeClass('d-none');
+        $('#recovery_email').val('');
+    });
+};

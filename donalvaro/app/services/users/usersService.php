@@ -201,27 +201,28 @@ class usersService {
 
     public function createSetPasswordToken(int $userId): array {
 
+        return $this->createPasswordToken($userId, 'SET_PASSWORD');
+    }
+
+    public function createPasswordRecoveryToken(int $userId): array {
+
+        return $this->createPasswordToken($userId, 'PASSWORD_RECOVERY');
+    }
+
+    private function createPasswordToken(int $userId, string $tokenType): array {
+
         try {
 
-            /*
-             * Token que enviaremos al usuario.
-             * 32 bytes generan 64 caracteres hexadecimales.
-             */
             $token = bin2hex(random_bytes(32));
-
-            /*
-             * En base de datos guardamos solamente el hash.
-             */
             $tokenHash = hash('sha256', $token);
 
-            $expiresAt = (new DateTimeImmutable('+24 hours'))
-                    ->format('Y-m-d H:i:s');
+            $expiresAt = (new DateTimeImmutable('+24 hours'))->format('Y-m-d H:i:s');
 
             $model = new usersTokensModel();
 
             $model->setUserId($userId);
             $model->setTokenHash($tokenHash);
-            $model->setTokenType('SET_PASSWORD');
+            $model->setTokenType($tokenType);
             $model->setExpiresAt($expiresAt);
 
             $tokenId = $model->add();
@@ -229,13 +230,13 @@ class usersService {
             if (!$tokenId) {
                 return serviceResponse::error(
                                 'No se ha podido generar el enlace para establecer la contraseña.',
-                                'SET_PASSWORD_TOKEN_CREATE_ERROR'
+                                'PASSWORD_TOKEN_CREATE_ERROR'
                         );
             }
 
             return serviceResponse::success(
                             'Token para establecer la contraseña generado correctamente.',
-                            'SET_PASSWORD_TOKEN_CREATED',
+                            'PASSWORD_TOKEN_CREATED',
                             [
                                 'token' => $token,
                                 'expires_at' => $expiresAt
@@ -245,7 +246,7 @@ class usersService {
 
             return serviceResponse::error(
                             'Se ha producido un error al generar el enlace para establecer la contraseña.',
-                            'SET_PASSWORD_TOKEN_CREATE_EXCEPTION'
+                            'PASSWORD_TOKEN_CREATE_EXCEPTION'
                     );
         }
     }

@@ -86,8 +86,7 @@
 
                         <div class="mb-2">
 
-                            <a href="/forgot-password"
-                               class="text-decoration-none">
+                            <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#modalRecoveryPassword">
 
                                 ¿Ha olvidado su contraseña?
 
@@ -123,3 +122,42 @@
         </div>
     </div>
 </main>
+
+<div class="modal fade" id="modalRecoveryPassword" tabindex="-1" aria-labelledby="modalRecoveryPasswordLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header backgroundPrimary colorWhite">
+                <h5 class="modal-title" id="modalRecoveryPasswordLabel">
+                    <i class="fa-solid fa-key me-2"></i>Recuperar contraseña
+                </h5>
+
+                <button type="button" class="btn colorWhite ms-auto" data-bs-dismiss="modal" aria-label="Cerrar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <form id="form_recovery_password">
+
+                    <div class="mb-3">
+                        <label for="recovery_email" class="form-label">Correo electrónico</label>
+                        <input type="email" class="form-control" id="recovery_email" name="email" required>
+                    </div>
+
+                    <div id="recovery_password_message" class="alert alert-info d-none">
+                        Si existe una cuenta asociada a este correo electrónico, recibirá un mensaje con las instrucciones para establecer una nueva contraseña.
+                    </div>
+
+                    <button type="button" class="btn backgroundPrimary colorWhite w-100" id="btn_recovery_password" onclick="recoverPassword();">
+                        <i class="fa-solid fa-paper-plane me-2"></i>Enviar instrucciones
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>

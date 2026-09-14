@@ -145,8 +145,8 @@ class mailService
             $sent = $this->mailer->sendStandardMail(
                     'Establece tu contraseña en Don Álvaro Digital',
                     $body,
-                    'Se ha creado una cuenta para ti en Don Álvaro Digital. '
-                    . 'Establece tu contraseña accediendo al siguiente enlace: '
+                    'Puedes establecer una nueva contraseña para tu cuenta de Don Álvaro Digital. '
+                    . 'accediendo al siguiente enlace: '
                     . $setPasswordUrl
             );
 
