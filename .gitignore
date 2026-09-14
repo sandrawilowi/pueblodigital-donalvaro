@@ -33,14 +33,14 @@ Thumbs.db
 
 /nbproject/
 /nbproject/private/
-#/data-test/
-#/data-logs/
-#/data-db/
-#/data-config/
+/data-test/
+/data-logs/
+/data-db/
+/data-config/
 /donalvaro/vendor
 /donalvaro/composer.lock
 /donalvaro/TmpSmarty/
-#/donalvaro/app/generated/
+/donalvaro/app/generated/
 /donalvaro/assets/images/facilities/
 /donalvaro/assets/images/usuarios/
 
