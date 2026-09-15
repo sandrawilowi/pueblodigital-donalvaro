@@ -23,7 +23,7 @@
         <ul class="navbar-nav ms-auto">
 
             <!--begin::Notifications Dropdown Menu-->
-            <li class="nav-item dropdown">
+            <!--<li class="nav-item dropdown">
                 <a class="nav-link" data-bs-toggle="dropdown" href="#">
                     <i class="fa-solid fa-bell"></i>
                     <span class="navbar-badge badge text-bg-warning">1</span>
@@ -43,7 +43,7 @@
                     <div class="dropdown-divider"></div>
                     <a href="#" class="dropdown-item dropdown-footer"> Ver todas </a>
                 </div>
-            </li>
+            </li>-->
             <!--end::Notifications Dropdown Menu-->
 
             <!--begin::Fullscreen Toggle-->
@@ -56,11 +56,12 @@
             <!--end::Fullscreen Toggle-->
 
 
+            [s/assign var="userPhoto" value=$user->photo|default:'images/usuarios/default_profile.png'/s]
             <!--begin::User Menu Dropdown-->
             <li class="nav-item dropdown user-menu">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <img
-                        src="[s/$extraUrl/s][s/$user->photo/s]"
+                        src="[s/$extraUrl/s][s/$userPhoto/s]"
                         class="user-image rounded-circle shadow"
                         alt="User Image"
                         />
@@ -70,7 +71,7 @@
                     <!--begin::User Image-->
                     <li class="user-header text-bg-primary">
                         <img
-                            src="[s/$extraUrl/s][s/$user->photo/s]"
+                            src="[s/$extraUrl/s][s/$userPhoto/s]"
                             class="rounded-circle shadow"
                             alt="User Image"
                             />
