@@ -509,6 +509,70 @@ body {
     font-weight: 600;
 }
 
+
+.footer-project {
+    width: 100%;
+    max-width: 200px;
+    margin: 1.5rem auto;
+    overflow: hidden;
+}
+
+.footer-project-header {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: #fff;
+    text-align: center;
+}
+
+.footer-project-header img {
+    display: block;
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.footer-project-body {
+    width: 100%;
+    padding: 1.5rem 1.25rem;
+    background: #c91f17;
+    color: #fff;
+    text-align: center;
+}
+
+.footer-project-title {
+    max-width: 350px;
+    margin: 0 auto;
+    color: #fff;
+    font-size: .7rem;
+    font-weight: 700;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.footer-avanzamos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .75rem;
+    margin-top: 1.5rem;
+}
+
+.footer-avanzamos-icon {
+    display: block;
+    width: 28px;
+    height: auto;
+    flex-shrink: 0;
+}
+
+.footer-avanzamos-text {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+
 @media (max-width: 575.98px) {
     .activation-card {
         padding: 36px 22px;
