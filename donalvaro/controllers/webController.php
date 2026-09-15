@@ -355,11 +355,19 @@ final class webController extends controller{
         return $this->getJSONEncode($response['success']);
     }
 
-    protected function recoverPassword(stdClass $params){
-	
-	
-	
-	
+    protected function recoverPassword(stdClass $params) {
+
+        $email = trim((string) ($params->email ?? ''));
+
+        $usersService = new usersService();
+
+        $result = $usersService->recoverPassword($email);
+
+        $this->type_msg = 'INFO';
+        $this->msg = $result['message'];
+        $this->extra = $result['code'] ?? null;
+
+        return $this->getJSONEncode(true);
     }
     
     
@@ -384,14 +392,29 @@ final class webController extends controller{
         ]);
     }
     
-    protected function establecerPassword(){
-        
+    protected function establecerPassword() {
+
         $token = trim((string) ($this->model_id ?? ''));
 
         $usersService = new usersService();
+        $usersTokensModel = new usersTokensModel();
 
-        $response = $usersService->validateSetPasswordToken($token);
-        
+        $tokenData = $usersTokensModel->findByTokenHash(hash('sha256', $token));
+
+        if (!empty($tokenData) && $tokenData['token_type'] === 'SET_PASSWORD') {
+
+            $response = $usersService->validateSetPasswordToken($token);
+        } elseif (!empty($tokenData) && $tokenData['token_type'] === 'PASSWORD_RECOVERY') {
+
+            $response = $usersService->validatePasswordRecoveryToken($token);
+        } else {
+
+            $response = serviceResponse::error(
+                    'El enlace no es válido.',
+                    'PASSWORD_TOKEN_INVALID'
+            );
+        }
+
         $this->template->assign('url_environment', _URL_ENVIRONMENT);
 
         $this->template->assign([

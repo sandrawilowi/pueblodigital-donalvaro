@@ -61,6 +61,17 @@ class usersTokensModel extends baseModel
                         $asObject
                 );
     }
+    
+    public function findByTokenHash(string $tokenHash): ?array {
+
+        return $this->db()->selectOne(
+                        'SELECT *
+           FROM ' . self::TABLE . '
+          WHERE token_hash = ?
+          LIMIT 1',
+                        [$tokenHash]
+                );
+    }
 
     public function add(): int {
         return $this->db()->insert(

@@ -1884,6 +1884,49 @@ class usersService {
         }
     }
     
+    public function validatePasswordRecoveryToken(string $token): array {
+
+        $token = trim($token);
+
+        if ($token === '') {
+            return serviceResponse::error(
+                            'El enlace no es válido.',
+                            'PASSWORD_RECOVERY_TOKEN_EMPTY'
+                    );
+        }
+
+        try {
+
+            $tokenHash = hash('sha256', $token);
+
+            $tokenData = $this->userTokensModel->findValidToken(
+                    $tokenHash,
+                    'PASSWORD_RECOVERY'
+            );
+
+            if ($tokenData === null) {
+                return serviceResponse::error(
+                                'El enlace no es válido, ha caducado o ya ha sido utilizado.',
+                                'PASSWORD_RECOVERY_TOKEN_INVALID'
+                        );
+            }
+
+            return serviceResponse::success(
+                            'El enlace es válido.',
+                            'PASSWORD_RECOVERY_TOKEN_VALID',
+                            [
+                                'user_id' => (int) $tokenData['user_id']
+                            ]
+                    );
+        } catch (Throwable $e) {
+
+            return serviceResponse::error(
+                            'Se ha producido un error al validar el enlace.',
+                            'PASSWORD_RECOVERY_TOKEN_EXCEPTION'
+                    );
+        }
+    }
+
     public function setPassword(
             string $token,
             string $password,
@@ -1895,7 +1938,7 @@ class usersService {
         if ($token === '') {
             return serviceResponse::error(
                             'El enlace no es válido.',
-                            'SET_PASSWORD_TOKEN_EMPTY'
+                            'PASSWORD_TOKEN_EMPTY'
                     );
         }
 
@@ -1916,19 +1959,48 @@ class usersService {
 
 
             /*
-             * Buscamos el token válido.
+             * Identificamos el tipo de token.
              */
             $tokenHash = hash('sha256', $token);
 
-            $tokenData = $this->userTokensModel->findValidToken(
-                    $tokenHash,
-                    'SET_PASSWORD'
-            );
+            $token = $this->userTokensModel->findByTokenHash($tokenHash);
+
+            if ($token === null) {
+                return serviceResponse::error(
+                                'El enlace no es válido.',
+                                'PASSWORD_TOKEN_INVALID'
+                        );
+            }
+
+            $tokenType = (string) $token['token_type'];
+
+            /*
+             * Buscamos el token válido según el tipo.
+             */
+            if ($tokenType === 'SET_PASSWORD') {
+
+                $tokenData = $this->userTokensModel->findValidToken(
+                        $tokenHash,
+                        'SET_PASSWORD'
+                );
+            } elseif ($tokenType === 'PASSWORD_RECOVERY') {
+
+                $tokenData = $this->userTokensModel->findValidToken(
+                        $tokenHash,
+                        'PASSWORD_RECOVERY'
+                );
+            } else {
+
+                return serviceResponse::error(
+                                'El enlace no es válido.',
+                                'PASSWORD_TOKEN_INVALID'
+                        );
+            }
 
             if ($tokenData === null) {
                 return serviceResponse::error(
                                 'El enlace no es válido, ha caducado o ya ha sido utilizado.',
-                                'SET_PASSWORD_TOKEN_INVALID'
+                                'PASSWORD_TOKEN_INVALID'
                         );
             }
 
@@ -1953,11 +2025,9 @@ class usersService {
 
 
             /*
-             * Ciframos y guardamos la contraseña definitiva.
+             * Ciframos y guardamos la contraseña.
              */
-            $passwordEncrypted = $this->passwordService->encryptPassword(
-                    $password
-            );
+            $passwordEncrypted = $this->passwordService->encryptPassword($password);
 
             $this->usersModel->setId($userId);
             $this->usersModel->setPassword($passwordEncrypted);
@@ -1971,26 +2041,27 @@ class usersService {
 
 
             /*
-             * Activamos la cuenta.
+             * Si el token corresponde al alta de una cuenta,
+             * activamos la cuenta y verificamos el correo.
+             *
+             * En una recuperación de contraseña no modificamos
+             * ninguno de estos estados.
              */
-            if (!$this->usersModel->updateStatus(
-                            usersModel::STATUS_ACTIVE
-                    )) {
-                return serviceResponse::error(
-                                'No se ha podido activar la cuenta.',
-                                'ACCOUNT_ACTIVATION_ERROR'
-                        );
-            }
+            if ($tokenType === 'SET_PASSWORD') {
 
+                if (!$this->usersModel->updateStatus(usersModel::STATUS_ACTIVE)) {
+                    return serviceResponse::error(
+                                    'No se ha podido activar la cuenta.',
+                                    'ACCOUNT_ACTIVATION_ERROR'
+                            );
+                }
 
-            /*
-             * Marcamos el email como verificado.
-             */
-            if (!$this->usersModel->markEmailVerified()) {
-                return serviceResponse::error(
-                                'No se ha podido verificar el correo electrónico.',
-                                'EMAIL_VERIFICATION_ERROR'
-                        );
+                if (!$this->usersModel->markEmailVerified()) {
+                    return serviceResponse::error(
+                                    'No se ha podido verificar el correo electrónico.',
+                                    'EMAIL_VERIFICATION_ERROR'
+                            );
+                }
             }
 
 
@@ -2000,14 +2071,13 @@ class usersService {
             if (!$this->userTokensModel->markAsUsed($tokenId)) {
                 return serviceResponse::error(
                                 'No se ha podido completar el proceso.',
-                                'SET_PASSWORD_TOKEN_UPDATE_ERROR'
+                                'PASSWORD_TOKEN_UPDATE_ERROR'
                         );
             }
 
 
             /*
-             * Recuperamos el usuario ya actualizado para obtener
-             * los valores reales guardados en base de datos.
+             * Recuperamos el usuario actualizado para auditoría.
              */
             $newUser = $this->usersModel->findById(
                     $userId,
@@ -2017,23 +2087,47 @@ class usersService {
             /*
              * Auditoría.
              */
-            $this->audit_service->update(
-                    'wi_users',
-                    $userId,
-                    $oldUser,
-                    [
-                        'password' => $passwordEncrypted,
-                        'status' => $newUser['status'],
-                        'email_verified_at' => $newUser['email_verified_at']
-                    ],
-                    __METHOD__,
-                    [],
-                    'Establecimiento de contraseña y activación de cuenta'
-            );
+            if ($tokenType === 'SET_PASSWORD') {
+
+                $this->audit_service->update(
+                        'wi_users',
+                        $userId,
+                        $oldUser,
+                        [
+                            'password' => $passwordEncrypted,
+                            'status' => $newUser['status'],
+                            'email_verified_at' => $newUser['email_verified_at']
+                        ],
+                        __METHOD__,
+                        [],
+                        'Establecimiento de contraseña y activación de cuenta'
+                );
+            } else {
+
+                $this->audit_service->update(
+                        'wi_users',
+                        $userId,
+                        $oldUser,
+                        [
+                            'password' => $passwordEncrypted
+                        ],
+                        __METHOD__,
+                        [],
+                        'Recuperación de contraseña'
+                );
+            }
+
+
+            if ($tokenType === 'SET_PASSWORD') {
+                return serviceResponse::success(
+                                'La contraseña se ha establecido correctamente. Ya puede iniciar sesión.',
+                                'SET_PASSWORD_SUCCESS'
+                        );
+            }
 
             return serviceResponse::success(
-                            'La contraseña se ha establecido correctamente. Ya puede iniciar sesión.',
-                            'SET_PASSWORD_SUCCESS'
+                            'La contraseña se ha actualizado correctamente.',
+                            'PASSWORD_RECOVERY_SUCCESS'
                     );
         } catch (Throwable $e) {
 
@@ -2057,7 +2151,106 @@ class usersService {
                     );
         }
     }
-    
+
+    public function recoverPassword(string $email): array {
+
+        $email = strtolower(trim($email));
+
+        /*
+         * La respuesta será siempre la misma para no revelar
+         * si existe una cuenta asociada al correo.
+         */
+        $genericResponse = serviceResponse::success(
+                'Si existe una cuenta asociada a este correo electrónico, recibirá un mensaje con las instrucciones para establecer una nueva contraseña.',
+                'PASSWORD_RECOVERY_REQUESTED'
+        );
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $genericResponse;
+        }
+
+        try {
+
+            /*
+             * Buscamos el usuario.
+             */
+            $user = $this->usersModel->findByEmail($email);
+
+            if (empty($user)) {
+                return $genericResponse;
+            }
+
+            $userId = (int) $user['id'];
+            $name = (string) $user['name'];
+
+            /*
+             * Generamos el token de recuperación.
+             */
+            $tokenResponse = $this->createPasswordRecoveryToken($userId);
+
+            if (!$tokenResponse['success']) {
+
+                $log = new logsModel('web', 'recoverPassword.log');
+
+                $log->error(
+                        'No se ha podido generar el token de recuperación de contraseña',
+                        [
+                            'user_id' => $userId,
+                            'code' => $tokenResponse['code'] ?? null
+                        ]
+                );
+
+                return $genericResponse;
+            }
+
+            $token = $tokenResponse['data']['token'];
+
+            $recoveryUrl = rtrim(_URL_ENVIRONMENT, '/')
+                    . '/establecer-password/'
+                    . urlencode($token);
+
+            /*
+             * Enviamos el correo.
+             */
+            $mailService = new mailService();
+
+            $mailResponse = $mailService->sendSetPassword(
+                    $email,
+                    $name,
+                    $recoveryUrl
+            );
+
+            if (!$mailResponse['success']) {
+
+                $log = new logsModel('web', 'recoverPassword.log');
+
+                $log->error(
+                        'No se ha podido enviar el correo de recuperación de contraseña',
+                        [
+                            'user_id' => $userId,
+                            'code' => $mailResponse['code'] ?? null
+                        ]
+                );
+            }
+
+            return $genericResponse;
+        } catch (Throwable $e) {
+
+            $log = new logsModel('web', 'recoverPassword.log');
+
+            $log->error(
+                    'Error durante la recuperación de contraseña',
+                    [
+                        'exception' => $e->getMessage(),
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine()
+                    ]
+            );
+
+            return $genericResponse;
+        }
+    }
+
     public function deleteUser(int $user_id): array {
 
         try {
