@@ -329,9 +329,12 @@ final class reservasController extends controller{
         );
 
         if (empty($result)) {
-            throw new RuntimeException(
-                            'La reserva no existe.'
-                    );
+            $this->chargeNotFoundPage(
+                    'La reserva solicitada no existe o ya no está disponible.',
+                    '../reservas',
+                    'Volver a reservas'
+            );
+            return;
         }
 
         $result_res_status = $reservation_statuses_model->findAllActive(true);

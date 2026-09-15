@@ -148,6 +148,8 @@ class controller {
     
     protected $data_post = null;
     
+    protected bool $page_not_found = false;
+    
     
     /**
      * Contruct
@@ -490,5 +492,25 @@ class controller {
         $_SESSION = [];
         session_destroy();
         $this->exitSession = true;
+    }
+
+    protected function chargeNotFoundPage(string $message = 'El elemento solicitado no existe o ya no está disponible.',
+            string $returnUrl = '',
+            string $returnText = 'Volver'
+    ) {
+
+        $plantilla_html = new newSmarty();
+
+        $plantilla_html->assign([
+            'message' => $message,
+            'return_url' => $returnUrl,
+            'return_text' => $returnText
+        ]);
+
+        $page = $plantilla_html->fetch('common/notFound.html');
+
+        $this->template->assign('page', $page);
+
+        $this->page_not_found = true;
     }
 }

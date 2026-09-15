@@ -256,7 +256,7 @@ class reservationsModel extends baseModel
             INNER JOIN wi_reservation_statuses rs
                 ON rs.id = r.reservation_status_id
                 
-            INNER JOIN wi_booking_types bt
+            LEFT JOIN wi_booking_types bt
                 ON bt.id = f.booking_type_id
 
             LEFT JOIN wi_facilities_prices fp
