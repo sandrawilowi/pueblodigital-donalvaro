@@ -118,9 +118,11 @@ class accessPinsService
             $valid_from = trim((string) ($user_bonus['valid_from'] ?? ''));
             $valid_until = trim((string) ($user_bonus['expires_at'] ?? ''));
 
-            if ($valid_from === '' || $valid_until === '') {
-                throw new RuntimeException('El bono no tiene configurado un periodo de validez correcto.');
+            if ($valid_from === '') {
+                throw new RuntimeException('El bono no tiene configurada una fecha de inicio de validez correcta.');
             }
+
+            $access_type = $valid_until === '' ? accessPinsModel::ACCESS_TYPE_PERMANENT : accessPinsModel::ACCESS_TYPE_TEMPORARY;
 
             /*
              * Evitamos generar los PIN dos veces si por cualquier motivo
@@ -276,7 +278,7 @@ class accessPinsService
                         $valid_from,
                         $valid_until,
                         accessPinsModel::PIN_TYPE_BONUS,
-                        accessPinsModel::ACCESS_TYPE_TEMPORARY,
+                        $access_type,
                         'Acceso mediante bono',
                         null,
                         $user_bonus_id,

@@ -12,6 +12,7 @@ class bonusesModel extends baseModel {
     public const STATUS_DELETED = 3;
     public const TYPE_USES = 'USES';
     public const TYPE_TIME = 'TIME';
+    public const VALIDITY_NONE = 'NONE';
     public const VALIDITY_DAYS = 'DAYS';
     public const VALIDITY_CALENDAR_WEEK = 'CALENDAR_WEEK';
     public const VALIDITY_CALENDAR_MONTH = 'CALENDAR_MONTH';

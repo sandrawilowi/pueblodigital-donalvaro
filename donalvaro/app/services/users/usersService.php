@@ -2395,7 +2395,11 @@ class usersService {
         $validity_mode = (string) $bonus['validity_mode'];
         $bonus_type = (string) $bonus['bonus_type'];
 
-        if ($validity_mode === bonusesModel::VALIDITY_DAYS) {
+        if ($validity_mode === bonusesModel::VALIDITY_NONE) {
+
+            $valid_from = $reference_date->format('Y-m-d 00:00:00');
+            $expires_at = null;
+        } elseif ($validity_mode === bonusesModel::VALIDITY_DAYS) {
 
             $validity_days = $bonus['validity_days'] !== null ? (int) $bonus['validity_days'] : null;
 

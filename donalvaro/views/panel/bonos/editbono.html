@@ -109,7 +109,7 @@
                             </label>
 
                             <select id="bonus_validity_mode" name="bonus_validity_mode" class="form-select">
-                                <option value="">Sin límite de tiempo</option>
+                                <option value="NONE">Sin límite de tiempo</option>
                                 <option value="DAYS" [s/if $model->validity_mode == 'DAYS'/s]selected[s//if/s]>
                                     Número de días
                                 </option>

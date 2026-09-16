@@ -118,7 +118,7 @@ final class usuariosController extends controller{
             'actualizarDisplayName' => ['method' => 'actualizarDisplayName', 'params' => true, 'files' => false, 'roles' => ['system', 'manager']],
             'addBonus' => ['method' => 'addBonus', 'params' => true, 'files' => false, 'roles' => ['system', 'manager']],
             'deleteBonus' => ['method' => 'deleteBonus', 'params' => true, 'files' => false, 'roles' => ['system', 'manager']],
-            'setPassword' => ['method' => 'setPassword', 'params' => true, 'files' => false],
+            'setPassword' => ['method' => 'setPassword', 'params' => true, 'files' => false, 'auth' => false],
             'cargarProvinciasPais' => ['method' => 'cargarProvinciasPais', 'params' => true, 'files' => false],
             'deleteClient' => ['method' => 'deleteUser', 'params' => true, 'files' => false, 'roles' => ['system', 'manager']],
             'deleteUser' => ['method' => 'deleteUser', 'params' => true, 'files' => false, 'roles' => ['system', 'manager']],

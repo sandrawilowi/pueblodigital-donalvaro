@@ -78,6 +78,7 @@ class bonusesService {
             }
 
             if (!in_array($validity_mode, [
+                        bonusesModel::VALIDITY_NONE,
                         bonusesModel::VALIDITY_DAYS,
                         bonusesModel::VALIDITY_CALENDAR_WEEK,
                         bonusesModel::VALIDITY_CALENDAR_MONTH,
@@ -335,6 +336,7 @@ class bonusesService {
             }
 
             if (!in_array($validity_mode, [
+                        bonusesModel::VALIDITY_NONE,
                         bonusesModel::VALIDITY_DAYS,
                         bonusesModel::VALIDITY_CALENDAR_WEEK,
                         bonusesModel::VALIDITY_CALENDAR_MONTH,
