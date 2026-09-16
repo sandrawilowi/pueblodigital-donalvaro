@@ -2324,14 +2324,12 @@ class reservationsService {
         $result['pin'] = $pin_result['pin'] ?? null;
 
         /*
-         * Solo enviamos el correo con PIN cuando está
-         * completamente sincronizado.
-         */
-        if (
-                $result['success']
-                && !$result['partial']
-                && !empty($result['pin'])
-        ) {
+             * Enviamos el correo siempre que el PIN haya sido generado.
+             *
+             * Si alguna cerradura no ha podido sincronizarlo,
+             * el cron se encargará de reintentarlo posteriormente.
+             */
+            if (!empty($result['pin'])) {
 
             $mail_result = $this->mail_service->sendReservationAccess(
                     $user,
