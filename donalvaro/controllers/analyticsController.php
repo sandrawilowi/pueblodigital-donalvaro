@@ -249,7 +249,7 @@ final class analyticsController extends controller{
     }
 
     private function cargarInformes(&$plantilla_html) {
-
+$this->printDebug('entro');
         $facilities_model = new facilitiesModel();
         $reservation_statuses_model = new reservationStatusesModel();
 
@@ -258,9 +258,9 @@ final class analyticsController extends controller{
          * también deben permitir consultar datos históricos.
          */
         $facilities = $facilities_model->findAll(true);
-
+$this->printDebug($facilities);
         $reservation_statuses = $reservation_statuses_model->findAllActive(true);
-
+$this->printDebug($reservation_statuses);
         $plantilla_html->assign('facilities', $facilities);
         $plantilla_html->assign('reservation_statuses', $reservation_statuses);
         $plantilla_html->assign('bonuses_enabled',defined('_BONUSES_ENABLED') && _BONUSES_ENABLED);
