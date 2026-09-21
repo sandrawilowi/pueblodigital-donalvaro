@@ -307,7 +307,7 @@
                                        id="check_in_time"
                                        name="check_in_time"
                                        class="form-control"
-                                       value="[s/$model->check_in_time|default:''|date_format:'%H:%M'/s]">
+                                       value="[s/$model.facility->check_in_time|default:''|date_format:'%H:%M'/s]">
 
                             </div>
 
@@ -323,7 +323,7 @@
                                        id="check_out_time"
                                        name="check_out_time"
                                        class="form-control"
-                                       value="[s/$model->check_out_time|default:''|date_format:'%H:%M'/s]">
+                                       value="[s/$model.facility->check_out_time|default:''|date_format:'%H:%M'/s]">
 
                             </div>
 
