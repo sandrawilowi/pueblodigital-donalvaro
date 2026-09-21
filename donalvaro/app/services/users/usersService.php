@@ -1754,27 +1754,23 @@ class usersService {
             }
 
             /*
-             * Creamos el perfil únicamente si se ha recibido algún dato.
+             * Creamos el perfil del usuario.
              */
-            $has_profile_data = $phone !== '' || $address !== '' || $city !== '' || $postal_code !== '' || $country_id !== null || $province_id !== null;
+            $this->usersProfileModel->setUserId($user_id);
+            $this->usersProfileModel->setPhone($phone !== '' ? $phone : null);
+            $this->usersProfileModel->setCountryId($country_id);
+            $this->usersProfileModel->setProvinceId($province_id);
+            $this->usersProfileModel->setAddress($address !== '' ? $address : null);
+            $this->usersProfileModel->setPostalCode($postal_code !== '' ? $postal_code : null);
+            $this->usersProfileModel->setCity($city !== '' ? $city : null);
 
-            if ($has_profile_data) {
-
-                $this->usersProfileModel->setUserId($user_id);
-                $this->usersProfileModel->setPhone($phone !== '' ? $phone : null);
-                $this->usersProfileModel->setCountryId($country_id);
-                $this->usersProfileModel->setProvinceId($province_id);
-                $this->usersProfileModel->setAddress($address !== '' ? $address : null);
-                $this->usersProfileModel->setPostalCode($postal_code !== '' ? $postal_code : null);
-                $this->usersProfileModel->setCity($city !== '' ? $city : null);
-
-                if (!$this->usersProfileModel->add()) {
-                    return serviceResponse::error(
-                                    'El usuario se ha creado, pero no se ha podido guardar su perfil.',
-                                    'USER_PROFILE_CREATE_ERROR'
-                            );
-                }
+            if (!$this->usersProfileModel->add()) {
+                return serviceResponse::error(
+                                'El usuario se ha creado, pero no se ha podido guardar su perfil.',
+                                'USER_PROFILE_CREATE_ERROR'
+                        );
             }
+
 
             /*
              * Auditoría del usuario.
@@ -1797,24 +1793,21 @@ class usersService {
             /*
              * Auditoría del perfil, si se ha creado.
              */
-            if ($has_profile_data) {
-
-                $this->audit_service->insert(
-                        'wi_users_profile',
-                        $user_id,
-                        [
-                            'user_id' => $user_id,
-                            'phone' => $phone !== '' ? $phone : null,
-                            'country_id' => $country_id,
-                            'province_id' => $province_id,
-                            'address' => $address !== '' ? $address : null,
-                            'postal_code' => $postal_code !== '' ? $postal_code : null,
-                            'city' => $city !== '' ? $city : null
-                        ],
-                        __METHOD__,
-                        'Creación del perfil del usuario'
-                );
-            }
+            $this->audit_service->insert(
+                    'wi_users_profile',
+                    $user_id,
+                    [
+                        'user_id' => $user_id,
+                        'phone' => $phone !== '' ? $phone : null,
+                        'country_id' => $country_id,
+                        'province_id' => $province_id,
+                        'address' => $address !== '' ? $address : null,
+                        'postal_code' => $postal_code !== '' ? $postal_code : null,
+                        'city' => $city !== '' ? $city : null
+                    ],
+                    __METHOD__,
+                    'Creación del perfil del usuario'
+            );
 
             return serviceResponse::success(
                             'Usuario creado correctamente.',
